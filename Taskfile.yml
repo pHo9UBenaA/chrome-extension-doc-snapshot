@@ -1,0 +1,21 @@
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - go build main.go
+  install:
+    cmds:
+      - go install main.go
+  test:
+    cmds:
+      - go test -v ./...
+  fmt:
+    cmds:
+      - gofmt -w -l .
+  vet:
+    cmds:
+      - go vet ./...
+  govulncheck:
+    cmds:
+      - govulncheck ./...

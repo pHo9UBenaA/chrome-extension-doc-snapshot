@@ -1,12 +1,9 @@
 version: "3"
 
 tasks:
-  build:
+  run-main:
     cmds:
-      - go build main.go
-  install:
-    cmds:
-      - go install main.go
+      - go run main.go
   test:
     cmds:
       - go test -v ./...

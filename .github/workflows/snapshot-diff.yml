@@ -1,0 +1,35 @@
+name: Daily Snapshot Diff Check
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  check-snapshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: '${{ github.workspace }}/go.mod'
+          cache: true
+
+      - name: Install go-task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
+
+      - name: Run snapshot script
+        run: task run-main
+
+      - name: Check for snapshot differences and echo diff if any
+        run: |
+          if git diff --exit-code __snapshot__; then
+            echo "スナップショットに差分はありません。"
+          else
+            echo "スナップショットに変更が検出されました。以下が差分です:"
+            git diff __snapshot__
+          fi

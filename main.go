@@ -88,8 +88,8 @@ func scrapeAndSnapshotAPIReference() ([]string, error) {
 	}
 
 	content := strings.Join(apiLinks, "\n")
-	if err := takeSnapshot("index", content); err != nil {
-		return nil, fmt.Errorf("failed to takeSnapshot (index): %w", err)
+	if err := takeSnapshot("api-reference", content); err != nil {
+		return nil, fmt.Errorf("failed to takeSnapshot (api-reference): %w", err)
 	}
 
 	return apiLinks, nil

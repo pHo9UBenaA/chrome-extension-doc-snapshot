@@ -28,10 +28,13 @@ jobs:
         run: go install golang.org/x/vuln/cmd/govulncheck@latest
 
       - name: Run fmt task
-        run: task fmt
+        run: diff -u <(echo -n) <(task fmt)
 
       - name: Run vet task
         run: task vet
 
       - name: Run govulncheck task
         run: task govulncheck
+
+      - name: Run test
+        run: task test

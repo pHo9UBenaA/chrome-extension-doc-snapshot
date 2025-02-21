@@ -12,9 +12,9 @@ import (
 )
 
 const (
-	SnapshotDir = "__snapshot__"
+	SnapshotDir           = "__snapshot__"
 	SnapshotFileExtension = ".txt"
-	BaseURL     = "https://developer.chrome.com/"
+	BaseURL               = "https://developer.chrome.com/"
 )
 
 func prepareCollector() *colly.Collector {

@@ -20,7 +20,7 @@ const (
 func prepareCollector() *colly.Collector {
 	return colly.NewCollector(
 		colly.AllowURLRevisit(),
-		colly.MaxDepth(2),
+		colly.MaxDepth(1),
 	)
 }
 

@@ -1,4 +1,4 @@
-name: Daily Snapshot Diff Check
+name: Weekly Snapshot Diff Check
 
 on:
   schedule:

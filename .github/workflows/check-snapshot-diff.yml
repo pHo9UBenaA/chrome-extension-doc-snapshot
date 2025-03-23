@@ -27,9 +27,12 @@ jobs:
 
       - name: Check for snapshot differences and echo diff if any
         run: |
-          if git diff --exit-code __snapshot__; then
-            echo "スナップショットに差分はありません。"
-          else
+          git diff __snapshot__ > diff_output.txt
+
+          if [ -s diff_output.txt ]; then
             echo "スナップショットに変更が検出されました。以下が差分です:"
-            git diff __snapshot__
+            cat diff_output.txt
+            exit 1
+          else
+            echo "スナップショットに差分はありません。"
           fi

@@ -104,8 +104,8 @@
     
       chrome.sessions
       
-    
   
+    
 
     
     
@@ -119,6 +119,9 @@
       Save and categorize content based on your preferences.
     
   
+  
+  
+    
   
   
 
@@ -187,7 +190,7 @@ Types
     
       lastModified
       number
-    The time when the window or tab was closed or modified, represented in milliseconds since the epoch.
+    The time when the window or tab was closed or modified, represented in seconds since the epoch.
 
     
       tab

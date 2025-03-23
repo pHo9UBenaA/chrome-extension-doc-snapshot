@@ -104,8 +104,8 @@
     
       chrome.i18n
       
-    
   
+    
 
     
     
@@ -119,6 +119,9 @@
       Save and categorize content based on your preferences.
     
   
+  
+  
+    
   
   
 

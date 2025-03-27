@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -17,11 +18,24 @@ const (
 	BaseURL               = "https://developer.chrome.com/"
 )
 
-func prepareCollector() *colly.Collector {
-	return colly.NewCollector(
+var globalCollector *colly.Collector
+
+func init() {
+	globalCollector = colly.NewCollector(
 		colly.AllowURLRevisit(),
 		colly.MaxDepth(1),
 	)
+
+	globalCollector.Limit(&colly.LimitRule{
+		DomainGlob:  "*",
+		Delay:       1 * time.Second,
+		// 適当な数。特になくても弾かれなかった。
+		Parallelism: 5,
+	})
+}
+
+func prepareCollector() *colly.Collector {
+	return globalCollector.Clone()
 }
 
 func ensureSnapshotDir() error {
@@ -34,7 +48,7 @@ func ensureSnapshotDir() error {
 
 func takeSnapshot(fileName string, content string) error {
 	if err := ensureSnapshotDir(); err != nil {
-		log.Fatalf("failed to ensure snapshot directory: %v", err)
+		return fmt.Errorf("failed to ensure snapshot directory: %v", err)
 	}
 
 	filePath := path.Join(SnapshotDir, fileName+SnapshotFileExtension)
@@ -50,12 +64,15 @@ func scrapeAPIReference() ([]string, error) {
 	c := prepareCollector()
 
 	var apiLinks []string
+	var mu sync.Mutex
 
 	c.OnHTML("dl", func(e *colly.HTMLElement) {
 		e.ForEach("dt", func(_ int, el *colly.HTMLElement) {
 			href := el.ChildAttr("a", "href")
 			if href != "" {
+				mu.Lock()
 				apiLinks = append(apiLinks, href)
+				mu.Unlock()
 			}
 		})
 	})
@@ -69,9 +86,14 @@ func scrapeAPIReference() ([]string, error) {
 
 func scrapeArticle(href string) (string, error) {
 	c := prepareCollector()
+
 	var articleContent string
+	var mu sync.Mutex
+
 	c.OnHTML("article", func(e *colly.HTMLElement) {
+		mu.Lock()
 		articleContent = e.Text
+		mu.Unlock()
 	})
 
 	if err := c.Visit(BaseURL + href); err != nil {
@@ -121,19 +143,40 @@ func main() {
 
 	log.Println("Done:  scrapeAndSnapshotAPIReference")
 
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	errorChan := make(chan error, len(hrefList))
+
 	for _, href := range hrefList {
-		baseName := path.Base(href)
+		wg.Add(1)
 
-		log.Printf("Start: scrapeAndSnapshotArticle (%s)\n", baseName)
+		go func(href string) {
+			defer wg.Done()
 
-		if err := scrapeAndSnapshotArticle(href); err != nil {
-			log.Fatalf("failed to scrapeAndSnapshotArticle (%s): %v", href, err)
-			continue
+			baseName := path.Base(href)
+
+			log.Printf("Start: scrapeAndSnapshotArticle (%s)\n", baseName)
+
+			if err := scrapeAndSnapshotArticle(href); err != nil {
+				mu.Lock()
+				errorChan <- fmt.Errorf("failed to scrapeAndSnapshotArticle (%s): %v", href, err)
+				mu.Unlock()
+				return
+			}
+
+			log.Printf("Done:  scrapeAndSnapshotArticle (%s)\n", baseName)
+		}(href)
+	}
+
+	go func() {
+		wg.Wait()
+		close(errorChan)
+	}()
+
+	for err := range errorChan {
+		if err != nil {
+			log.Fatalf("Error: %v", err)
 		}
-
-		log.Printf("Done:  scrapeAndSnapshotArticle (%s)\n", baseName)
-
-		time.Sleep(1 * time.Second)
 	}
 
 	log.Println("Done: Scrape and Snapshot")

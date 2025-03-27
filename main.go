@@ -27,8 +27,8 @@ func init() {
 	)
 
 	globalCollector.Limit(&colly.LimitRule{
-		DomainGlob:  "*",
-		Delay:       1 * time.Second,
+		DomainGlob: "*",
+		Delay:      1 * time.Second,
 		// 適当な数。特になくても弾かれなかった。
 		Parallelism: 5,
 	})

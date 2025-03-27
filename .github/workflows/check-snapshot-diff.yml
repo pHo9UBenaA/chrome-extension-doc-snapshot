@@ -32,7 +32,12 @@ jobs:
           if [ -s diff_output.txt ]; then
             echo "スナップショットに変更が検出されました。以下が差分です:"
             cat diff_output.txt
-            exit 1
+            
+            # スクリプトを実行可能にして実行
+            chmod +x .github/scripts/create-snapshot-pr.sh
+            .github/scripts/create-snapshot-pr.sh
           else
             echo "スナップショットに差分はありません。"
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

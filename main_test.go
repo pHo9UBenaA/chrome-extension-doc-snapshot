@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"testing"
 )
 
@@ -62,13 +63,14 @@ func Test_EnsureSnapshotDir(t *testing.T) {
 
 func Test_TakeSnapshot(t *testing.T) {
 	fileName := "test"
-	content := "Hello, world!"
+	// HTMLコンテンツをテスト
+	content := "<article><h1>Test</h1><p>Hello, world!</p></article>"
 
 	if err := takeSnapshot(fileName, content); err != nil {
 		t.Fatalf("%v", err)
 	}
 
-	snapshotFile := path.Join(SnapshotDir, fileName+SnapshotFileExtension)
+	snapshotFile := path.Join(SnapshotDir, fileName+SnapshotFileExtension) // .txtから.htmlに変更される
 	data, err := os.ReadFile(snapshotFile)
 
 	if err != nil {
@@ -102,5 +104,10 @@ func Test_ScrapeArticle(t *testing.T) {
 
 	if len(content) == 0 {
 		t.Errorf("expected content, got empty string")
+	}
+
+	// HTMLの基本構造をチェック
+	if !strings.Contains(content, "<article") || !strings.Contains(content, "</article>") {
+		t.Errorf("expected HTML article tags, got %q", content)
 	}
 }

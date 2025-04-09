@@ -1,42 +1,24 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"path"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/gocolly/colly/v2"
+	"golang.org/x/net/html"
 )
 
 const (
 	SnapshotDir           = "__snapshot__"
-	SnapshotFileExtension = ".txt"
+	SnapshotFileExtension = ".html"
 	BaseURL               = "https://developer.chrome.com/"
 )
-
-var globalCollector *colly.Collector
-
-func init() {
-	globalCollector = colly.NewCollector(
-		colly.AllowURLRevisit(),
-		colly.MaxDepth(1),
-	)
-
-	globalCollector.Limit(&colly.LimitRule{
-		DomainGlob: "*",
-		Delay:      1 * time.Second,
-		// 適当な数。特になくても弾かれなかった。
-		Parallelism: 5,
-	})
-}
-
-func prepareCollector() *colly.Collector {
-	return globalCollector.Clone()
-}
 
 func ensureSnapshotDir() error {
 	if err := os.MkdirAll(SnapshotDir, 0755); err != nil {
@@ -60,47 +42,88 @@ func takeSnapshot(fileName string, content string) error {
 	return nil
 }
 
-func scrapeAPIReference() ([]string, error) {
-	c := prepareCollector()
-
-	var apiLinks []string
-	var mu sync.Mutex
-
-	c.OnHTML("dl", func(e *colly.HTMLElement) {
-		e.ForEach("dt", func(_ int, el *colly.HTMLElement) {
-			href := el.ChildAttr("a", "href")
-			if href != "" {
-				mu.Lock()
-				apiLinks = append(apiLinks, href)
-				mu.Unlock()
-			}
-		})
-	})
-
-	if err := c.Visit(BaseURL + "docs/extensions/reference/api"); err != nil {
-		return nil, fmt.Errorf("failed to visit API reference: %w", err)
+func findArticle(n *html.Node) *html.Node {
+	if n.Type == html.ElementNode && n.Data == "article" {
+		return n
 	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if result := findArticle(c); result != nil {
+			return result
+		}
+	}
+	return nil
+}
 
-	return apiLinks, nil
+func renderNode(n *html.Node) string {
+	var buf bytes.Buffer
+	if err := html.Render(&buf, n); err != nil {
+		return ""
+	}
+	return buf.String()
 }
 
 func scrapeArticle(href string) (string, error) {
-	c := prepareCollector()
-
-	var articleContent string
-	var mu sync.Mutex
-
-	c.OnHTML("article", func(e *colly.HTMLElement) {
-		mu.Lock()
-		articleContent = e.Text
-		mu.Unlock()
-	})
-
-	if err := c.Visit(BaseURL + href); err != nil {
-		return "", fmt.Errorf("failed to visit article: %w", err)
+	client := &http.Client{
+		Timeout: 30 * time.Second,
 	}
 
-	return articleContent, nil
+	resp, err := client.Get(BaseURL + href)
+	if err != nil {
+		return "", fmt.Errorf("failed to get article: %w", err)
+	}
+	defer resp.Body.Close()
+
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse HTML: %w", err)
+	}
+
+	article := findArticle(doc)
+	if article == nil {
+		return "", fmt.Errorf("article not found")
+	}
+
+	return renderNode(article), nil
+}
+
+func scrapeAPIReference() ([]string, error) {
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
+
+	resp, err := client.Get(BaseURL + "docs/extensions/reference/api")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get API reference: %w", err)
+	}
+	defer resp.Body.Close()
+
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse HTML: %w", err)
+	}
+
+	var apiLinks []string
+	var findLinks func(*html.Node)
+	findLinks = func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "dt" {
+			for c := n.FirstChild; c != nil; c = c.NextSibling {
+				if c.Type == html.ElementNode && c.Data == "a" {
+					for _, attr := range c.Attr {
+						if attr.Key == "href" {
+							apiLinks = append(apiLinks, attr.Val)
+							break
+						}
+					}
+				}
+			}
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			findLinks(c)
+		}
+	}
+	findLinks(doc)
+
+	return apiLinks, nil
 }
 
 func scrapeAndSnapshotAPIReference() ([]string, error) {
@@ -180,4 +203,7 @@ func main() {
 	}
 
 	log.Println("Done: Scrape and Snapshot")
+
+	// リクエスト間に少し待機を入れる
+	time.Sleep(1 * time.Second)
 }

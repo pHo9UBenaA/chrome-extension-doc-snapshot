@@ -65,25 +65,26 @@ func Test_TakeSnapshot(t *testing.T) {
 	fileName := "test"
 	// HTMLコンテンツをテスト
 	content := "<article><h1>Test</h1><p>Hello, world!</p></article>"
+	expected := "# Test\n\nHello, world!"
 
 	if err := takeSnapshot(fileName, content); err != nil {
 		t.Fatalf("%v", err)
 	}
 
-	snapshotFile := path.Join(SnapshotDir, fileName+SnapshotFileExtension) // .txtから.htmlに変更される
+	snapshotFile := path.Join(SnapshotDir, fileName+SnapshotFileExtension)
 	data, err := os.ReadFile(snapshotFile)
 
 	if err != nil {
 		t.Fatalf("failed to read snapshot file: %v", err)
 	}
 
-	if string(data) != content {
-		t.Errorf("expected content %q, got %q", content, string(data))
+	if string(data) != expected {
+		t.Errorf("expected content %q, got %q", expected, string(data))
 	}
 }
 
 func Test_ScrapeAPIReference(t *testing.T) {
-	links, err := scrapeAPIReference()
+	links, err := fetchAPIReference()
 
 	if err != nil {
 		t.Fatalf("%v", err)
@@ -96,7 +97,7 @@ func Test_ScrapeAPIReference(t *testing.T) {
 
 func Test_ScrapeArticle(t *testing.T) {
 	href := "/docs/extensions/reference/api/tabs"
-	content, err := scrapeArticle(href)
+	content, err := fetchArticle(href)
 
 	if err != nil {
 		t.Fatalf("%v", err)

@@ -12,11 +12,13 @@ import (
 	"time"
 
 	"golang.org/x/net/html"
+
+	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 )
 
 const (
 	SnapshotDir           = "__snapshot__"
-	SnapshotFileExtension = ".html"
+	SnapshotFileExtension = ".md"
 	BaseURL               = "https://developer.chrome.com/"
 )
 
@@ -28,24 +30,76 @@ func ensureSnapshotDir() error {
 	return nil
 }
 
-func takeSnapshot(fileName string, content string) error {
+func takeSnapshot(href string, content string) error {
+	fileName := path.Base(href)
+
 	if err := ensureSnapshotDir(); err != nil {
 		return fmt.Errorf("failed to ensure snapshot directory: %v", err)
 	}
 
 	filePath := path.Join(SnapshotDir, fileName+SnapshotFileExtension)
 
-	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+	markdown, err := htmltomarkdown.ConvertString(content)
+	if err != nil {
+		return fmt.Errorf("failed to convert HTML to Markdown: %w", err)
+	}
+
+	if err := os.WriteFile(filePath, []byte(markdown), 0644); err != nil {
 		return fmt.Errorf("failed to write snapshot file: %w", err)
 	}
 
 	return nil
 }
 
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
+func hasClass(n *html.Node, className string) bool {
+	for _, attr := range n.Attr {
+		if attr.Key == "class" && strings.Contains(attr.Val, className) {
+			return true
+		}
+	}
+	return false
+}
+
+func removeUnwantedElements(n *html.Node) {
+	var next *html.Node
+
+	for c := n.FirstChild; c != nil; c = next {
+		next = c.NextSibling
+
+		if c.Type == html.ElementNode {
+			// パンくずリスト
+			if c.Data == "div" && hasClass(c, "devsite-article-meta") {
+				c.Parent.RemoveChild(c)
+			}
+
+			// ヘッダーのツールチップ
+			if c.Data == "h1" && hasClass(c, "devsite-page-title") {
+				for inner := c.FirstChild; inner != nil; inner = inner.NextSibling {
+					if inner.Data == "div" {
+						inner.Parent.RemoveChild(inner)
+					}
+				}
+			}
+		}
+
+	}
+}
+
 func findArticle(n *html.Node) *html.Node {
 	if n.Type == html.ElementNode && n.Data == "article" {
+		removeUnwantedElements(n)
 		return n
 	}
+
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		if result := findArticle(c); result != nil {
 			return result
@@ -62,18 +116,18 @@ func renderNode(n *html.Node) string {
 	return buf.String()
 }
 
-func scrapeArticle(href string) (string, error) {
+func fetchArticle(href string) (string, error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 	}
 
-	resp, err := client.Get(BaseURL + href)
+	res, err := client.Get(BaseURL + href)
 	if err != nil {
 		return "", fmt.Errorf("failed to get article: %w", err)
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
-	doc, err := html.Parse(resp.Body)
+	doc, err := html.Parse(res.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to parse HTML: %w", err)
 	}
@@ -86,7 +140,7 @@ func scrapeArticle(href string) (string, error) {
 	return renderNode(article), nil
 }
 
-func scrapeAPIReference() ([]string, error) {
+func fetchAPIReference() ([]string, error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 	}
@@ -126,13 +180,14 @@ func scrapeAPIReference() ([]string, error) {
 	return apiLinks, nil
 }
 
-func scrapeAndSnapshotAPIReference() ([]string, error) {
-	apiLinks, err := scrapeAPIReference()
+func fetchAndSnapshotAPIReference() ([]string, error) {
+	apiLinks, err := fetchAPIReference()
 	if err != nil {
-		return nil, fmt.Errorf("failed to scrapeAPIReference: %w", err)
+		return nil, fmt.Errorf("failed to fetchAPIReference: %w", err)
 	}
 
 	content := strings.Join(apiLinks, "\n")
+	
 	if err := takeSnapshot("api-reference", content); err != nil {
 		return nil, fmt.Errorf("failed to takeSnapshot (api-reference): %w", err)
 	}
@@ -140,14 +195,13 @@ func scrapeAndSnapshotAPIReference() ([]string, error) {
 	return apiLinks, nil
 }
 
-func scrapeAndSnapshotArticle(href string) error {
-	content, err := scrapeArticle(href)
+func fetchAndSnapshotArticle(href string) error {
+	content, err := fetchArticle(href)
 	if err != nil {
-		return fmt.Errorf("failed to scrapeArticle: %w", err)
+		return fmt.Errorf("failed to fetchArticle: %w", err)
 	}
 
-	baseName := path.Base(href)
-	if err := takeSnapshot(baseName, content); err != nil {
+	if err := takeSnapshot(href, content); err != nil {
 		return fmt.Errorf("failed to takeSnapshot (article): %w", err)
 	}
 
@@ -157,14 +211,14 @@ func scrapeAndSnapshotArticle(href string) error {
 func main() {
 	log.Println("Start: Scrape and Snapshot")
 
-	log.Println("Start: scrapeAndSnapshotAPIReference")
+	log.Println("Start: fetchAndSnapshotAPIReference")
 
-	hrefList, err := scrapeAndSnapshotAPIReference()
+	hrefList, err := fetchAndSnapshotAPIReference()
 	if err != nil {
-		log.Fatalf("failed to scrapeAndSnapshotAPIReference: %v", err)
+		log.Fatalf("failed to fetchAndSnapshotAPIReference: %v", err)
 	}
 
-	log.Println("Done:  scrapeAndSnapshotAPIReference")
+	log.Println("Done:  fetchAndSnapshotAPIReference")
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -178,16 +232,16 @@ func main() {
 
 			baseName := path.Base(href)
 
-			log.Printf("Start: scrapeAndSnapshotArticle (%s)\n", baseName)
+			log.Printf("Start: fetchAndSnapshotArticle (%s)\n", baseName)
 
-			if err := scrapeAndSnapshotArticle(href); err != nil {
+			if err := fetchAndSnapshotArticle(href); err != nil {
 				mu.Lock()
-				errorChan <- fmt.Errorf("failed to scrapeAndSnapshotArticle (%s): %v", href, err)
+				errorChan <- fmt.Errorf("failed to fetchAndSnapshotArticle (%s): %v", href, err)
 				mu.Unlock()
 				return
 			}
 
-			log.Printf("Done:  scrapeAndSnapshotArticle (%s)\n", baseName)
+			log.Printf("Done:  fetchAndSnapshotArticle (%s)\n", baseName)
 		}(href)
 	}
 

@@ -6,6 +6,8 @@ import (
 	"path"
 	"strings"
 	"testing"
+
+	"golang.org/x/net/html"
 )
 
 func setupTempDir(_ *testing.M) (string, string) {
@@ -63,11 +65,18 @@ func Test_EnsureSnapshotDir(t *testing.T) {
 
 func Test_TakeSnapshot(t *testing.T) {
 	fileName := "test"
-	// HTMLコンテンツをテスト
-	content := "<article><h1>Test</h1><p>Hello, world!</p></article>"
+	content, err := html.Parse(strings.NewReader("<article><h1>Test</h1><p>Hello, world!</p></article>"))
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
 	expected := "# Test\n\nHello, world!"
 
-	if err := takeSnapshot(fileName, content); err != nil {
+	markdown, err := convertNodeToMarkdown(content)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	if err := takeSnapshot(fileName, markdown); err != nil {
 		t.Fatalf("%v", err)
 	}
 
@@ -83,32 +92,43 @@ func Test_TakeSnapshot(t *testing.T) {
 	}
 }
 
-func Test_ScrapeAPIReference(t *testing.T) {
-	links, err := fetchAPIReference()
+func Test_FetchAPIReference(t *testing.T) {
+	doc, err := fetchAPIReference()
 
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
+
+	links := extractAPILinks(doc)
 
 	if len(links) == 0 {
 		t.Errorf("expected at least one link, got 0")
 	}
 }
 
-func Test_ScrapeArticle(t *testing.T) {
+func Test_FetchAPIDetail(t *testing.T) {
 	href := "/docs/extensions/reference/api/tabs"
-	content, err := fetchArticle(href)
 
+	doc, err := fetchAPIDetail(href)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	articleNode, err := extractArticle(doc)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	if !strings.Contains(renderNode(articleNode), "<article") || !strings.Contains(renderNode(articleNode), "</article>") {
+		t.Errorf("expected HTML article tags, got %q", renderNode(articleNode))
+	}
+
+	content, err := convertNodeToMarkdown(articleNode)
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
 
 	if len(content) == 0 {
 		t.Errorf("expected content, got empty string")
-	}
-
-	// HTMLの基本構造をチェック
-	if !strings.Contains(content, "<article") || !strings.Contains(content, "</article>") {
-		t.Errorf("expected HTML article tags, got %q", content)
 	}
 }

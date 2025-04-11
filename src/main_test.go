@@ -1,134 +1,93 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"path"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
-	"golang.org/x/net/html"
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/crawler"
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/parser"
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
 )
 
-func setupTempDir(_ *testing.M) (string, string) {
-	// `t.tempDir`でテスト毎に一時的な領域を作るのが面倒なためTestMainで設定している
-	// 多分これのせいでテストがアイソレートされていないっぽい
+func TestMain(t *testing.T) {
+	// Arrange
+	// テスト用のHTMLサーバーを立ち上げる
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/docs/extensions/reference/api":
+			w.Write([]byte(`
+				<!DOCTYPE html>
+				<html>
+					<body>
+						<dl>
+							<dt><a href="/docs/extensions/reference/api/api1">API 1</a></dt>
+							<dt><a href="/docs/extensions/reference/api/api2">API 2</a></dt>
+						</dl>
+					</body>
+				</html>
+			`))
+		case "/docs/extensions/reference/api/api1", "/docs/extensions/reference/api/api2":
+			w.Write([]byte(`
+				<!DOCTYPE html>
+				<html>
+					<body>
+						<article>
+							<h1>Test Article</h1>
+							<p>This is a test article.</p>
+						</article>
+					</body>
+				</html>
+			`))
+		}
+	}))
+	defer ts.Close()
 
-	origWd, err := os.Getwd()
+	// モックストレージを使用
+	storage := mock.NewMockStorage()
+	crawler := crawler.NewCrawler(storage)
+
+	// Act
+	// テストサーバーのURLをBaseURLとして使用
+	BaseURL = ts.URL
+
+	// クローリングを実行
+	doc, err := crawler.FetchAPIReference(BaseURL)
 	if err != nil {
-		fmt.Printf("failed to get working directory: %v\n", err)
-		os.Exit(1)
+		t.Fatalf("FetchAPIReference failed: %v", err)
 	}
 
-	tempWd, err := os.MkdirTemp("", "test")
-	if err != nil {
-		fmt.Printf("failed to create temporary directory: %v\n", err)
-		os.Exit(1)
+	hrefList := parser.ExtractAPILinks(doc)
+
+	for _, href := range hrefList {
+		if err := crawler.FetchAndSnapshotArticle(ts.URL + href); err != nil {
+			t.Fatalf("FetchAndSnapshotArticle failed: %v", err)
+		}
 	}
 
-	if err := os.Chdir(tempWd); err != nil {
-		fmt.Printf("failed to change working directory: %v\n", err)
-		os.Exit(1)
+	// Assert
+	// スナップショットが保存されたことを確認
+	if len(storage.Snapshots) != 2 {
+		t.Errorf("Expected 2 snapshots, got %d", len(storage.Snapshots))
 	}
 
-	return origWd, tempWd
-}
+	// 各スナップショットの内容を確認
+	for _, href := range hrefList {
+		// ファイル名を生成（最後の部分を使用）
+		fileName := href
+		if idx := strings.LastIndex(href, "/"); idx != -1 {
+			fileName = href[idx+1:]
+		}
 
-func shutdown(origWd, tempWd string) {
-	os.RemoveAll(tempWd)
-	os.Chdir(origWd)
-}
+		content, exists := storage.Snapshots[fileName]
+		if !exists {
+			t.Errorf("Snapshot for %s was not saved", href)
+			continue
+		}
 
-func TestMain(m *testing.M) {
-	origWd, tempWd := setupTempDir(m)
-
-	// Go1.5からos.Exitは不要になったよう
-	// https://go.dev/doc/go1.15#testing
-	m.Run()
-
-	shutdown(origWd, tempWd)
-}
-
-func Test_EnsureSnapshotDir(t *testing.T) {
-	if err := ensureSnapshotDir(); err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	info, err := os.Stat(SnapshotDir)
-	if err != nil {
-		t.Fatalf("failed to check snapshot directory: %v", err)
-	}
-	if !info.IsDir() {
-		t.Errorf("expected %s to be a directory", SnapshotDir)
-	}
-}
-
-func Test_TakeSnapshot(t *testing.T) {
-	fileName := "test"
-	content, err := html.Parse(strings.NewReader("<article><h1>Test</h1><p>Hello, world!</p></article>"))
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	expected := "# Test\n\nHello, world!"
-
-	markdown, err := convertNodeToMarkdown(content)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	if err := takeSnapshot(fileName, markdown); err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	snapshotFile := path.Join(SnapshotDir, fileName+SnapshotFileExtension)
-	data, err := os.ReadFile(snapshotFile)
-
-	if err != nil {
-		t.Fatalf("failed to read snapshot file: %v", err)
-	}
-
-	if string(data) != expected {
-		t.Errorf("expected content %q, got %q", expected, string(data))
-	}
-}
-
-func Test_FetchAPIReference(t *testing.T) {
-	doc, err := fetchAPIReference()
-
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	links := extractAPILinks(doc)
-
-	if len(links) == 0 {
-		t.Errorf("expected at least one link, got 0")
-	}
-}
-
-func Test_FetchAPIDetail(t *testing.T) {
-	href := "/docs/extensions/reference/api/tabs"
-
-	doc, err := fetchAPIDetail(href)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	articleNode, err := extractArticle(doc)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	if !strings.Contains(renderNode(articleNode), "<article") || !strings.Contains(renderNode(articleNode), "</article>") {
-		t.Errorf("expected HTML article tags, got %q", renderNode(articleNode))
-	}
-
-	content, err := convertNodeToMarkdown(articleNode)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-
-	if len(content) == 0 {
-		t.Errorf("expected content, got empty string")
+		if !strings.Contains(content, "Test Article") {
+			t.Errorf("Snapshot for %s does not contain expected content", href)
+		}
 	}
 }

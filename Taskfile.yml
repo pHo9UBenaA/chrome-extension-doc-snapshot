@@ -3,19 +3,20 @@ version: "3"
 tasks:
   run-main:
     cmds:
-      - go run main.go
+      - go run src/main.go
   test:
     cmds:
-      - go test -v ./...
+      - go test -v ./src/...
   fmt:
     cmds:
-      - gofmt -w -l .
+      - gofmt -w -l ./src
   vet:
     cmds:
-      - go vet ./...
+      - go vet ./src/...
   govulncheck:
     cmds:
-      - govulncheck ./...
+      - govulncheck ./src/...
   up-latest:
     cmds:
-      - go get -u; go mod tidy
+      - go get -u ./src/...
+      - go mod tidy

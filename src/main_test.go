@@ -1,4 +1,4 @@
-package main
+package main_test
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/crawler"
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/parser"
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
+	storage_mock "github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
 )
 
 func TestMain(t *testing.T) {
@@ -45,12 +45,12 @@ func TestMain(t *testing.T) {
 	defer ts.Close()
 
 	// モックストレージを使用
-	storage := mock.NewMockStorage()
+	storage := storage_mock.NewMockStorage()
 	crawler := crawler.NewCrawler(storage)
 
 	// Act
 	// テストサーバーのURLをBaseURLとして使用
-	BaseURL = ts.URL
+	BaseURL := ts.URL
 
 	// クローリングを実行
 	doc, err := crawler.FetchAPIReference(BaseURL)
@@ -58,7 +58,10 @@ func TestMain(t *testing.T) {
 		t.Fatalf("FetchAPIReference failed: %v", err)
 	}
 
-	hrefList := parser.ExtractAPILinks(doc)
+	hrefList, err := parser.ExtractAPILinks(doc)
+	if err != nil {
+		t.Fatalf("ExtractAPILinks failed: %v", err)
+	}
 
 	for _, href := range hrefList {
 		if err := crawler.FetchAndSnapshotArticle(ts.URL + href); err != nil {

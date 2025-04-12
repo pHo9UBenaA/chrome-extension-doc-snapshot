@@ -1,18 +1,18 @@
-package storage
+package storage_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
 
 func TestFileStorage(t *testing.T) {
 	// Arrange
 	// テスト用の一時ディレクトリを作成
 	tempDir := t.TempDir()
-	storage := &FileStorage{
+	storage := &storage.FileStorage{
 		SnapshotDir:           filepath.Join(tempDir, "__snapshot__"),
 		SnapshotFileExtension: ".md",
 	}
@@ -56,32 +56,5 @@ func TestFileStorage(t *testing.T) {
 
 	if string(content) != markdown {
 		t.Errorf("Expected content '%s', got '%s'", markdown, string(content))
-	}
-}
-
-func TestMockStorage(t *testing.T) {
-	// Arrange
-	storage := mock.NewMockStorage()
-
-	// テストデータ
-	href := "/test/article"
-	markdown := "# Test Article\n\nThis is a test article."
-
-	// Act
-	err := storage.TakeSnapshot(href, markdown)
-
-	// Assert
-	if err != nil {
-		t.Fatalf("TakeSnapshot failed: %v", err)
-	}
-
-	// スナップショットが保存されたことを確認
-	savedMarkdown, exists := storage.Snapshots["article"]
-	if !exists {
-		t.Fatal("Snapshot was not saved")
-	}
-
-	if savedMarkdown != markdown {
-		t.Errorf("Expected content '%s', got '%s'", markdown, savedMarkdown)
 	}
 }

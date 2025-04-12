@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func TestFetchHTML(t *testing.T) {
+func Test_FetchHTML(t *testing.T) {
 	// Arrange
 	// テスト用のHTMLサーバーを立ち上げる
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +62,7 @@ func TestFetchHTML(t *testing.T) {
 	}
 }
 
-func TestFetchHTML_Timeout(t *testing.T) {
+func Test_FetchHTML_Timeout(t *testing.T) {
 	// Arrange
 	// 意図的に遅延するテストサーバー
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +82,7 @@ func TestFetchHTML_Timeout(t *testing.T) {
 	}
 }
 
-func TestFetchHTML_InvalidURL(t *testing.T) {
+func Test_FetchHTML_InvalidURL(t *testing.T) {
 	// Arrange
 	invalidURL := "http://invalid-url-that-does-not-exist"
 

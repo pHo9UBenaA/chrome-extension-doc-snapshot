@@ -29,7 +29,10 @@ func main() {
 		log.Fatalf("failed to fetchAPIReference: %v", err)
 	}
 
-	hrefList := parser.ExtractAPILinks(doc)
+	hrefList, err := parser.ExtractAPILinks(doc)
+	if err != nil {
+		log.Fatalf("failed to extractAPILinks: %v", err)
+	}
 
 	log.Println("Done:  fetchAndSnapshotAPIReference")
 

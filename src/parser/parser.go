@@ -7,31 +7,8 @@ import (
 	"golang.org/x/net/html"
 )
 
-// FindArticleはHTMLドキュメントからarticle要素を探して返します
-func FindArticle(n *html.Node) *html.Node {
-	if n.Type == html.ElementNode && n.Data == "article" {
-		RemoveUnwantedElements(n)
-		return n
-	}
-
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if result := FindArticle(c); result != nil {
-			return result
-		}
-	}
-	return nil
-}
-
-// ExtractArticleはHTMLドキュメントから記事を抽出します
-func ExtractArticle(doc *html.Node) (*html.Node, error) {
-	if article := FindArticle(doc); article != nil {
-		return article, nil
-	}
-	return nil, fmt.Errorf("article not found")
-}
-
-// RemoveUnwantedElementsは不要な要素を削除します
-func RemoveUnwantedElements(n *html.Node) {
+// removeUnwantedElementsは不要な要素を削除します
+func removeUnwantedElements(n *html.Node) {
 	var next *html.Node
 
 	for c := n.FirstChild; c != nil; c = next {
@@ -43,12 +20,12 @@ func RemoveUnwantedElements(n *html.Node) {
 
 		switch {
 		// パンくずリスト
-		case c.Data == "div" && HasClass(c, "devsite-article-meta"):
+		case c.Data == "div" && hasClass(c, "devsite-article-meta"):
 			if c.Parent != nil {
 				c.Parent.RemoveChild(c)
 			}
 		// ヘッダーのツールチップ
-		case c.Data == "h1" && HasClass(c, "devsite-page-title"):
+		case c.Data == "h1" && hasClass(c, "devsite-page-title"):
 			for inner := c.FirstChild; inner != nil; inner = inner.NextSibling {
 				if inner.Data == "div" && inner.Parent != nil {
 					inner.Parent.RemoveChild(inner)
@@ -58,8 +35,8 @@ func RemoveUnwantedElements(n *html.Node) {
 	}
 }
 
-// HasClassはノードが指定されたクラスを持っているかどうかを返します
-func HasClass(n *html.Node, className string) bool {
+// hasClassはノードが指定されたクラスを持っているかどうかを返します
+func hasClass(n *html.Node, className string) bool {
 	for _, attr := range n.Attr {
 		if attr.Key == "class" {
 			return strings.Contains(attr.Val, className)
@@ -68,8 +45,8 @@ func HasClass(n *html.Node, className string) bool {
 	return false
 }
 
-// FindHrefInAnchorはアンカータグからhref属性の値を取得します
-func FindHrefInAnchor(n *html.Node) string {
+// findHrefInAnchorはアンカータグからhref属性の値を取得します
+func findHrefInAnchor(n *html.Node) string {
 	if n.Type == html.ElementNode && n.Data == "a" {
 		for _, attr := range n.Attr {
 			if attr.Key == "href" {
@@ -79,29 +56,57 @@ func FindHrefInAnchor(n *html.Node) string {
 	}
 
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if href := FindHrefInAnchor(c); href != "" {
+		if href := findHrefInAnchor(c); href != "" {
 			return href
 		}
 	}
 	return ""
 }
 
-// ExtractAPILinksはHTMLドキュメントからAPIリンクを抽出します
-func ExtractAPILinks(doc *html.Node) []string {
-	var apiLinks []string
-
-	var findLinks func(*html.Node)
-	findLinks = func(n *html.Node) {
-		if n.Type == html.ElementNode && n.Data == "dt" {
-			if href := FindHrefInAnchor(n); href != "" {
-				apiLinks = append(apiLinks, href)
-			}
-		}
-		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			findLinks(c)
-		}
+// findArticleはHTMLドキュメントからarticle要素を探して返します
+func findArticle(n *html.Node) *html.Node {
+	if n.Type == html.ElementNode && n.Data == "article" {
+		removeUnwantedElements(n)
+		return n
 	}
 
-	findLinks(doc)
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if result := findArticle(c); result != nil {
+			return result
+		}
+	}
+	return nil
+}
+
+// findAPILinksはHTMLドキュメントからAPIリンクを抽出します
+func findAPILinks(n *html.Node) []string {
+	var apiLinks []string
+
+	if n.Type == html.ElementNode && n.Data == "dt" {
+		if href := findHrefInAnchor(n); href != "" {
+			apiLinks = append(apiLinks, href)
+		}
+	}
+	
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		apiLinks = append(apiLinks, findAPILinks(c)...)
+	}
+
 	return apiLinks
+}
+
+// ExtractArticleはHTMLドキュメントから記事を抽出します
+func ExtractArticle(doc *html.Node) (*html.Node, error) {
+	if article := findArticle(doc); article != nil {
+		return article, nil
+	}
+	return nil, fmt.Errorf("article not found")
+}
+
+// ExtractAPILinksはHTMLドキュメントからAPIリンクを抽出します
+func ExtractAPILinks(doc *html.Node) ([]string, error) {
+	if apiLinks := findAPILinks(doc); len(apiLinks) > 0 {
+		return apiLinks, nil
+	}
+	return nil, fmt.Errorf("API links not found")
 }

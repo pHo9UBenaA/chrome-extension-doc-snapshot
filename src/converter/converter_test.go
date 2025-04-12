@@ -50,7 +50,7 @@ func TestRenderNode(t *testing.T) {
 	}
 
 	// Act
-	htmlContent := RenderNode(node)
+	htmlContent := renderNode(node)
 
 	// Assert
 	expected := "<p>Test paragraph</p>"

@@ -6,7 +6,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func TestFindArticle(t *testing.T) {
+func Test_findArticle(t *testing.T) {
 	// Arrange
 	// テスト用のHTMLノードを作成
 	doc := &html.Node{
@@ -26,7 +26,7 @@ func TestFindArticle(t *testing.T) {
 	}
 
 	// Act
-	article := FindArticle(doc)
+	article := findArticle(doc)
 
 	// Assert
 	if article == nil {
@@ -38,7 +38,7 @@ func TestFindArticle(t *testing.T) {
 	}
 }
 
-func TestRemoveUnwantedElements(t *testing.T) {
+func Test_removeUnwantedElements(t *testing.T) {
 	// Arrange
 	// 不要な要素を含むHTMLノードを作成
 	parent := &html.Node{
@@ -56,7 +56,7 @@ func TestRemoveUnwantedElements(t *testing.T) {
 	parent.FirstChild = doc
 
 	// Act
-	RemoveUnwantedElements(parent)
+	removeUnwantedElements(parent)
 
 	// Assert
 	// 不要な要素が削除されていることを確認
@@ -65,7 +65,7 @@ func TestRemoveUnwantedElements(t *testing.T) {
 	}
 }
 
-func TestHasClass(t *testing.T) {
+func Test_hasClass(t *testing.T) {
 	// Arrange
 	node := &html.Node{
 		Type: html.ElementNode,
@@ -77,17 +77,17 @@ func TestHasClass(t *testing.T) {
 
 	// Act & Assert
 	// クラスが存在する場合
-	if !HasClass(node, "test-class") {
+	if !hasClass(node, "test-class") {
 		t.Error("Expected to find 'test-class'")
 	}
 
 	// クラスが存在しない場合
-	if HasClass(node, "non-existent") {
+	if hasClass(node, "non-existent") {
 		t.Error("Expected not to find 'non-existent'")
 	}
 }
 
-func TestFindHrefInAnchor(t *testing.T) {
+func Test_findHrefInAnchor(t *testing.T) {
 	// Arrange
 	node := &html.Node{
 		Type: html.ElementNode,
@@ -102,7 +102,7 @@ func TestFindHrefInAnchor(t *testing.T) {
 	}
 
 	// Act
-	href := FindHrefInAnchor(node)
+	href := findHrefInAnchor(node)
 
 	// Assert
 	if href != "/test/link" {
@@ -110,7 +110,36 @@ func TestFindHrefInAnchor(t *testing.T) {
 	}
 }
 
-func TestExtractAPILinks(t *testing.T) {
+func Test_ExtractArticle(t *testing.T) {
+	// Arrange
+	// テスト用のHTMLノードを作成
+	doc := &html.Node{
+		Type: html.ElementNode,
+		Data: "html",
+		FirstChild: &html.Node{
+			Type: html.ElementNode,
+			Data: "body",
+			FirstChild: &html.Node{
+				Type: html.ElementNode,
+				Data: "article",
+			},
+		},
+	}
+
+	// Act
+	article, err := ExtractArticle(doc)
+
+	// Assert
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if article == nil {
+		t.Fatal("Expected to find article node")
+	}
+}
+
+func Test_ExtractAPILinks(t *testing.T) {
 	// Arrange
 	doc := &html.Node{
 		Type: html.ElementNode,
@@ -137,7 +166,10 @@ func TestExtractAPILinks(t *testing.T) {
 	}
 
 	// Act
-	links := ExtractAPILinks(doc)
+	links, err := ExtractAPILinks(doc)
+	if err != nil {
+		t.Fatalf("ExtractAPILinks failed: %v", err)
+	}
 
 	// Assert
 	if len(links) != 1 {

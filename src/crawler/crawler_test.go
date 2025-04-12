@@ -5,10 +5,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
+	storage_mock "github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
 )
 
-func TestCrawler(t *testing.T) {
+func Test_Crawler(t *testing.T) {
 	// Arrange
 	// テスト用のHTMLサーバーを立ち上げる
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +42,7 @@ func TestCrawler(t *testing.T) {
 	defer ts.Close()
 
 	// モックストレージを使用
-	storage := mock.NewMockStorage()
+	storage := storage_mock.NewMockStorage()
 	crawler := NewCrawler(storage)
 
 	// Act

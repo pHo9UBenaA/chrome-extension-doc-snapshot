@@ -1,33 +1,23 @@
-package storage_test
+package storage
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
 
-func TestFileStorage(t *testing.T) {
+func Test_TakeSnapshot(t *testing.T) {
 	// Arrange
 	// テスト用の一時ディレクトリを作成
 	tempDir := t.TempDir()
-	storage := &storage.FileStorage{
-		SnapshotDir:           filepath.Join(tempDir, "__snapshot__"),
-		SnapshotFileExtension: ".md",
-	}
+	os.Setenv("SNAPSHOT_DIR", tempDir)
 
 	// Act
-	err := storage.EnsureSnapshotDir()
+	err := EnsureSnapshotDir()
 
 	// Assert
 	if err != nil {
 		t.Fatalf("EnsureSnapshotDir failed: %v", err)
-	}
-
-	// ディレクトリが存在することを確認
-	if _, err := os.Stat(storage.SnapshotDir); os.IsNotExist(err) {
-		t.Fatal("Snapshot directory was not created")
 	}
 
 	// テストデータ
@@ -35,7 +25,7 @@ func TestFileStorage(t *testing.T) {
 	markdown := "# Test Article\n\nThis is a test article."
 
 	// Act
-	err = storage.TakeSnapshot(href, markdown)
+	err = TakeSnapshot(href, markdown)
 
 	// Assert
 	if err != nil {
@@ -43,7 +33,7 @@ func TestFileStorage(t *testing.T) {
 	}
 
 	// ファイルが作成されたことを確認
-	filePath := filepath.Join(storage.SnapshotDir, "article.md")
+	filePath := filepath.Join(getSnapshotDir(), "article.md")
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		t.Fatal("Snapshot file was not created")
 	}

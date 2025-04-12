@@ -3,38 +3,73 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/converter"
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/crawler"
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/parser"
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
 
-var (
-	// BaseURLはクロール対象のベースURL
-	BaseURL = "https://developer.chrome.com/"
-)
+// BaseURLはクロール対象のベースURL
+var BaseURL = "https://developer.chrome.com/"
+
+// APIReferencePathはChrome Extension APIリファレンスのパス
+const APIReferencePath = "/docs/extensions/reference/api"
+
+func extractAPILinks() ([]string, error) {
+	doc, err := crawler.FetchHTML(BaseURL + APIReferencePath)
+	if err != nil {
+		return nil, err
+	}
+	return parser.ExtractAPILinks(doc)
+}
+
+func snapshotArticle(href string) error {
+	doc, err := crawler.FetchHTML(BaseURL + href)
+	if err != nil {
+		return err
+	}
+
+	// 記事を抽出
+	articleNode, err := parser.ExtractArticle(doc)
+	if err != nil {
+		return err
+	}
+
+	// Markdownに変換
+	markdown, err := converter.ConvertNodeToMarkdown(articleNode)
+	if err != nil {
+		return err
+	}
+
+	// URLからパス部分を抽出し、最後の部分だけを取得
+	path := href
+	if idx := strings.LastIndex(path, "/"); idx != -1 {
+		path = path[idx+1:]
+	}
+
+	// スナップショットとして保存
+	if err := storage.TakeSnapshot(path, markdown); err != nil {
+		return fmt.Errorf("failed to take snapshot: %v", err)
+	}
+
+	return nil
+}
 
 func main() {
 	log.Println("Start: Scrape and Snapshot")
 
 	// ストレージの初期化
-	storage := storage.NewFileStorage()
-	crawler := crawler.NewCrawler(storage)
+	storage.EnsureSnapshotDir()
 
-	log.Println("Start: fetchAndSnapshotAPIReference")
+	log.Println("Scrape: API Reference")
 
-	doc, err := crawler.FetchAPIReference(BaseURL)
-	if err != nil {
-		log.Fatalf("failed to fetchAPIReference: %v", err)
-	}
-
-	hrefList, err := parser.ExtractAPILinks(doc)
+	hrefList, err := extractAPILinks()
 	if err != nil {
 		log.Fatalf("failed to extractAPILinks: %v", err)
 	}
-
-	log.Println("Done:  fetchAndSnapshotAPIReference")
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -46,16 +81,14 @@ func main() {
 		go func(href string) {
 			defer wg.Done()
 
-			log.Printf("Start: fetchAndSnapshotArticle (%s)\n", href)
+			log.Printf("Scrape: Article (%s)", href)
 
-			if err := crawler.FetchAndSnapshotArticle(BaseURL + href); err != nil {
+			if err := snapshotArticle(href); err != nil {
 				mu.Lock()
-				errorChan <- fmt.Errorf("failed to fetchAndSnapshotArticle (%s): %v", href, err)
+				errorChan <- fmt.Errorf("failed to snapshotArticle (%s): %v", href, err)
 				mu.Unlock()
 				return
 			}
-
-			log.Printf("Done:  fetchAndSnapshotArticle (%s)\n", href)
 		}(href)
 	}
 

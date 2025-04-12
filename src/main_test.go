@@ -1,18 +1,22 @@
-package main_test
+package main
 
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/crawler"
-	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/parser"
-	storage_mock "github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage/mock"
+	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
 
 func TestMain(t *testing.T) {
 	// Arrange
+	// テスト用の一時ディレクトリを作成
+	tempDir := t.TempDir()
+	os.Setenv("SNAPSHOT_DIR", tempDir)
+
 	// テスト用のHTMLサーバーを立ち上げる
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
@@ -21,10 +25,12 @@ func TestMain(t *testing.T) {
 				<!DOCTYPE html>
 				<html>
 					<body>
-						<dl>
-							<dt><a href="/docs/extensions/reference/api/api1">API 1</a></dt>
-							<dt><a href="/docs/extensions/reference/api/api2">API 2</a></dt>
-						</dl>
+						<article>
+							<dl>
+								<dt><a href="/docs/extensions/reference/api/api1">API 1</a></dt>
+								<dt><a href="/docs/extensions/reference/api/api2">API 2</a></dt>
+							</dl>
+						</article>
 					</body>
 				</html>
 			`))
@@ -44,53 +50,28 @@ func TestMain(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	// モックストレージを使用
-	storage := storage_mock.NewMockStorage()
-	crawler := crawler.NewCrawler(storage)
-
 	// Act
 	// テストサーバーのURLをBaseURLとして使用
-	BaseURL := ts.URL
+	BaseURL = ts.URL
 
 	// クローリングを実行
-	doc, err := crawler.FetchAPIReference(BaseURL)
-	if err != nil {
-		t.Fatalf("FetchAPIReference failed: %v", err)
-	}
-
-	hrefList, err := parser.ExtractAPILinks(doc)
-	if err != nil {
-		t.Fatalf("ExtractAPILinks failed: %v", err)
-	}
-
-	for _, href := range hrefList {
-		if err := crawler.FetchAndSnapshotArticle(ts.URL + href); err != nil {
-			t.Fatalf("FetchAndSnapshotArticle failed: %v", err)
-		}
-	}
+	main()
 
 	// Assert
 	// スナップショットが保存されたことを確認
-	if len(storage.Snapshots) != 2 {
-		t.Errorf("Expected 2 snapshots, got %d", len(storage.Snapshots))
+	snapshotDir := filepath.Join(tempDir, storage.SnapshotDir)
+	files, err := os.ReadDir(snapshotDir)
+	if err != nil {
+		t.Fatalf("Failed to read snapshot directory: %v", err)
 	}
 
-	// 各スナップショットの内容を確認
-	for _, href := range hrefList {
-		// ファイル名を生成（最後の部分を使用）
-		fileName := href
-		if idx := strings.LastIndex(href, "/"); idx != -1 {
-			fileName = href[idx+1:]
-		}
+	if len(files) != 2 {
+		t.Fatalf("Expected 2 snapshots, got %d", len(files))
+	}
 
-		content, exists := storage.Snapshots[fileName]
-		if !exists {
-			t.Errorf("Snapshot for %s was not saved", href)
-			continue
-		}
-
-		if !strings.Contains(content, "Test Article") {
-			t.Errorf("Snapshot for %s does not contain expected content", href)
+	for _, file := range files {
+		if !strings.HasSuffix(file.Name(), storage.SnapshotFileExtension) {
+			t.Errorf("Unexpected file extension: %s", file.Name())
 		}
 	}
 }

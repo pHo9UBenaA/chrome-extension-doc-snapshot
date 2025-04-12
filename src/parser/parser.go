@@ -87,7 +87,7 @@ func findAPILinks(n *html.Node) []string {
 			apiLinks = append(apiLinks, href)
 		}
 	}
-	
+
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		apiLinks = append(apiLinks, findAPILinks(c)...)
 	}

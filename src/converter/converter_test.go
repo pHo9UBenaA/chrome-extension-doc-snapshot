@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func TestConvertNodeToMarkdown(t *testing.T) {
+func TestNodeToMarkdown(t *testing.T) {
 	// Arrange
 	// テスト用のHTMLノードを作成
 	doc := &html.Node{
@@ -24,11 +24,11 @@ func TestConvertNodeToMarkdown(t *testing.T) {
 	}
 
 	// Act
-	markdown, err := ConvertNodeToMarkdown(doc)
+	markdown, err := NodeToMarkdown(doc)
 
 	// Assert
 	if err != nil {
-		t.Fatalf("ConvertNodeToMarkdown failed: %v", err)
+		t.Fatalf("NodeToMarkdown failed: %v", err)
 	}
 
 	// 期待されるMarkdownの形式を確認

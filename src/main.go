@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
+	"path/filepath"
 	"sync"
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/converter"
@@ -12,96 +12,137 @@ import (
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
 
-// BaseURLはクロール対象のベースURL
-var BaseURL = "https://developer.chrome.com/"
+var (
+	baseURL = "https://developer.chrome.com/"
+)
 
-// APIReferencePathはChrome Extension APIリファレンスのパス
-const APIReferencePath = "/docs/extensions/reference/api"
+const (
+	apiReferencePath       = "/docs/extensions/reference/api"
+	maxConcurrentDownloads = 10
+)
 
-func extractAPILinks() ([]string, error) {
-	doc, err := crawler.FetchHTML(BaseURL + APIReferencePath)
-	if err != nil {
-		return nil, err
-	}
-	return parser.ExtractAPILinks(doc)
+type DocumentProcessError struct {
+	documentPath string
+	err          error
 }
 
-func snapshotArticle(href string) error {
-	doc, err := crawler.FetchHTML(BaseURL + href)
+func (e *DocumentProcessError) Error() string {
+	return fmt.Sprintf("Document: '%s'\nError: %v", e.documentPath, e.err)
+}
+
+func fetchAPIDocumentLinks() ([]string, error) {
+	referencePageURL := baseURL + apiReferencePath
+	doc, err := crawler.FetchHTML(referencePageURL)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("Failed to fetch API reference page: %w", err)
 	}
 
-	// 記事を抽出
-	articleNode, err := parser.ExtractArticle(doc)
+	links, err := parser.ExtractAPILinks(doc)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("Failed to extract API links: %w", err)
 	}
 
-	// Markdownに変換
-	markdown, err := converter.ConvertNodeToMarkdown(articleNode)
+	return links, nil
+}
+
+func snapshotDocument(documentPath string) error {
+	// ドキュメントのダウンロード
+	fullURL := baseURL + documentPath
+	doc, err := crawler.FetchHTML(fullURL)
 	if err != nil {
-		return err
+		return &DocumentProcessError{
+			documentPath: documentPath,
+			err:          fmt.Errorf("Failed to fetch HTML: %w", err),
+		}
 	}
 
-	// URLからパス部分を抽出し、最後の部分だけを取得
-	path := href
-	if idx := strings.LastIndex(path, "/"); idx != -1 {
-		path = path[idx+1:]
+	// 記事本文の抽出
+	article, err := parser.ExtractArticle(doc)
+	if err != nil {
+		return &DocumentProcessError{
+			documentPath: documentPath,
+			err:          fmt.Errorf("Failed to extract article: %w", err),
+		}
 	}
 
-	// スナップショットとして保存
-	if err := storage.TakeSnapshot(path, markdown); err != nil {
-		return fmt.Errorf("failed to take snapshot: %v", err)
+	// Markdownへの変換
+	markdown, err := converter.NodeToMarkdown(article)
+	if err != nil {
+		return &DocumentProcessError{
+			documentPath: documentPath,
+			err:          fmt.Errorf("Failed to convert to Markdown: %w", err),
+		}
+	}
+
+	// スナップショットの保存
+	filename := filepath.Base(documentPath)
+	if err := storage.TakeSnapshot(filename, markdown); err != nil {
+		return &DocumentProcessError{
+			documentPath: documentPath,
+			err:          fmt.Errorf("Failed to save snapshot: %w", err),
+		}
+	}
+
+	log.Printf("✅ Document '%s' processed successfully", documentPath)
+	return nil
+}
+
+func processDocumentsConcurrently(documentPaths []string) error {
+	workerLimit := make(chan struct{}, maxConcurrentDownloads)
+	errors := make(chan error, len(documentPaths))
+	var wg sync.WaitGroup
+
+	// ドキュメント処理の実行
+	for _, path := range documentPaths {
+		wg.Add(1)
+		go func(docPath string) {
+			defer wg.Done()
+			workerLimit <- struct{}{} // 同時実行数の制限
+			defer func() { <-workerLimit }()
+
+			if err := snapshotDocument(docPath); err != nil {
+				errors <- err
+			}
+		}(path)
+	}
+
+	// エラー収集
+	var processErrors []error
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	// 全ての処理が完了するまでエラーを収集
+	go func() {
+		<-done
+		close(errors)
+	}()
+
+	for err := range errors {
+		processErrors = append(processErrors, err)
+	}
+
+	if len(processErrors) > 0 {
+		return fmt.Errorf("%d documents processing failed: %v", len(processErrors), processErrors)
 	}
 
 	return nil
 }
 
 func main() {
-	log.Println("Start: Scrape and Snapshot")
+	log.Println("🚀 Starting snapshot processing for Chrome Extension API documents")
 
-	// ストレージの初期化
-	storage.EnsureSnapshotDir()
-
-	log.Println("Scrape: API Reference")
-
-	hrefList, err := extractAPILinks()
+	documentPaths, err := fetchAPIDocumentLinks()
 	if err != nil {
-		log.Fatalf("failed to extractAPILinks: %v", err)
+		log.Fatalf("❌ Failed to fetch API document links: %v", err)
+	}
+	log.Printf("📝 %d API documents detected", len(documentPaths))
+
+	if err := processDocumentsConcurrently(documentPaths); err != nil {
+		log.Fatalf("❌ Failed to process documents: %v", err)
 	}
 
-	var wg sync.WaitGroup
-	var mu sync.Mutex
-	errorChan := make(chan error, len(hrefList))
-
-	for _, href := range hrefList {
-		wg.Add(1)
-
-		go func(href string) {
-			defer wg.Done()
-
-			log.Printf("Scrape: Article (%s)", href)
-
-			if err := snapshotArticle(href); err != nil {
-				mu.Lock()
-				errorChan <- fmt.Errorf("failed to snapshotArticle (%s): %v", href, err)
-				mu.Unlock()
-				return
-			}
-		}(href)
-	}
-
-	go func() {
-		wg.Wait()
-		close(errorChan)
-	}()
-
-	for err := range errorChan {
-		if err != nil {
-			log.Fatalf("Error: %v", err)
-		}
-	}
-
-	log.Println("Done: Scrape and Snapshot")
+	log.Println("✨ All documents processed successfully")
 }

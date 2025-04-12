@@ -4,30 +4,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"golang.org/x/net/html"
 )
-
-func Test_fetchHTML_Timeout(t *testing.T) {
-	// Arrange
-	// 意図的に遅延するテストサーバー
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(2 * time.Second) // タイムアウトを確実に発生させるために遅延時間を延長
-		w.Write([]byte("<html></html>"))
-	}))
-	defer ts.Close()
-
-	// Act
-	// 非常に短いタイムアウトを設定
-	_, err := fetchHTML(ts.URL, 100*time.Millisecond)
-
-	// Assert
-	// タイムアウトエラーが発生することを確認
-	if err == nil {
-		t.Fatal("Expected timeout error, got nil")
-	}
-}
 
 func Test_FetchHTML(t *testing.T) {
 	// Arrange

@@ -15,8 +15,8 @@ func renderNode(n *html.Node) string {
 	return buf.String()
 }
 
-// ConvertNodeToMarkdownはHTMLノードをMarkdownに変換します
-func ConvertNodeToMarkdown(n *html.Node) (string, error) {
+// NodeToMarkdownはHTMLノードをMarkdownに変換します
+func NodeToMarkdown(n *html.Node) (string, error) {
 	htmlContent := renderNode(n)
 	return htmltomarkdown.ConvertString(htmlContent)
 }

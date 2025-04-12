@@ -12,20 +12,13 @@ func Test_TakeSnapshot(t *testing.T) {
 	tempDir := t.TempDir()
 	os.Setenv("SNAPSHOT_DIR", tempDir)
 
-	// Act
-	err := EnsureSnapshotDir()
-
 	// Assert
-	if err != nil {
-		t.Fatalf("EnsureSnapshotDir failed: %v", err)
-	}
-
 	// テストデータ
 	href := "/test/article"
 	markdown := "# Test Article\n\nThis is a test article."
 
 	// Act
-	err = TakeSnapshot(href, markdown)
+	err := TakeSnapshot(href, markdown)
 
 	// Assert
 	if err != nil {
@@ -33,7 +26,7 @@ func Test_TakeSnapshot(t *testing.T) {
 	}
 
 	// ファイルが作成されたことを確認
-	filePath := filepath.Join(getSnapshotDir(), "article.md")
+	filePath := filepath.Join(GetSnapshotDirPath(), "article.md")
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		t.Fatal("Snapshot file was not created")
 	}

@@ -7,6 +7,16 @@ import (
 	"golang.org/x/net/html"
 )
 
+// hasClassはノードが指定されたクラスを持っているかどうかを返します
+func hasClass(n *html.Node, className string) bool {
+	for _, attr := range n.Attr {
+		if attr.Key == "class" {
+			return strings.Contains(attr.Val, className)
+		}
+	}
+	return false
+}
+
 // removeUnwantedElementsは不要な要素を削除します
 func removeUnwantedElements(n *html.Node) {
 	var next *html.Node
@@ -33,16 +43,6 @@ func removeUnwantedElements(n *html.Node) {
 			}
 		}
 	}
-}
-
-// hasClassはノードが指定されたクラスを持っているかどうかを返します
-func hasClass(n *html.Node, className string) bool {
-	for _, attr := range n.Attr {
-		if attr.Key == "class" {
-			return strings.Contains(attr.Val, className)
-		}
-	}
-	return false
 }
 
 // findHrefInAnchorはアンカータグからhref属性の値を取得します

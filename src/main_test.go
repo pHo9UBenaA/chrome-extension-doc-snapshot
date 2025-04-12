@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
@@ -52,14 +51,14 @@ func TestMain(t *testing.T) {
 
 	// Act
 	// テストサーバーのURLをBaseURLとして使用
-	BaseURL = ts.URL
+	baseURL = ts.URL
 
 	// クローリングを実行
 	main()
 
 	// Assert
 	// スナップショットが保存されたことを確認
-	snapshotDir := filepath.Join(tempDir, storage.SnapshotDir)
+	snapshotDir := storage.GetSnapshotDirPath()
 	files, err := os.ReadDir(snapshotDir)
 	if err != nil {
 		t.Fatalf("Failed to read snapshot directory: %v", err)
@@ -70,8 +69,13 @@ func TestMain(t *testing.T) {
 	}
 
 	for _, file := range files {
-		if !strings.HasSuffix(file.Name(), storage.SnapshotFileExtension) {
-			t.Errorf("Unexpected file extension: %s", file.Name())
+		content, err := os.ReadFile(filepath.Join(snapshotDir, file.Name()))
+		if err != nil {
+			t.Fatalf("Failed to read snapshot file: %v", err)
+		}
+
+		if string(content) != "# Test Article\n\nThis is a test article." {
+			t.Errorf("Unexpected content: %s", string(content))
 		}
 	}
 }

@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"testing"
 	"slices"
+	"testing"
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )

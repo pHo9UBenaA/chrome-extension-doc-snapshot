@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"slices"
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/storage"
 )
@@ -26,14 +27,14 @@ func TestMain(t *testing.T) {
 					<body>
 						<article>
 							<dl>
-								<dt><a href="/docs/extensions/reference/api/api1">API 1</a></dt>
-								<dt><a href="/docs/extensions/reference/api/api2">API 2</a></dt>
+								<dt><a href="/docs/extensions/reference/api/api">API 1</a></dt>
+								<dt><a href="/docs/extensions/reference/api/enterprise/api">API 2</a></dt>
 							</dl>
 						</article>
 					</body>
 				</html>
 			`))
-		case "/docs/extensions/reference/api/api1", "/docs/extensions/reference/api/api2":
+		case "/docs/extensions/reference/api/api", "/docs/extensions/reference/api/enterprise/api":
 			w.Write([]byte(`
 				<!DOCTYPE html>
 				<html>
@@ -68,6 +69,15 @@ func TestMain(t *testing.T) {
 		t.Fatalf("Expected 2 snapshots, got %d", len(files))
 	}
 
+	// スナップショットのファイル名を確認
+	expectedFilenames := []string{"api.md", "enterprise-api.md"}
+	for _, file := range files {
+		if !slices.Contains(expectedFilenames, file.Name()) {
+			t.Errorf("Unexpected snapshot filename: %s", file.Name())
+		}
+	}
+
+	// スナップショットの内容を確認
 	for _, file := range files {
 		content, err := os.ReadFile(filepath.Join(snapshotDir, file.Name()))
 		if err != nil {

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/pHo9UBenaA/chrome-extension-doc-snapshot/src/converter"
@@ -28,6 +28,18 @@ type DocumentProcessError struct {
 
 func (e *DocumentProcessError) Error() string {
 	return fmt.Sprintf("Document: '%s'\nError: %v", e.documentPath, e.err)
+}
+
+func getFilenameFromPath(documentPath string) (string, error) {
+	// ex. ["", "/tabs"], ["", "/devtools/performance"]
+	parts := strings.Split(documentPath, apiReferencePath)
+
+	if parts[0] != "" || len(parts) != 2 {
+		return "", fmt.Errorf("Failed to get filename from path: %s", parts)
+	}
+
+	path := strings.TrimPrefix(parts[1], "/")
+	return strings.ReplaceAll(path, "/", "-"), nil
 }
 
 func fetchAPIDocumentLinks() ([]string, error) {
@@ -75,7 +87,14 @@ func snapshotDocument(documentPath string) error {
 	}
 
 	// スナップショットの保存
-	filename := filepath.Base(documentPath)
+	filename, err := getFilenameFromPath(documentPath)
+	if err != nil {
+		return &DocumentProcessError{
+			documentPath: documentPath,
+			err:          fmt.Errorf("Failed to get filename: %w", err),
+		}
+	}
+
 	if err := storage.TakeSnapshot(filename, markdown); err != nil {
 		return &DocumentProcessError{
 			documentPath: documentPath,

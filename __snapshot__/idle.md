@@ -39,51 +39,26 @@ Chrome 44+
 
 ### getAutoLockDelay()
 
-Promise Chrome 73+ ChromeOS only
+Chrome 73+ ChromeOS only
 
 ```
-chrome.idle.getAutoLockDelay(
-  callback?: function,
-)
+chrome.idle.getAutoLockDelay(): Promise<number>
 ```
 
 Gets the time, in seconds, it takes until the screen is locked automatically while idle. Returns a zero duration if the screen is never locked automatically. Currently supported on Chrome OS only.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (delay: number) => void
-  ```
-  
-  - delay
-    
-    number
-    
-    Time, in seconds, until the screen is locked automatically while idle. This is zero if the screen never locks automatically.
 
 #### Returns
 
 - Promise&lt;number&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### queryState()
-
-Promise
 
 ```
 chrome.idle.queryState(
   detectionIntervalInSeconds: number,
-  callback?: function,
-)
+): Promise<IdleState>
 ```
 
 Returns "locked" if the system is locked, "idle" if the user has not generated any input for a specified number of seconds, or "active" otherwise.
@@ -95,34 +70,19 @@ Returns "locked" if the system is locked, "idle" if the user has not generated a
   number
   
   The system is considered idle if detectionIntervalInSeconds seconds have elapsed since the last user input detected.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (newState: IdleState) => void
-  ```
-  
-  - newState
-    
-    [IdleState](#type-IdleState)
 
 #### Returns
 
 - Promise&lt;[IdleState](#type-IdleState)&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setDetectionInterval()
 
 ```
 chrome.idle.setDetectionInterval(
   intervalInSeconds: number,
-)
+): void
 ```
 
 Sets the interval, in seconds, used to determine when the system is in an idle state for onStateChanged events. The default interval is 60 seconds.

@@ -120,12 +120,8 @@ Chrome 115+ MV3+
 
 ### attach()
 
-Promise
-
 ```
-chrome.webAuthenticationProxy.attach(
-  callback?: function,
-)
+chrome.webAuthenticationProxy.attach(): Promise<string | undefined>
 ```
 
 Makes this extension the active Web Authentication API request proxy.
@@ -138,37 +134,16 @@ The attached extension must call `detach()` once the remote desktop session has 
 
 Refer to the `onRemoteSessionStateChange` event for signaling a change of remote session attachment from a native application to to the (possibly suspended) extension.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (error?: string) => void
-  ```
-  
-  - error
-    
-    string optional
-
 #### Returns
 
 - Promise&lt;string | undefined&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### completeCreateRequest()
-
-Promise
 
 ```
 chrome.webAuthenticationProxy.completeCreateRequest(
   details: CreateResponseDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Reports the result of a `navigator.credentials.create()` call. The extension must call this for every `onCreateRequest` event it has received, unless the request was canceled (in which case, an `onRequestCanceled` event is fired).
@@ -178,31 +153,17 @@ Reports the result of a `navigator.credentials.create()` call. The extension mus
 - details
   
   [CreateResponseDetails](#type-CreateResponseDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### completeGetRequest()
-
-Promise
 
 ```
 chrome.webAuthenticationProxy.completeGetRequest(
   details: GetResponseDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Reports the result of a `navigator.credentials.get()` call. The extension must call this for every `onGetRequest` event it has received, unless the request was canceled (in which case, an `onRequestCanceled` event is fired).
@@ -212,31 +173,17 @@ Reports the result of a `navigator.credentials.get()` call. The extension must c
 - details
   
   [GetResponseDetails](#type-GetResponseDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### completeIsUvpaaRequest()
-
-Promise
 
 ```
 chrome.webAuthenticationProxy.completeIsUvpaaRequest(
   details: IsUvpaaResponseDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Reports the result of a `PublicKeyCredential.isUserVerifyingPlatformAuthenticator()` call. The extension must call this for every `onIsUvpaaRequest` event it has received.
@@ -246,30 +193,15 @@ Reports the result of a `PublicKeyCredential.isUserVerifyingPlatformAuthenticato
 - details
   
   [IsUvpaaResponseDetails](#type-IsUvpaaResponseDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### detach()
 
-Promise
-
 ```
-chrome.webAuthenticationProxy.detach(
-  callback?: function,
-)
+chrome.webAuthenticationProxy.detach(): Promise<string | undefined>
 ```
 
 Removes this extension from being the active Web Authentication API request proxy.
@@ -278,27 +210,9 @@ This method is typically called when the extension detects that a remote desktop
 
 Refer to the `onRemoteSessionStateChange` event for signaling a change of remote session attachment from a native application to to the (possibly suspended) extension.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (error?: string) => void
-  ```
-  
-  - error
-    
-    string optional
-
 #### Returns
 
 - Promise&lt;string | undefined&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

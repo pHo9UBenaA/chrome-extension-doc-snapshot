@@ -51,13 +51,10 @@ Specifies that the search results display in a new window.
 
 ### query()
 
-Promise
-
 ```
 chrome.search.query(
   queryInfo: QueryInfo,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Used to query the default search provider. In case of an error, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) will be set.
@@ -67,20 +64,9 @@ Used to query the default search provider. In case of an error, [`runtime.lastEr
 - queryInfo
   
   [QueryInfo](#type-QueryInfo)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

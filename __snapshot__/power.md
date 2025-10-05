@@ -33,47 +33,31 @@ Prevents the display from being turned off or dimmed, or the system from sleepin
 ### releaseKeepAwake()
 
 ```
-chrome.power.releaseKeepAwake()
+chrome.power.releaseKeepAwake(): void
 ```
 
 Releases a request previously made via requestKeepAwake().
 
 ### reportActivity()
 
-Promise Chrome 113+ ChromeOS only
+Chrome 113+ ChromeOS only
 
 ```
-chrome.power.reportActivity(
-  callback?: function,
-)
+chrome.power.reportActivity(): Promise<void>
 ```
 
 Reports a user activity in order to awake the screen from a dimmed or turned off state or from a screensaver. Exits the screensaver if it is currently active.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### requestKeepAwake()
 
 ```
 chrome.power.requestKeepAwake(
   level: Level,
-)
+): void
 ```
 
 Requests that power management be temporarily disabled. `level` describes the degree to which power management should be disabled. If a request previously made by the same app is still active, it will be replaced by the new request.

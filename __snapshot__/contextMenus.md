@@ -256,7 +256,7 @@ The maximum number of top level extension items that can be added to an extensio
 chrome.contextMenus.create(
   createProperties: CreateProperties,
   callback?: function,
-)
+): number | string
 ```
 
 Creates a new context menu item. If an error occurs during creation, it may not be detected until the creation callback fires; details will be in [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError).
@@ -284,13 +284,10 @@ Creates a new context menu item. If an error occurs during creation, it may not 
 
 ### remove()
 
-Promise
-
 ```
 chrome.contextMenus.remove(
   menuItemId: string | number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes a context menu item.
@@ -302,66 +299,34 @@ Removes a context menu item.
   string | number
   
   The ID of the context menu item to remove.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 123+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeAll()
 
-Promise
-
 ```
-chrome.contextMenus.removeAll(
-  callback?: function,
-)
+chrome.contextMenus.removeAll(): Promise<void>
 ```
 
 Removes all context menu items added by this extension.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 123+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.contextMenus.update(
   id: string | number,
   updateProperties: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates a previously created context menu item.
@@ -434,23 +399,12 @@ Updates a previously created context menu item.
       Chrome 44+
       
       The details of the tab where the click took place. This parameter is not present for platform apps.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 123+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

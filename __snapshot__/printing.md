@@ -74,7 +74,7 @@ console.log(`Default printer: ${defaultPrinter.name}.\n\t${defaultPrinter.descri
 The `submitJob()` method requires three things.
 
 - A `ticket` structure specifying which capabilities of the printer are to be used. If the user needs to select from available capabilities, you can retrieve them for a specific printer using `getPrinterInfo()`.
-- A `SubmitJobRequest` structure, which specifies the printer to use, and the file or date to print. This structure contains a reference to the `ticket` structure.
+- A `SubmitJobRequest` structure, which specifies the printer to use, and the file or data to print. This structure contains a reference to the `ticket` structure.
 - A blob of the file or data to print.
 
 Calling `submitJob()` triggers a dialog box asking the user to confirm printing. Use the [`PrintingAPIExtensionsAllowlist`](https://chromeenterprise.google/policies/#PrintingAPIExtensionsAllowlist%22) to bypass confirmation.
@@ -355,13 +355,10 @@ The maximum number of times that [`submitJob`](#method-submitJob) can be called 
 
 ### cancelJob()
 
-Promise
-
 ```
 chrome.printing.cancelJob(
   jobId: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Cancels previously submitted job.
@@ -373,33 +370,21 @@ Cancels previously submitted job.
   string
   
   The id of the print job to cancel. This should be the same id received in a [`SubmitJobResponse`](#type-SubmitJobResponse).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 100+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getJobStatus()
 
-Promise Chrome 135+
+Chrome 135+
 
 ```
 chrome.printing.getJobStatus(
   jobId: string,
-  callback?: function,
-)
+): Promise<JobStatus>
 ```
 
 Returns the status of the print job. This call will fail with a runtime error if the print job with the given `jobId` doesn't exist. `jobId`: The id of the print job to return the status of. This should be the same id received in a [`SubmitJobResponse`](#type-SubmitJobResponse).
@@ -409,35 +394,17 @@ Returns the status of the print job. This call will fail with a runtime error if
 - jobId
   
   string
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (status: JobStatus) => void
-  ```
-  
-  - status
-    
-    [JobStatus](#type-JobStatus)
 
 #### Returns
 
 - Promise&lt;[JobStatus](#type-JobStatus)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPrinterInfo()
-
-Promise
 
 ```
 chrome.printing.getPrinterInfo(
   printerId: string,
-  callback?: function,
-)
+): Promise<GetPrinterInfoResponse>
 ```
 
 Returns the status and capabilities of the printer in [CDD format](https://developers.google.com/cloud-print/docs/cdd#cdd). This call will fail with a runtime error if no printers with given id are installed.
@@ -447,73 +414,33 @@ Returns the status and capabilities of the printer in [CDD format](https://devel
 - printerId
   
   string
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: GetPrinterInfoResponse) => void
-  ```
-  
-  - response
-    
-    [GetPrinterInfoResponse](#type-GetPrinterInfoResponse)
 
 #### Returns
 
 - Promise&lt;[GetPrinterInfoResponse](#type-GetPrinterInfoResponse)&gt;
   
   Chrome 100+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPrinters()
 
-Promise
-
 ```
-chrome.printing.getPrinters(
-  callback?: function,
-)
+chrome.printing.getPrinters(): Promise<Printer[]>
 ```
 
 Returns the list of available printers on the device. This includes manually added, enterprise and discovered printers.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (printers: Printer[]) => void
-  ```
-  
-  - printers
-    
-    [Printer](#type-Printer)\[]
 
 #### Returns
 
 - Promise&lt;[Printer](#type-Printer)\[]&gt;
   
   Chrome 100+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### submitJob()
-
-Promise
 
 ```
 chrome.printing.submitJob(
   request: SubmitJobRequest,
-  callback?: function,
-)
+): Promise<SubmitJobResponse>
 ```
 
 Submits the job for printing. If the extension is not listed in the [`PrintingAPIExtensionsAllowlist`](https://chromeenterprise.google/policies/#PrintingAPIExtensionsAllowlist) policy, the user is prompted to accept the print job. Before Chrome 120, this function did not return a promise.
@@ -523,27 +450,12 @@ Submits the job for printing. If the extension is not listed in the [`PrintingAP
 - request
   
   [SubmitJobRequest](#type-SubmitJobRequest)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: SubmitJobResponse) => void
-  ```
-  
-  - response
-    
-    [SubmitJobResponse](#type-SubmitJobResponse)
 
 #### Returns
 
 - Promise&lt;[SubmitJobResponse](#type-SubmitJobResponse)&gt;
   
   Chrome 100+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

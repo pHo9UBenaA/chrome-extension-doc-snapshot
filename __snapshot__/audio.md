@@ -191,13 +191,10 @@ Type of stream an audio device provides.
 
 ### getDevices()
 
-Promise
-
 ```
 chrome.audio.getDevices(
   filter?: DeviceFilter,
-  callback?: function,
-)
+): Promise<AudioDeviceInfo[]>
 ```
 
 Gets a list of audio devices filtered based on `filter`.
@@ -209,37 +206,19 @@ Gets a list of audio devices filtered based on `filter`.
   [DeviceFilter](#type-DeviceFilter) optional
   
   Device properties by which to filter the list of returned audio devices. If the filter is not set or set to `{}`, returned device list will contain all available audio devices.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (devices: AudioDeviceInfo[]) => void
-  ```
-  
-  - devices
-    
-    [AudioDeviceInfo](#type-AudioDeviceInfo)\[]
 
 #### Returns
 
 - Promise&lt;[AudioDeviceInfo](#type-AudioDeviceInfo)\[]&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getMute()
-
-Promise
 
 ```
 chrome.audio.getMute(
   streamType: StreamType,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Gets the system-wide mute state for the specified stream type.
@@ -251,37 +230,19 @@ Gets the system-wide mute state for the specified stream type.
   [StreamType](#type-StreamType)
   
   Stream type for which mute state should be fetched.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (value: boolean) => void
-  ```
-  
-  - value
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setActiveDevices()
-
-Promise
 
 ```
 chrome.audio.setActiveDevices(
   ids: DeviceIdLists,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets lists of active input and/or output devices.
@@ -295,34 +256,20 @@ Sets lists of active input and/or output devices.
   Specifies IDs of devices that should be active. If either the input or output list is not set, devices in that category are unaffected.
   
   It is an error to pass in a non-existent device ID.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setMute()
-
-Promise
 
 ```
 chrome.audio.setMute(
   streamType: StreamType,
   isMuted: boolean,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets mute state for a stream type. The mute state will apply to all audio devices with the specified audio stream type.
@@ -339,34 +286,20 @@ Sets mute state for a stream type. The mute state will apply to all audio device
   boolean
   
   New mute value.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setProperties()
-
-Promise
 
 ```
 chrome.audio.setProperties(
   id: string,
   properties: DeviceProperties,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the properties for the input or output device.
@@ -379,23 +312,12 @@ Sets the properties for the input or output device.
 - properties
   
   [DeviceProperties](#type-DeviceProperties)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

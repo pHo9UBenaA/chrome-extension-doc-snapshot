@@ -240,13 +240,10 @@ A cookie's 'SameSite' state (https://tools.ietf.org/html/draft-west-first-party-
 
 ### get()
 
-Promise
-
 ```
 chrome.cookies.get(
   details: CookieDetails,
-  callback?: function,
-)
+): Promise<Cookie | undefined>
 ```
 
 Retrieves information about a single cookie. If more than one cookie of the same name exists for the given URL, the one with the longest path will be returned. For cookies with the same path length, the cookie with the earliest creation time will be returned.
@@ -256,39 +253,19 @@ Retrieves information about a single cookie. If more than one cookie of the same
 - details
   
   [CookieDetails](#type-CookieDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (cookie?: Cookie) => void
-  ```
-  
-  - cookie
-    
-    [Cookie](#type-Cookie) optional
-    
-    Contains details about the cookie. This parameter is null if no such cookie was found.
 
 #### Returns
 
 - Promise&lt;[Cookie](#type-Cookie) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
-
-Promise
 
 ```
 chrome.cookies.getAll(
   details: object,
-  callback?: function,
-)
+): Promise<Cookie[]>
 ```
 
 Retrieves all cookies from a single cookie store that match the given information. The cookies returned will be sorted, with those with the longest path first. If multiple cookies have the same path length, those with the earliest creation time will be first. This method only retrieves cookies for domains that the extension has host permissions to.
@@ -343,77 +320,35 @@ Retrieves all cookies from a single cookie store that match the given informatio
     string optional
     
     Restricts the retrieved cookies to those that would match the given URL.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (cookies: Cookie[]) => void
-  ```
-  
-  - cookies
-    
-    [Cookie](#type-Cookie)\[]
-    
-    All the existing, unexpired cookies that match the given cookie info.
 
 #### Returns
 
 - Promise&lt;[Cookie](#type-Cookie)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAllCookieStores()
 
-Promise
-
 ```
-chrome.cookies.getAllCookieStores(
-  callback?: function,
-)
+chrome.cookies.getAllCookieStores(): Promise<CookieStore[]>
 ```
 
 Lists all existing cookie stores.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (cookieStores: CookieStore[]) => void
-  ```
-  
-  - cookieStores
-    
-    [CookieStore](#type-CookieStore)\[]
-    
-    All the existing cookie stores.
 
 #### Returns
 
 - Promise&lt;[CookieStore](#type-CookieStore)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPartitionKey()
 
-Promise Chrome 132+
+Chrome 132+
 
 ```
 chrome.cookies.getPartitionKey(
   details: FrameDetails,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 The partition key for the frame indicated.
@@ -423,43 +358,17 @@ The partition key for the frame indicated.
 - details
   
   [FrameDetails](#type-FrameDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: object) => void
-  ```
-  
-  - details
-    
-    object
-    
-    Contains details about the partition key that's been retrieved.
-    
-    - partitionKey
-      
-      [CookiePartitionKey](#type-CookiePartitionKey)
-      
-      The partition key for reading or modifying cookies with the Partitioned attribute.
 
 #### Returns
 
 - Promise&lt;object&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### remove()
-
-Promise
 
 ```
 chrome.cookies.remove(
   details: CookieDetails,
-  callback?: function,
-)
+): Promise<object | undefined>
 ```
 
 Deletes a cookie by name.
@@ -469,62 +378,19 @@ Deletes a cookie by name.
 - details
   
   [CookieDetails](#type-CookieDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details?: object) => void
-  ```
-  
-  - details
-    
-    object optional
-    
-    Contains details about the cookie that's been removed. If removal failed for any reason, this will be "null", and [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) will be set.
-    
-    - name
-      
-      string
-      
-      The name of the cookie that's been removed.
-    - partitionKey
-      
-      [CookiePartitionKey](#type-CookiePartitionKey) optional
-      
-      Chrome 119+
-      
-      The partition key for reading or modifying cookies with the Partitioned attribute.
-    - storeId
-      
-      string
-      
-      The ID of the cookie store from which the cookie was removed.
-    - url
-      
-      string
-      
-      The URL associated with the cookie that's been removed.
 
 #### Returns
 
 - Promise&lt;object | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### set()
-
-Promise
 
 ```
 chrome.cookies.set(
   details: object,
-  callback?: function,
-)
+): Promise<Cookie | undefined>
 ```
 
 Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
@@ -596,29 +462,12 @@ Sets a cookie with the given cookie data; may overwrite equivalent cookies if th
     string optional
     
     The value of the cookie. Empty by default if omitted.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (cookie?: Cookie) => void
-  ```
-  
-  - cookie
-    
-    [Cookie](#type-Cookie) optional
-    
-    Contains details about the cookie that's been set. If setting failed for any reason, this will be "null", and [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) will be set.
 
 #### Returns
 
 - Promise&lt;[Cookie](#type-Cookie) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

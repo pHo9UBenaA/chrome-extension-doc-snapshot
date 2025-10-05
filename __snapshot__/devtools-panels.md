@@ -165,7 +165,7 @@ Represents the Elements panel.
 
 ### ExtensionPanel
 
-Represents a panel created by extension.
+Represents a panel created by an extension.
 
 #### Properties
 
@@ -276,6 +276,19 @@ Represents a panel created by extension.
   - returns
     
     [Button](#type-Button)
+- show
+  
+  void
+  
+  Chrome 140+
+  
+  Shows the panel by activating the corresponding tab.
+  
+  The `show` function looks like:
+  
+  ```
+  () => {...}
+  ```
 
 ### ExtensionSidebarPane
 
@@ -524,7 +537,7 @@ chrome.devtools.panels.create(
   iconPath: string,
   pagePath: string,
   callback?: function,
-)
+): void
 ```
 
 Creates an extension panel.
@@ -570,7 +583,7 @@ chrome.devtools.panels.openResource(
   lineNumber: number,
   columnNumber?: number,
   callback?: function,
-)
+): void
 ```
 
 Requests DevTools to open a URL in a Developer Tools panel.
@@ -609,7 +622,7 @@ Requests DevTools to open a URL in a Developer Tools panel.
 ```
 chrome.devtools.panels.setOpenResourceHandler(
   callback?: function,
-)
+): void
 ```
 
 Specifies the function to be called when the user clicks a resource link in the Developer Tools window. To unset the handler, either call the method with no parameters or pass null as the parameter.
@@ -623,7 +636,7 @@ Specifies the function to be called when the user clicks a resource link in the 
   The `callback` parameter looks like:
   
   ```
-  (resource: Resource) => void
+  (resource: Resource, lineNumber: number) => void
   ```
   
   - resource
@@ -631,3 +644,8 @@ Specifies the function to be called when the user clicks a resource link in the 
     [Resource](https://developer.chrome.com/docs/extensions/reference/api/devtools/devtools_inspectedWindow/#type-Resource)
     
     A [`devtools.inspectedWindow.Resource`](https://developer.chrome.com/docs/extensions/reference/api/devtools/devtools_inspectedWindow/#type-Resource) object for the resource that was clicked.
+  - lineNumber
+    
+    number
+    
+    Specifies the line number within the resource that was clicked.

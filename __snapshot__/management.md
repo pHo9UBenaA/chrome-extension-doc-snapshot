@@ -254,13 +254,10 @@ Options for how to handle the extension's uninstallation.
 
 ### createAppShortcut()
 
-Promise
-
 ```
 chrome.management.createAppShortcut(
   id: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Display options to create shortcuts for an app. On Mac, only packaged app shortcuts can be created.
@@ -272,34 +269,20 @@ Display options to create shortcuts for an app. On Mac, only packaged app shortc
   string
   
   This should be the id from an app item of [`management.ExtensionInfo`](#type-ExtensionInfo).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### generateAppForLink()
-
-Promise
 
 ```
 chrome.management.generateAppForLink(
   url: string,
   title: string,
-  callback?: function,
-)
+): Promise<ExtensionInfo>
 ```
 
 Generate an app for a URL. Returns the generated bookmark app.
@@ -316,37 +299,19 @@ Generate an app for a URL. Returns the generated bookmark app.
   string
   
   The title of the generated app.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ExtensionInfo) => void
-  ```
-  
-  - result
-    
-    [ExtensionInfo](#type-ExtensionInfo)
 
 #### Returns
 
 - Promise&lt;[ExtensionInfo](#type-ExtensionInfo)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### get()
-
-Promise
 
 ```
 chrome.management.get(
   id: string,
-  callback?: function,
-)
+): Promise<ExtensionInfo>
 ```
 
 Returns information about the installed extension, app, or theme that has the given ID.
@@ -358,73 +323,33 @@ Returns information about the installed extension, app, or theme that has the gi
   string
   
   The ID from an item of [`management.ExtensionInfo`](#type-ExtensionInfo).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ExtensionInfo) => void
-  ```
-  
-  - result
-    
-    [ExtensionInfo](#type-ExtensionInfo)
 
 #### Returns
 
 - Promise&lt;[ExtensionInfo](#type-ExtensionInfo)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
 
-Promise
-
 ```
-chrome.management.getAll(
-  callback?: function,
-)
+chrome.management.getAll(): Promise<ExtensionInfo[]>
 ```
 
 Returns a list of information about installed extensions and apps.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ExtensionInfo[]) => void
-  ```
-  
-  - result
-    
-    [ExtensionInfo](#type-ExtensionInfo)\[]
 
 #### Returns
 
 - Promise&lt;[ExtensionInfo](#type-ExtensionInfo)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPermissionWarningsById()
-
-Promise
 
 ```
 chrome.management.getPermissionWarningsById(
   id: string,
-  callback?: function,
-)
+): Promise<string[]>
 ```
 
 Returns a list of [permission warnings](https://developer.chrome.com/extensions/develop/concepts/permission-warnings) for the given extension id.
@@ -436,37 +361,19 @@ Returns a list of [permission warnings](https://developer.chrome.com/extensions/
   string
   
   The ID of an already installed extension.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (permissionWarnings: string[]) => void
-  ```
-  
-  - permissionWarnings
-    
-    string\[]
 
 #### Returns
 
 - Promise&lt;string\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPermissionWarningsByManifest()
-
-Promise
 
 ```
 chrome.management.getPermissionWarningsByManifest(
   manifestStr: string,
-  callback?: function,
-)
+): Promise<string[]>
 ```
 
 Returns a list of [permission warnings](https://developer.chrome.com/extensions/develop/concepts/permission-warnings) for the given extension manifest string. Note: This function can be used without requesting the 'management' permission in the manifest.
@@ -478,105 +385,49 @@ Returns a list of [permission warnings](https://developer.chrome.com/extensions/
   string
   
   Extension manifest JSON string.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (permissionWarnings: string[]) => void
-  ```
-  
-  - permissionWarnings
-    
-    string\[]
 
 #### Returns
 
 - Promise&lt;string\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getSelf()
 
-Promise
-
 ```
-chrome.management.getSelf(
-  callback?: function,
-)
+chrome.management.getSelf(): Promise<ExtensionInfo>
 ```
 
 Returns information about the calling extension, app, or theme. Note: This function can be used without requesting the 'management' permission in the manifest.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ExtensionInfo) => void
-  ```
-  
-  - result
-    
-    [ExtensionInfo](#type-ExtensionInfo)
 
 #### Returns
 
 - Promise&lt;[ExtensionInfo](#type-ExtensionInfo)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### installReplacementWebApp()
 
-Promise Chrome 77+
+Chrome 77+
 
 ```
-chrome.management.installReplacementWebApp(
-  callback?: function,
-)
+chrome.management.installReplacementWebApp(): Promise<void>
 ```
 
 Launches the replacement\_web\_app specified in the manifest. Prompts the user to install if not already installed.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### launchApp()
-
-Promise
 
 ```
 chrome.management.launchApp(
   id: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Launches an application.
@@ -588,34 +439,20 @@ Launches an application.
   string
   
   The extension id of the application.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setEnabled()
-
-Promise
 
 ```
 chrome.management.setEnabled(
   id: string,
   enabled: boolean,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Enables or disables an app or extension. In most cases this function must be called in the context of a user gesture (e.g. an onclick handler for a button), and may present the user with a native confirmation UI as a way of preventing abuse.
@@ -632,34 +469,20 @@ Enables or disables an app or extension. In most cases this function must be cal
   boolean
   
   Whether this item should be enabled or disabled.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setLaunchType()
-
-Promise
 
 ```
 chrome.management.setLaunchType(
   id: string,
   launchType: LaunchType,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Set the launch type of an app.
@@ -676,34 +499,20 @@ Set the launch type of an app.
   [LaunchType](#type-LaunchType)
   
   The target launch type. Always check and make sure this launch type is in [`ExtensionInfo.availableLaunchTypes`](#property-ExtensionInfo-availableLaunchTypes), because the available launch types vary on different platforms and configurations.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### uninstall()
-
-Promise
 
 ```
 chrome.management.uninstall(
   id: string,
   options?: UninstallOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Uninstalls a currently installed app or extension. Note: This function does not work in managed environments when the user is not allowed to uninstall the specified extension/app. If the uninstall fails (e.g. the user cancels the dialog) the promise will be rejected or the callback will be called with [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) set.
@@ -718,33 +527,19 @@ Uninstalls a currently installed app or extension. Note: This function does not 
 - options
   
   [UninstallOptions](#type-UninstallOptions) optional
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### uninstallSelf()
-
-Promise
 
 ```
 chrome.management.uninstallSelf(
   options?: UninstallOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Uninstalls the calling extension. Note: This function can be used without requesting the 'management' permission in the manifest. This function does not work in managed environments when the user is not allowed to uninstall the specified extension/app.
@@ -754,23 +549,12 @@ Uninstalls the calling extension. Note: This function can be used without reques
 - options
   
   [UninstallOptions](#type-UninstallOptions) optional
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

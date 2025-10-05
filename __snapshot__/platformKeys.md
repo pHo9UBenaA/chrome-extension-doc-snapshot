@@ -115,7 +115,7 @@ chrome.platformKeys.getKeyPair(
   certificate: ArrayBuffer,
   parameters: object,
   callback: function,
-)
+): void
 ```
 
 Passes the key pair of `certificate` for usage with [`platformKeys.subtleCrypto`](#method-subtleCrypto) to `callback`.
@@ -162,7 +162,7 @@ chrome.platformKeys.getKeyPairBySpki(
   publicKeySpkiDer: ArrayBuffer,
   parameters: object,
   callback: function,
-)
+): void
 ```
 
 Passes the key pair identified by `publicKeySpkiDer` for usage with [`platformKeys.subtleCrypto`](#method-subtleCrypto) to `callback`.
@@ -202,13 +202,10 @@ Passes the key pair identified by `publicKeySpkiDer` for usage with [`platformKe
 
 ### selectClientCertificates()
 
-Promise
-
 ```
 chrome.platformKeys.selectClientCertificates(
   details: SelectDetails,
-  callback?: function,
-)
+): Promise<Match[]>
 ```
 
 This method filters from a list of client certificates the ones that are known to the platform, match `request` and for which the extension has permission to access the certificate and its private key. If `interactive` is true, the user is presented a dialog where they can select from matching certificates and grant the extension access to the certificate. The selected/filtered client certificates will be passed to `callback`.
@@ -218,34 +215,17 @@ This method filters from a list of client certificates the ones that are known t
 - details
   
   [SelectDetails](#type-SelectDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (matches: Match[]) => void
-  ```
-  
-  - matches
-    
-    [Match](#type-Match)\[]
-    
-    The list of certificates that match the request, that the extension has permission for and, if `interactive` is true, that were selected by the user.
 
 #### Returns
 
 - Promise&lt;[Match](#type-Match)\[]&gt;
   
   Chrome 121+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### subtleCrypto()
 
 ```
-chrome.platformKeys.subtleCrypto()
+chrome.platformKeys.subtleCrypto(): object | undefined
 ```
 
 An implementation of WebCrypto's [SubtleCrypto](https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface) that allows crypto operations on keys of client certificates that are available to this extension.
@@ -256,13 +236,10 @@ An implementation of WebCrypto's [SubtleCrypto](https://www.w3.org/TR/WebCryptoA
 
 ### verifyTLSServerCertificate()
 
-Promise
-
 ```
 chrome.platformKeys.verifyTLSServerCertificate(
   details: VerificationDetails,
-  callback?: function,
-)
+): Promise<VerificationResult>
 ```
 
 Checks whether `details.serverCertificateChain` can be trusted for `details.hostname` according to the trust settings of the platform. Note: The actual behavior of the trust verification is not fully specified and might change in the future. The API implementation verifies certificate expiration, validates the certification path and checks trust by a known CA. The implementation is supposed to respect the EKU serverAuth and to support subject alternative names.
@@ -272,24 +249,9 @@ Checks whether `details.serverCertificateChain` can be trusted for `details.host
 - details
   
   [VerificationDetails](#type-VerificationDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: VerificationResult) => void
-  ```
-  
-  - result
-    
-    [VerificationResult](#type-VerificationResult)
 
 #### Returns
 
 - Promise&lt;[VerificationResult](#type-VerificationResult)&gt;
   
   Chrome 121+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

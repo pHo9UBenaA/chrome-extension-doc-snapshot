@@ -622,35 +622,17 @@ The maximum number of times that `handlerBehaviorChanged` can be called per 10 m
 
 ### handlerBehaviorChanged()
 
-Promise
-
 ```
-chrome.webRequest.handlerBehaviorChanged(
-  callback?: function,
-)
+chrome.webRequest.handlerBehaviorChanged(): Promise<void>
 ```
 
 Needs to be called when the behavior of the webRequest handlers has changed to prevent incorrect handling due to caching. This function call is expensive. Don't call it often.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

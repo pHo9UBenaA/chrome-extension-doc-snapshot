@@ -169,7 +169,7 @@ chrome.devtools.inspectedWindow.eval(
   expression: string,
   options?: object,
   callback?: function,
-)
+): void
 ```
 
 Evaluates a JavaScript expression in the context of the main frame of the inspected page. The expression must evaluate to a JSON-compliant object, otherwise an exception is thrown. The eval function can report either a DevTools-side error or a JavaScript exception that occurs during evaluation. In either case, the `result` parameter of the callback is `undefined`. In the case of a DevTools-side error, the `isException` parameter is non-null and has `isError` set to true and `code` set to an error code. In the case of a JavaScript error, `isException` is set to true and `value` is set to the string value of thrown object.
@@ -261,7 +261,7 @@ Evaluates a JavaScript expression in the context of the main frame of the inspec
 ```
 chrome.devtools.inspectedWindow.getResources(
   callback: function,
-)
+): void
 ```
 
 Retrieves the list of resources from the inspected page.
@@ -289,7 +289,7 @@ Retrieves the list of resources from the inspected page.
 ```
 chrome.devtools.inspectedWindow.reload(
   reloadOptions?: object,
-)
+): void
 ```
 
 Reloads the inspected page.

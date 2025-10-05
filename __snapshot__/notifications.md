@@ -176,13 +176,10 @@ Contains an icon, title, message, progress, and up to two buttons.
 
 ### clear()
 
-Promise
-
 ```
 chrome.notifications.clear(
   notificationId: string,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Clears the specified notification.
@@ -194,38 +191,20 @@ Clears the specified notification.
   string
   
   The id of the notification to be cleared. This is returned by [`notifications.create`](#method-create) method.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (wasCleared: boolean) => void
-  ```
-  
-  - wasCleared
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### create()
-
-Promise
 
 ```
 chrome.notifications.create(
   notificationId?: string,
   options: NotificationOptions,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Creates and displays a notification.
@@ -244,110 +223,48 @@ Creates and displays a notification.
   [NotificationOptions](#type-NotificationOptions)
   
   Contents of the notification.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (notificationId: string) => void
-  ```
-  
-  - notificationId
-    
-    string
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
 
-Promise
-
 ```
-chrome.notifications.getAll(
-  callback?: function,
-)
+chrome.notifications.getAll(): Promise<object>
 ```
 
 Retrieves all the notifications of this app or extension.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (notifications: object) => void
-  ```
-  
-  - notifications
-    
-    object
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPermissionLevel()
 
-Promise
-
 ```
-chrome.notifications.getPermissionLevel(
-  callback?: function,
-)
+chrome.notifications.getPermissionLevel(): Promise<PermissionLevel>
 ```
 
 Retrieves whether the user has enabled notifications from this app or extension.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (level: PermissionLevel) => void
-  ```
-  
-  - level
-    
-    [PermissionLevel](#type-PermissionLevel)
 
 #### Returns
 
 - Promise&lt;[PermissionLevel](#type-PermissionLevel)&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.notifications.update(
   notificationId: string,
   options: NotificationOptions,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Updates an existing notification.
@@ -364,27 +281,12 @@ Updates an existing notification.
   [NotificationOptions](#type-NotificationOptions)
   
   Contents of the notification to update to.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (wasUpdated: boolean) => void
-  ```
-  
-  - wasUpdated
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

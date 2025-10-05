@@ -83,13 +83,10 @@ The storage type is unknown.
 
 ### ejectDevice()
 
-Promise
-
 ```
 chrome.system.storage.ejectDevice(
   id: string,
-  callback?: function,
-)
+): Promise<EjectDeviceResultCode>
 ```
 
 Ejects a removable storage device.
@@ -99,37 +96,21 @@ Ejects a removable storage device.
 - id
   
   string
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: EjectDeviceResultCode) => void
-  ```
-  
-  - result
-    
-    [EjectDeviceResultCode](#type-EjectDeviceResultCode)
 
 #### Returns
 
 - Promise&lt;[EjectDeviceResultCode](#type-EjectDeviceResultCode)&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAvailableCapacity()
 
-Promise Dev channel
+Dev channel
 
 ```
 chrome.system.storage.getAvailableCapacity(
   id: string,
-  callback?: function,
-)
+): Promise<StorageAvailableCapacityInfo>
 ```
 
 Get the available capacity of a specified `id` storage device. The `id` is the transient device ID from StorageUnitInfo.
@@ -139,61 +120,24 @@ Get the available capacity of a specified `id` storage device. The `id` is the t
 - id
   
   string
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (info: StorageAvailableCapacityInfo) => void
-  ```
-  
-  - info
-    
-    [StorageAvailableCapacityInfo](#type-StorageAvailableCapacityInfo)
 
 #### Returns
 
 - Promise&lt;[StorageAvailableCapacityInfo](#type-StorageAvailableCapacityInfo)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getInfo()
 
-Promise
-
 ```
-chrome.system.storage.getInfo(
-  callback?: function,
-)
+chrome.system.storage.getInfo(): Promise<StorageUnitInfo[]>
 ```
 
 Get the storage information from the system. The argument passed to the callback is an array of StorageUnitInfo objects.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (info: StorageUnitInfo[]) => void
-  ```
-  
-  - info
-    
-    [StorageUnitInfo](#type-StorageUnitInfo)\[]
 
 #### Returns
 
 - Promise&lt;[StorageUnitInfo](#type-StorageUnitInfo)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

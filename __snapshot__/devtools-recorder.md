@@ -230,7 +230,7 @@ Chrome 112+
 chrome.devtools.recorder.createView(
   title: string,
   pagePath: string,
-)
+): RecorderView
 ```
 
 Creates a view that can handle the replay. This view will be embedded inside the Recorder panel.
@@ -259,7 +259,7 @@ chrome.devtools.recorder.registerRecorderExtensionPlugin(
   plugin: RecorderExtensionPlugin,
   name: string,
   mediaType: string,
-)
+): void
 ```
 
 Registers a Recorder extension plugin.

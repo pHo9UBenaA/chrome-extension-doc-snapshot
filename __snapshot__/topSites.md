@@ -48,36 +48,14 @@ An object encapsulating a most visited URL, such as the default shortcuts on the
 
 ### get()
 
-Promise
-
 ```
-chrome.topSites.get(
-  callback?: function,
-)
+chrome.topSites.get(): Promise<MostVisitedURL[]>
 ```
 
 Gets a list of top sites.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (data: MostVisitedURL[]) => void
-  ```
-  
-  - data
-    
-    [MostVisitedURL](#type-MostVisitedURL)\[]
 
 #### Returns
 
 - Promise&lt;[MostVisitedURL](#type-MostVisitedURL)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

@@ -56,19 +56,19 @@ The Storage API is divided into the following storage areas:
 
 [`storage.local`](#property-local)
 
-Data is stored locally and cleared when the extension is removed. The storage limit is 10 MB (5 MB in Chrome 113 and earlier), but can be increased by requesting the `"unlimitedStorage"` permission. We recommend using `storage.local` to store larger amounts of data.
+Data is stored locally and cleared when the extension is removed. The storage limit is 10 MB (5 MB in Chrome 113 and earlier), but can be increased by requesting the `"unlimitedStorage"` permission. We recommend using `storage.local` to store larger amounts of data. By default, it's exposed to content scripts, but this behavior can be changed by calling [`chrome.storage.local.setAccessLevel()`](#method-StorageArea-setAccessLevel).
 
 [`storage.managed`](#property-managed)
 
-Managed storage is read-only storage for policy installed extensions and managed by system administrators using a developer-defined schema and enterprise policies. Policies are analogous to options but are configured by a system administrator instead of the user, allowing the extension to be preconfigured for all users of an organization. For information on policies, see [Documentation for Administrators](https://www.chromium.org/administrators/). To learn more about the `managed` storage area, see [Manifest for storage areas](/docs/extensions/reference/api/storage).
+Managed storage is read-only storage for policy installed extensions and managed by system administrators using a developer-defined schema and enterprise policies. Policies are analogous to options but are configured by a system administrator instead of the user, allowing the extension to be preconfigured for all users of an organization. By default, `storage.managed` is exposed to content scripts, but this behavior can be changed by calling [`chrome.storage.managed.setAccessLevel()`](#method-StorageArea-setAccessLevel). For information on policies, see [Documentation for Administrators](https://www.chromium.org/administrators/). To learn more about the `managed` storage area, see [Manifest for storage areas](/docs/extensions/reference/api/storage).
 
 [`storage.session`](#property-session)
 
-Holds data in memory while an extension is loaded. The storage is cleared if the extension is disabled, reloaded or updated and when the browser restarts. By default, it's not exposed to content scripts, but this behavior can be changed by setting [`chrome.storage.session.setAccessLevel()`](#method-StorageArea-setAccessLevel). The storage limit is 10 MB (1 MB in Chrome 111 and earlier). The`storage.session` interface is one of several [we recommend for service workers](/docs/extensions/mv3/service_workers/service-worker-lifecycle#persist-data).
+Holds data in memory while an extension is loaded. The storage is cleared if the extension is disabled, reloaded or updated and when the browser restarts. By default, it's not exposed to content scripts, but this behavior can be changed by calling [`chrome.storage.session.setAccessLevel()`](#method-StorageArea-setAccessLevel). The storage limit is 10 MB (1 MB in Chrome 111 and earlier). The`storage.session` interface is one of several [we recommend for service workers](/docs/extensions/mv3/service_workers/service-worker-lifecycle#persist-data).
 
 [`storage.sync`](#property-sync)
 
-If syncing is enabled, the data is synced to any Chrome browser that the user is logged into. If disabled, it behaves like `storage.local`. Chrome stores the data locally when the browser is offline and resumes syncing when it's back online. The quota limitation is approximately 100 KB, 8 KB per item. We recommend using `storage.sync` to preserve user settings across synced browsers. If you're working with sensitive user data, instead use `storage.session`.
+If syncing is enabled, the data is synced to any Chrome browser that the user is logged into. If disabled, it behaves like `storage.local`. Chrome stores the data locally when the browser is offline and resumes syncing when it's back online. The quota limitation is approximately 100 KB, 8 KB per item. We recommend using `storage.sync` to preserve user settings across synced browsers. If you're working with sensitive user data, instead use `storage.session`. By default, `storage.sync` is exposed to content scripts, but this behavior can be changed by calling [`chrome.storage.sync.setAccessLevel()`](#method-StorageArea-setAccessLevel).
 
 ### Storage and throttling limits
 
@@ -83,7 +83,7 @@ For details on storage area limitations and what happens when they're exceeded, 
 
 The following sections demonstrate common use cases for the Storage API.
 
-### Synchronous response to storage updates
+### Respond to storage updates
 
 To track changes made to storage, add a listener to its `onChanged` event. When anything changes in storage, that event fires. The sample code listens for these changes:
 
@@ -278,47 +278,29 @@ Specifies contexts originating from outside the extension.
   
   void
   
-  Promise
-  
   Removes all items from storage.
   
   The `clear` function looks like:
   
   ```
-  (callback?: function) => {...}
+  () => {...}
   ```
-  
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
-  
-  <!--THE END-->
   
   - returns
     
     Promise&lt;void&gt;
     
     Chrome 95+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - get
   
   void
-  
-  Promise
   
   Gets one or more items from storage.
   
   The `get` function looks like:
   
   ```
-  (keys?: string | string[] | object, callback?: function) => {...}
+  (keys?: string | string[] | object) => {...}
   ```
   
   - keys
@@ -326,21 +308,6 @@ Specifies contexts originating from outside the extension.
     string | string\[] | object optional
     
     A single key to get, list of keys to get, or a dictionary specifying default values (see description of the object). An empty list or object will return an empty result object. Pass in `null` to get the entire contents of storage.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (items: object) => void
-    ```
-    
-    - items
-      
-      object
-      
-      Object with items in their key-value mappings.
   
   <!--THE END-->
   
@@ -349,20 +316,16 @@ Specifies contexts originating from outside the extension.
     Promise&lt;object&gt;
     
     Chrome 95+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - getBytesInUse
   
   void
-  
-  Promise
   
   Gets the amount of space (in bytes) being used by one or more items.
   
   The `getBytesInUse` function looks like:
   
   ```
-  (keys?: string | string[], callback?: function) => {...}
+  (keys?: string | string[]) => {...}
   ```
   
   - keys
@@ -370,21 +333,6 @@ Specifies contexts originating from outside the extension.
     string | string\[] optional
     
     A single key or list of keys to get the total usage for. An empty list will return 0. Pass in `null` to get the total usage of all of storage.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (bytesInUse: number) => void
-    ```
-    
-    - bytesInUse
-      
-      number
-      
-      Amount of space being used in storage, in bytes.
   
   <!--THE END-->
   
@@ -393,57 +341,33 @@ Specifies contexts originating from outside the extension.
     Promise&lt;number&gt;
     
     Chrome 95+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - getKeys
   
   void
   
-  Promise Chrome 130+
+  Chrome 130+
   
   Gets all keys from storage.
   
   The `getKeys` function looks like:
   
   ```
-  (callback?: function) => {...}
+  () => {...}
   ```
-  
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (keys: string[]) => void
-    ```
-    
-    - keys
-      
-      string\[]
-      
-      Array with keys read from storage.
-  
-  <!--THE END-->
   
   - returns
     
     Promise&lt;string\[]&gt;
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - remove
   
   void
-  
-  Promise
   
   Removes one or more items from storage.
   
   The `remove` function looks like:
   
   ```
-  (keys: string | string[], callback?: function) => {...}
+  (keys: string | string[]) => {...}
   ```
   
   - keys
@@ -451,15 +375,6 @@ Specifies contexts originating from outside the extension.
     string | string\[]
     
     A single key or a list of keys for items to remove.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -468,20 +383,16 @@ Specifies contexts originating from outside the extension.
     Promise&lt;void&gt;
     
     Chrome 95+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - set
   
   void
-  
-  Promise
   
   Sets multiple items.
   
   The `set` function looks like:
   
   ```
-  (items: object, callback?: function) => {...}
+  (items: object) => {...}
   ```
   
   - items
@@ -491,15 +402,6 @@ Specifies contexts originating from outside the extension.
     An object which gives each key/value pair to update storage with. Any other key/value pairs in storage will not be affected.
     
     Primitive values such as numbers will serialize as expected. Values with a `typeof` `"object"` and `"function"` will typically serialize to `{}`, with the exception of `Array` (serializes as expected), `Date`, and `Regex` (serialize using their `String` representation).
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -508,20 +410,18 @@ Specifies contexts originating from outside the extension.
     Promise&lt;void&gt;
     
     Chrome 95+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - setAccessLevel
   
   void
   
-  Promise Chrome 102+
+  Chrome 102+
   
-  Sets the desired access level for the storage area. The default will be only trusted contexts.
+  Sets the desired access level for the storage area. By default, `session` storage is restricted to trusted contexts (extension pages and service workers), while `managed`, `local`, and `sync` storage allow access from both trusted and untrusted contexts.
   
   The `setAccessLevel` function looks like:
   
   ```
-  (accessOptions: object, callback?: function) => {...}
+  (accessOptions: object) => {...}
   ```
   
   - accessOptions
@@ -533,23 +433,12 @@ Specifies contexts originating from outside the extension.
       [AccessLevel](#type-AccessLevel)
       
       The access level of the storage area.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
   - returns
     
     Promise&lt;void&gt;
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### StorageChange
 

@@ -149,7 +149,7 @@ Foreground only
 chrome.tabCapture.capture(
   options: CaptureOptions,
   callback: function,
-)
+): void
 ```
 
 Captures the visible area of the currently active tab. Capture can only be started on the currently active tab after the extension has been *invoked*, similar to the way that [activeTab](https://developer.chrome.com/docs/extensions/activeTab#invoking-activeTab) works. Capture is maintained across page navigations within the tab, and stops when the tab is closed, or the media stream is closed by the extension.
@@ -177,49 +177,26 @@ Captures the visible area of the currently active tab. Capture can only be start
 
 ### getCapturedTabs()
 
-Promise
-
 ```
-chrome.tabCapture.getCapturedTabs(
-  callback?: function,
-)
+chrome.tabCapture.getCapturedTabs(): Promise<CaptureInfo[]>
 ```
 
 Returns a list of tabs that have requested capture or are being captured, i.e. status != stopped and status != error. This allows extensions to inform the user that there is an existing tab capture that would prevent a new tab capture from succeeding (or to prevent redundant requests for the same tab).
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: CaptureInfo[]) => void
-  ```
-  
-  - result
-    
-    [CaptureInfo](#type-CaptureInfo)\[]
 
 #### Returns
 
 - Promise&lt;[CaptureInfo](#type-CaptureInfo)\[]&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getMediaStreamId()
 
-Promise Chrome 71+
+Chrome 71+
 
 ```
 chrome.tabCapture.getMediaStreamId(
   options?: GetMediaStreamOptions,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Creates a stream ID to capture the target tab. Similar to chrome.tabCapture.capture() method, but returns a media stream ID, instead of a media stream, to the consumer tab.
@@ -229,27 +206,12 @@ Creates a stream ID to capture the target tab. Similar to chrome.tabCapture.capt
 - options
   
   [GetMediaStreamOptions](#type-GetMediaStreamOptions) optional
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (streamId: string) => void
-  ```
-  
-  - streamId
-    
-    string
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

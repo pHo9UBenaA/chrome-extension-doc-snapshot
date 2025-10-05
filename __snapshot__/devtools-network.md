@@ -86,7 +86,7 @@ Represents a network request for a document resource (script, image and so on). 
 ```
 chrome.devtools.network.getHAR(
   callback: function,
-)
+): void
 ```
 
 Returns HAR log that contains all known network requests.

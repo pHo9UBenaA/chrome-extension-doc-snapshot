@@ -48,6 +48,20 @@ Mirrors [SystemAudioPreferenceEnum](https://w3c.github.io/mediacapture-screen-sh
 
 "exclude"
 
+### WindowAudioPreferenceEnum
+
+Chrome 140+
+
+Mirrors [WindowAudioPreferenceEnum](https://w3c.github.io/mediacapture-screen-share/#dom-windowaudiopreferenceenum).
+
+#### Enum
+
+"system"
+
+"window"
+
+"exclude"
+
 ## Methods
 
 ### cancelChooseDesktopMedia()
@@ -55,7 +69,7 @@ Mirrors [SystemAudioPreferenceEnum](https://w3c.github.io/mediacapture-screen-sh
 ```
 chrome.desktopCapture.cancelChooseDesktopMedia(
   desktopMediaRequestId: number,
-)
+): void
 ```
 
 Hides desktop media picker dialog shown by chooseDesktopMedia().
@@ -75,7 +89,7 @@ chrome.desktopCapture.chooseDesktopMedia(
   sources: DesktopCaptureSourceType[],
   targetTab?: Tab,
   callback: function,
-)
+): number
 ```
 
 Shows desktop media picker UI with the specified set of sources.

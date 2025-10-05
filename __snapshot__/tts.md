@@ -330,84 +330,36 @@ Gender is deprecated and is ignored.
 
 ### getVoices()
 
-Promise
-
 ```
-chrome.tts.getVoices(
-  callback?: function,
-)
+chrome.tts.getVoices(): Promise<TtsVoice[]>
 ```
 
 Gets an array of all available voices.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (voices: TtsVoice[]) => void
-  ```
-  
-  - voices
-    
-    [TtsVoice](#type-TtsVoice)\[]
-    
-    Array of [`tts.TtsVoice`](#type-TtsVoice) objects representing the available voices for speech synthesis.
 
 #### Returns
 
 - Promise&lt;[TtsVoice](#type-TtsVoice)\[]&gt;
   
   Chrome 101+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### isSpeaking()
 
-Promise
-
 ```
-chrome.tts.isSpeaking(
-  callback?: function,
-)
+chrome.tts.isSpeaking(): Promise<boolean>
 ```
 
 Checks whether the engine is currently speaking. On Mac OS X, the result is true whenever the system speech engine is speaking, even if the speech wasn't initiated by Chrome.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (speaking: boolean) => void
-  ```
-  
-  - speaking
-    
-    boolean
-    
-    True if speaking, false otherwise.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 101+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### pause()
 
 ```
-chrome.tts.pause()
+chrome.tts.pause(): void
 ```
 
 Pauses speech synthesis, potentially in the middle of an utterance. A call to resume or stop will un-pause speech.
@@ -415,21 +367,18 @@ Pauses speech synthesis, potentially in the middle of an utterance. A call to re
 ### resume()
 
 ```
-chrome.tts.resume()
+chrome.tts.resume(): void
 ```
 
 If speech was paused, resumes speaking where it left off.
 
 ### speak()
 
-Promise
-
 ```
 chrome.tts.speak(
   utterance: string,
   options?: TtsOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Speaks text using a text-to-speech engine.
@@ -446,28 +395,17 @@ Speaks text using a text-to-speech engine.
   [TtsOptions](#type-TtsOptions) optional
   
   The speech options.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 101+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### stop()
 
 ```
-chrome.tts.stop()
+chrome.tts.stop(): void
 ```
 
 Stops any current speech and flushes the queue of any pending utterances. In addition, if speech was paused, it will now be un-paused for the next call to speak.

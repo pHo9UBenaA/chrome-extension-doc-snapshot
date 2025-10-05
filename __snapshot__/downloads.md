@@ -687,13 +687,10 @@ Chrome 105+
 
 ### acceptDanger()
 
-Promise
-
 ```
 chrome.downloads.acceptDanger(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Prompt the user to accept a dangerous download. Can only be called from a visible context (tab, window, or page/browser action popup). Does not automatically accept dangerous downloads. If the download is accepted, then an [`onChanged`](#event-onChanged) event will fire, otherwise nothing will happen. When all the data is fetched into a temporary file and either the download is not dangerous or the danger has been accepted, then the temporary file is renamed to the target filename, the `state` changes to 'complete', and [`onChanged`](#event-onChanged) fires.
@@ -705,33 +702,19 @@ Prompt the user to accept a dangerous download. Can only be called from a visibl
   number
   
   The identifier for the [`DownloadItem`](#type-DownloadItem).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### cancel()
-
-Promise
 
 ```
 chrome.downloads.cancel(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Cancel a download. When `callback` is run, the download is cancelled, completed, interrupted or doesn't exist anymore.
@@ -743,33 +726,19 @@ Cancel a download. When `callback` is run, the download is cancelled, completed,
   number
   
   The id of the download to cancel.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### download()
-
-Promise
 
 ```
 chrome.downloads.download(
   options: DownloadOptions,
-  callback?: function,
-)
+): Promise<number>
 ```
 
 Download a URL. If the URL uses the HTTP\[S] protocol, then the request will include all cookies currently set for its hostname. If both `filename` and `saveAs` are specified, then the Save As dialog will be displayed, pre-populated with the specified `filename`. If the download started successfully, `callback` will be called with the new [`DownloadItem`](#type-DownloadItem)'s `downloadId`. If there was an error starting the download, then `callback` will be called with `downloadId=undefined` and [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) will contain a descriptive string. The error strings are not guaranteed to remain backwards compatible between releases. Extensions must not parse it.
@@ -781,37 +750,19 @@ Download a URL. If the URL uses the HTTP\[S] protocol, then the request will inc
   [DownloadOptions](#type-DownloadOptions)
   
   What to download and how.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (downloadId: number) => void
-  ```
-  
-  - downloadId
-    
-    number
 
 #### Returns
 
 - Promise&lt;number&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### erase()
-
-Promise
 
 ```
 chrome.downloads.erase(
   query: DownloadQuery,
-  callback?: function,
-)
+): Promise<number[]>
 ```
 
 Erase matching [`DownloadItem`](#type-DownloadItem) from history without deleting the downloaded file. An [`onErased`](#event-onErased) event will fire for each [`DownloadItem`](#type-DownloadItem) that matches `query`, then `callback` will be called.
@@ -821,38 +772,20 @@ Erase matching [`DownloadItem`](#type-DownloadItem) from history without deletin
 - query
   
   [DownloadQuery](#type-DownloadQuery)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (erasedIds: number[]) => void
-  ```
-  
-  - erasedIds
-    
-    number\[]
 
 #### Returns
 
 - Promise&lt;number\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getFileIcon()
-
-Promise
 
 ```
 chrome.downloads.getFileIcon(
   downloadId: number,
   options?: GetFileIconOptions,
-  callback?: function,
-)
+): Promise<string | undefined>
 ```
 
 Retrieve an icon for the specified download. For new downloads, file icons are available after the [`onCreated`](#event-onCreated) event has been received. The image returned by this function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) will contain an error message.
@@ -867,37 +800,19 @@ Retrieve an icon for the specified download. For new downloads, file icons are a
 - options
   
   [GetFileIconOptions](#type-GetFileIconOptions) optional
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (iconURL?: string) => void
-  ```
-  
-  - iconURL
-    
-    string optional
 
 #### Returns
 
 - Promise&lt;string | undefined&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### open()
-
-Promise
 
 ```
 chrome.downloads.open(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Opens the downloaded file now if the [`DownloadItem`](#type-DownloadItem) is complete; otherwise returns an error through [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError). This method requires the `"downloads.open"` permission in addition to the `"downloads"` permission. An [`onChanged`](#event-onChanged) event fires when the item is opened for the first time. This method can only be called in response to a user gesture.
@@ -909,35 +824,19 @@ Opens the downloaded file now if the [`DownloadItem`](#type-DownloadItem) is com
   number
   
   The identifier for the downloaded file.
-- callback
-  
-  function optional
-  
-  Chrome 123+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 123+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### pause()
-
-Promise
 
 ```
 chrome.downloads.pause(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Pause the download. If the request was successful the download is in a paused state. Otherwise [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) contains an error message. The request will fail if the download is not active.
@@ -949,33 +848,19 @@ Pause the download. If the request was successful the download is in a paused st
   number
   
   The id of the download to pause.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeFile()
-
-Promise
 
 ```
 chrome.downloads.removeFile(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Remove the downloaded file if it exists and the [`DownloadItem`](#type-DownloadItem) is complete; otherwise return an error through [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError).
@@ -985,33 +870,19 @@ Remove the downloaded file if it exists and the [`DownloadItem`](#type-DownloadI
 - downloadId
   
   number
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### resume()
-
-Promise
 
 ```
 chrome.downloads.resume(
   downloadId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Resume a paused download. If the request was successful the download is in progress and unpaused. Otherwise [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) contains an error message. The request will fail if the download is not active.
@@ -1023,33 +894,19 @@ Resume a paused download. If the request was successful the download is in progr
   number
   
   The id of the download to resume.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### search()
-
-Promise
 
 ```
 chrome.downloads.search(
   query: DownloadQuery,
-  callback?: function,
-)
+): Promise<DownloadItem[]>
 ```
 
 Find [`DownloadItem`](#type-DownloadItem). Set `query` to the empty object to get all [`DownloadItem`](#type-DownloadItem). To get a specific [`DownloadItem`](#type-DownloadItem), set only the `id` field. To page through a large number of items, set `orderBy: ['-startTime']`, set `limit` to the number of items per page, and set `startedAfter` to the `startTime` of the last item from the last page.
@@ -1059,27 +916,12 @@ Find [`DownloadItem`](#type-DownloadItem). Set `query` to the empty object to ge
 - query
   
   [DownloadQuery](#type-DownloadQuery)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (results: DownloadItem[]) => void
-  ```
-  
-  - results
-    
-    [DownloadItem](#type-DownloadItem)\[]
 
 #### Returns
 
 - Promise&lt;[DownloadItem](#type-DownloadItem)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setShelfEnabled()
 
@@ -1088,7 +930,7 @@ Deprecated since Chrome 117
 ```
 chrome.downloads.setShelfEnabled(
   enabled: boolean,
-)
+): void
 ```
 
 Use [`setUiOptions`](#method-setUiOptions) instead.
@@ -1103,13 +945,12 @@ Enable or disable the gray shelf at the bottom of every window associated with t
 
 ### setUiOptions()
 
-Promise Chrome 105+
+Chrome 105+
 
 ```
 chrome.downloads.setUiOptions(
   options: UiOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Change the download UI of every window associated with the current browser profile. As long as at least one extension has set [`UiOptions.enabled`](#property-UiOptions-enabled) to false, the download UI will be hidden. Setting [`UiOptions.enabled`](#property-UiOptions-enabled) to true while at least one other extension has disabled it will return an error through [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError). Requires the `"downloads.ui"` permission in addition to the `"downloads"` permission.
@@ -1121,28 +962,17 @@ Change the download UI of every window associated with the current browser profi
   [UiOptions](#type-UiOptions)
   
   Encapsulate a change to the download UI.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### show()
 
 ```
 chrome.downloads.show(
   downloadId: number,
-)
+): void
 ```
 
 Show the downloaded file in its folder in a file manager.
@@ -1158,7 +988,7 @@ Show the downloaded file in its folder in a file manager.
 ### showDefaultFolder()
 
 ```
-chrome.downloads.showDefaultFolder()
+chrome.downloads.showDefaultFolder(): void
 ```
 
 Show the default Downloads folder in a file manager.

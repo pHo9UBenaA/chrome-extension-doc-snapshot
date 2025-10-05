@@ -6,6 +6,14 @@ The `chrome.extensionTypes` API contains type declarations for Chrome extensions
 
 ## Types
 
+### ColorArray
+
+Chrome 139+
+
+#### Type
+
+\[number, number, number, number]
+
 ### CSSOrigin
 
 Chrome 66+
@@ -101,9 +109,19 @@ The type of frame.
 
 "sub\_frame"
 
+### ImageDataType
+
+Chrome 139+
+
+Pixel data for an image. Must be an ImageData object; for example, from a `canvas` element.
+
+#### Type
+
+ImageData
+
 ### ImageDetails
 
-Details about the format and quality of an image.
+Details about the format, quality, and area of an image.
 
 #### Properties
 

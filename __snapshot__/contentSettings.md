@@ -120,14 +120,12 @@ Chrome 121+
   
   void
   
-  Promise
-  
   Clear all content setting rules set by this extension.
   
   The `clear` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -139,15 +137,6 @@ Chrome 121+
       [Scope](#type-Scope) optional
       
       Where to clear the setting (default: regular).
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -156,20 +145,16 @@ Chrome 121+
     Promise&lt;void&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - get
   
   void
-  
-  Promise
   
   Gets the current content setting for a given pair of URLs.
   
   The `get` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -196,25 +181,6 @@ Chrome 121+
       string optional
       
       The secondary URL for which the content setting should be retrieved. Defaults to the primary URL. Note that the meaning of a secondary URL depends on the content type, and not all content types use secondary URLs.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (details: object) => void
-    ```
-    
-    - details
-      
-      object
-      
-      - setting
-        
-        T
-        
-        The content setting. See the description of the individual ContentSetting objects for the possible values.
   
   <!--THE END-->
   
@@ -223,57 +189,31 @@ Chrome 121+
     Promise&lt;object&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - getResourceIdentifiers
   
   void
   
-  Promise
-  
   The `getResourceIdentifiers` function looks like:
   
   ```
-  (callback?: function) => {...}
+  () => {...}
   ```
-  
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (resourceIdentifiers?: ResourceIdentifier[]) => void
-    ```
-    
-    - resourceIdentifiers
-      
-      [ResourceIdentifier](#type-ResourceIdentifier)\[] optional
-      
-      A list of resource identifiers for this content type, or `undefined` if this content type does not use resource identifiers.
-  
-  <!--THE END-->
   
   - returns
     
     Promise&lt;[ResourceIdentifier](#type-ResourceIdentifier)\[]&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - set
   
   void
-  
-  Promise
   
   Applies a new content setting rule.
   
   The `set` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -305,15 +245,6 @@ Chrome 121+
       any
       
       The setting applied by this rule. See the description of the individual ContentSetting objects for the possible values.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -322,8 +253,6 @@ Chrome 121+
     Promise&lt;void&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### CookiesContentSetting
 
@@ -475,6 +404,16 @@ The scope of the ContentSetting. One of `regular`: setting for regular profile (
 "regular"
 
 "incognito\_session\_only"
+
+### SoundContentSetting
+
+Pending
+
+#### Enum
+
+"allow"
+
+"block"
 
 ## Properties
 

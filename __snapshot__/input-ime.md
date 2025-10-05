@@ -383,13 +383,10 @@ Where to display the candidate window. If set to 'cursor', the window follows th
 
 ### clearComposition()
 
-Promise
-
 ```
 chrome.input.ime.clearComposition(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Clear the current composition. If this extension does not own the active IME, this fails.
@@ -405,37 +402,19 @@ Clear the current composition. If this extension does not own the active IME, th
     number
     
     ID of the context where the composition will be cleared
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### commitText()
-
-Promise
 
 ```
 chrome.input.ime.commitText(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Commits the provided text to the current input.
@@ -456,37 +435,19 @@ Commits the provided text to the current input.
     string
     
     The text to commit
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### deleteSurroundingText()
-
-Promise
 
 ```
 chrome.input.ime.deleteSurroundingText(
   parameters: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Deletes the text around the caret.
@@ -517,28 +478,17 @@ Deletes the text around the caret.
     number
     
     The offset from the caret position where deletion will start. This value can be negative.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### hideInputView()
 
 ```
-chrome.input.ime.hideInputView()
+chrome.input.ime.hideInputView(): void
 ```
 
 Hides the input view window, which is popped up automatically by system. If the input view window is already hidden, this function will do nothing.
@@ -549,7 +499,7 @@ Hides the input view window, which is popped up automatically by system. If the 
 chrome.input.ime.keyEventHandled(
   requestId: string,
   response: boolean,
-)
+): void
 ```
 
 Indicates that the key event received by onKeyEvent is handled. This should only be called if the onKeyEvent listener is asynchronous.
@@ -569,13 +519,10 @@ Indicates that the key event received by onKeyEvent is handled. This should only
 
 ### sendKeyEvents()
 
-Promise
-
 ```
 chrome.input.ime.sendKeyEvents(
   parameters: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sends the key events. This function is expected to be used by virtual keyboards. When key(s) on a virtual keyboard is pressed by a user, this function is used to propagate that event to the system.
@@ -596,33 +543,21 @@ Sends the key events. This function is expected to be used by virtual keyboards.
     [KeyboardEvent](#type-KeyboardEvent)\[]
     
     Data on the key event.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setAssistiveWindowButtonHighlighted()
 
-Promise Chrome 86+
+Chrome 86+
 
 ```
 chrome.input.ime.setAssistiveWindowButtonHighlighted(
   parameters: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Highlights/Unhighlights a button in an assistive window.
@@ -658,33 +593,21 @@ Highlights/Unhighlights a button in an assistive window.
     "undo"
     
     The window type the button belongs to.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setAssistiveWindowProperties()
 
-Promise Chrome 85+
+Chrome 85+
 
 ```
 chrome.input.ime.setAssistiveWindowProperties(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Shows/Hides an assistive window with the given properties.
@@ -705,37 +628,19 @@ Shows/Hides an assistive window with the given properties.
     [AssistiveWindowProperties](#type-AssistiveWindowProperties)
     
     Properties of the assistive window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setCandidates()
-
-Promise
 
 ```
 chrome.input.ime.setCandidates(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Sets the current candidate list. This fails if this extension doesn't own the active IME
@@ -798,37 +703,19 @@ Sets the current candidate list. This fails if this extension doesn't own the ac
     number
     
     ID of the context that owns the candidate window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setCandidateWindowProperties()
-
-Promise
 
 ```
 chrome.input.ime.setCandidateWindowProperties(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Sets the properties of the candidate window. This fails if the extension doesn't own the active IME
@@ -897,37 +784,19 @@ Sets the properties of the candidate window. This fails if the extension doesn't
       [WindowPosition](#type-WindowPosition) optional
       
       Where to display the candidate window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setComposition()
-
-Promise
 
 ```
 chrome.input.ime.setComposition(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Set the current composition. If this extension does not own the active IME, this fails.
@@ -984,37 +853,19 @@ Set the current composition. If this extension does not own the active IME, this
     string
     
     Text to set
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setCursorPosition()
-
-Promise
 
 ```
 chrome.input.ime.setCursorPosition(
   parameters: object,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Set the position of the cursor in the candidate window. This is a no-op if this extension does not own the active IME.
@@ -1035,37 +886,19 @@ Set the position of the cursor in the candidate window. This is a no-op if this 
     number
     
     ID of the context that owns the candidate window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setMenuItems()
-
-Promise
 
 ```
 chrome.input.ime.setMenuItems(
   parameters: MenuParameters,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Adds the provided menu items to the language menu when this IME is active.
@@ -1075,33 +908,19 @@ Adds the provided menu items to the language menu when this IME is active.
 - parameters
   
   [MenuParameters](#type-MenuParameters)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateMenuItems()
-
-Promise
 
 ```
 chrome.input.ime.updateMenuItems(
   parameters: MenuParameters,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates the state of the MenuItems specified
@@ -1111,23 +930,12 @@ Updates the state of the MenuItems specified
 - parameters
   
   [MenuParameters](#type-MenuParameters)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

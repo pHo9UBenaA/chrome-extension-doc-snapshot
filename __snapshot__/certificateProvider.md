@@ -410,13 +410,12 @@ Chrome 57+
 
 ### reportSignature()
 
-Promise Chrome 86+
+Chrome 86+
 
 ```
 chrome.certificateProvider.reportSignature(
   details: ReportSignatureDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Should be called as a response to [`onSignatureRequested`](#event-onSignatureRequested).
@@ -428,33 +427,21 @@ The extension must eventually call this function for every [`onSignatureRequeste
 - details
   
   [ReportSignatureDetails](#type-ReportSignatureDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### requestPin()
 
-Promise Chrome 57+
+Chrome 57+
 
 ```
 chrome.certificateProvider.requestPin(
   details: RequestPinDetails,
-  callback?: function,
-)
+): Promise<PinResponseDetails | undefined>
 ```
 
 Requests the PIN from the user. Only one ongoing request at a time is allowed. The requests issued while another flow is ongoing are rejected. It's the extension's responsibility to try again later if another flow is in progress.
@@ -466,37 +453,21 @@ Requests the PIN from the user. Only one ongoing request at a time is allowed. T
   [RequestPinDetails](#type-RequestPinDetails)
   
   Contains the details about the requested dialog.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details?: PinResponseDetails) => void
-  ```
-  
-  - details
-    
-    [PinResponseDetails](#type-PinResponseDetails) optional
 
 #### Returns
 
 - Promise&lt;[PinResponseDetails](#type-PinResponseDetails) | undefined&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setCertificates()
 
-Promise Chrome 86+
+Chrome 86+
 
 ```
 chrome.certificateProvider.setCertificates(
   details: SetCertificatesDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets a list of certificates to use in the browser.
@@ -510,33 +481,21 @@ The extension should call this function after initialization and on every change
   [SetCertificatesDetails](#type-SetCertificatesDetails)
   
   The certificates to set. Invalid certificates will be ignored.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### stopPinRequest()
 
-Promise Chrome 57+
+Chrome 57+
 
 ```
 chrome.certificateProvider.stopPinRequest(
   details: StopPinRequestDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Stops the pin request started by the [`requestPin`](#method-requestPin) function.
@@ -548,23 +507,12 @@ Stops the pin request started by the [`requestPin`](#method-requestPin) function
   [StopPinRequestDetails](#type-StopPinRequestDetails)
   
   Contains the details about the reason for stopping the request flow.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

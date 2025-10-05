@@ -215,39 +215,17 @@ Specifies that the print job was printed without any errors.
 
 ### getPrintJobs()
 
-Promise
-
 ```
-chrome.printingMetrics.getPrintJobs(
-  callback?: function,
-)
+chrome.printingMetrics.getPrintJobs(): Promise<PrintJobInfo[]>
 ```
 
 Returns the list of the finished print jobs.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (jobs: PrintJobInfo[]) => void
-  ```
-  
-  - jobs
-    
-    [PrintJobInfo](#type-PrintJobInfo)\[]
 
 #### Returns
 
 - Promise&lt;[PrintJobInfo](#type-PrintJobInfo)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

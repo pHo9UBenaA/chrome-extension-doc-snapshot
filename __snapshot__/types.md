@@ -98,14 +98,12 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
   
   void
   
-  Promise
-  
   Clears the setting, restoring any default value.
   
   The `clear` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -119,15 +117,6 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
       [ChromeSettingScope](#type-ChromeSettingScope) optional
       
       Where to clear the setting (default: regular).
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -136,20 +125,16 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
     Promise&lt;void&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - get
   
   void
-  
-  Promise
   
   Gets the value of a setting.
   
   The `get` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -163,37 +148,6 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
       boolean optional
       
       Whether to return the value that applies to the incognito session (default false).
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    (details: object) => void
-    ```
-    
-    - details
-      
-      object
-      
-      Details of the currently effective value.
-      
-      - incognitoSpecific
-        
-        boolean optional
-        
-        Whether the effective value is specific to the incognito session. This property will *only* be present if the `incognito` property in the `details` parameter of `get()` was true.
-      - levelOfControl
-        
-        [LevelOfControl](#type-LevelOfControl)
-        
-        The level of control of the setting.
-      - value
-        
-        T
-        
-        The value of the setting.
   
   <!--THE END-->
   
@@ -202,20 +156,16 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
     Promise&lt;object&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 - set
   
   void
-  
-  Promise
   
   Sets the value of a setting.
   
   The `set` function looks like:
   
   ```
-  (details: object, callback?: function) => {...}
+  (details: object) => {...}
   ```
   
   - details
@@ -234,15 +184,6 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
       T
       
       The value of the setting. Note that every setting has a specific value type, which is described together with the setting. An extension should *not* set a value of a different type.
-  - callback
-    
-    function optional
-    
-    The `callback` parameter looks like:
-    
-    ```
-    () => void
-    ```
   
   <!--THE END-->
   
@@ -251,8 +192,6 @@ An interface that allows access to a Chrome browser setting. See [`accessibility
     Promise&lt;void&gt;
     
     Chrome 96+
-    
-    Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### ChromeSettingScope
 

@@ -35,7 +35,7 @@ boolean
 Foreground only
 
 ```
-chrome.extension.getBackgroundPage()
+chrome.extension.getBackgroundPage(): Window | undefined
 ```
 
 Returns the JavaScript 'window' object for the background page running inside the current extension. Returns null if the extension has no background page.
@@ -51,7 +51,7 @@ Foreground only
 ```
 chrome.extension.getViews(
   fetchProperties?: object,
-)
+): Window[]
 ```
 
 Returns an array of the JavaScript 'window' objects for each of the pages running inside the current extension.
@@ -88,86 +88,38 @@ Returns an array of the JavaScript 'window' objects for each of the pages runnin
 
 ### isAllowedFileSchemeAccess()
 
-Promise
-
 ```
-chrome.extension.isAllowedFileSchemeAccess(
-  callback?: function,
-)
+chrome.extension.isAllowedFileSchemeAccess(): Promise<boolean>
 ```
 
 Retrieves the state of the extension's access to the 'file://' scheme. This corresponds to the user-controlled per-extension 'Allow access to File URLs' setting accessible via the chrome://extensions page.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (isAllowedAccess: boolean) => void
-  ```
-  
-  - isAllowedAccess
-    
-    boolean
-    
-    True if the extension can access the 'file://' scheme, false otherwise.
-
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### isAllowedIncognitoAccess()
 
-Promise
-
 ```
-chrome.extension.isAllowedIncognitoAccess(
-  callback?: function,
-)
+chrome.extension.isAllowedIncognitoAccess(): Promise<boolean>
 ```
 
 Retrieves the state of the extension's access to Incognito-mode. This corresponds to the user-controlled per-extension 'Allowed in Incognito' setting accessible via the chrome://extensions page.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (isAllowedAccess: boolean) => void
-  ```
-  
-  - isAllowedAccess
-    
-    boolean
-    
-    True if the extension has access to Incognito mode, false otherwise.
-
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setUpdateUrlData()
 
 ```
 chrome.extension.setUpdateUrlData(
   data: string,
-)
+): void
 ```
 
 Sets the value of the ap CGI parameter used in the extension's update URL. This value is ignored for extensions that are hosted in the Chrome Extension Gallery.

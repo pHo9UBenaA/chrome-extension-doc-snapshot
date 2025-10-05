@@ -111,13 +111,10 @@ A suggest result.
 
 ### setDefaultSuggestion()
 
-Promise
-
 ```
 chrome.omnibox.setDefaultSuggestion(
   suggestion: DefaultSuggestResult,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the description and styling for the default suggestion. The default suggestion is the text that is displayed in the first suggestion row underneath the URL bar.
@@ -129,25 +126,12 @@ Sets the description and styling for the default suggestion. The default suggest
   [DefaultSuggestResult](#type-DefaultSuggestResult)
   
   A partial SuggestResult object, without the 'content' parameter.
-- callback
-  
-  function optional
-  
-  Chrome 100+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 100+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

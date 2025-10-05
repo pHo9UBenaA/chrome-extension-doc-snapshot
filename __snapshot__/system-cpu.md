@@ -88,36 +88,14 @@ Use the `system.cpu` API to query CPU metadata.
 
 ### getInfo()
 
-Promise
-
 ```
-chrome.system.cpu.getInfo(
-  callback?: function,
-)
+chrome.system.cpu.getInfo(): Promise<CpuInfo>
 ```
 
 Queries basic CPU information of the system.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (info: CpuInfo) => void
-  ```
-  
-  - info
-    
-    [CpuInfo](#type-CpuInfo)
 
 #### Returns
 
 - Promise&lt;[CpuInfo](#type-CpuInfo)&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

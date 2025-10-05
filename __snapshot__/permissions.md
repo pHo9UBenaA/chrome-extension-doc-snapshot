@@ -148,13 +148,12 @@ chrome.permissions.remove({
 
 ### addHostAccessRequest()
 
-Promise Chrome 133+ MV3+
+Chrome 133+ MV3+
 
 ```
 chrome.permissions.addHostAccessRequest(
   request: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Adds a host access request. Request will only be signaled to the user if extension can be granted access to the host in the request. Request will be reset on cross-origin navigation. When accepted, grants persistent access to the site’s top origin
@@ -180,31 +179,17 @@ Adds a host access request. Request will only be signaled to the user if extensi
     number optional
     
     The id of the tab where host access requests can be shown. If provided, the request is shown on the specified tab and is removed when the tab navigates to a new origin. Adding a new request will override an existent request for `documentId`. This or `documentId` must be specified.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### contains()
-
-Promise
 
 ```
 chrome.permissions.contains(
   permissions: Permissions,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Checks if the extension has the specified permissions.
@@ -214,77 +199,33 @@ Checks if the extension has the specified permissions.
 - permissions
   
   [Permissions](#type-Permissions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: boolean) => void
-  ```
-  
-  - result
-    
-    boolean
-    
-    True if the extension has the specified permissions. If an origin is specified as both an optional permission and a content script match pattern, this will return `false` unless both permissions are granted.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
 
-Promise
-
 ```
-chrome.permissions.getAll(
-  callback?: function,
-)
+chrome.permissions.getAll(): Promise<Permissions>
 ```
 
 Gets the extension's current set of permissions.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (permissions: Permissions) => void
-  ```
-  
-  - permissions
-    
-    [Permissions](#type-Permissions)
-    
-    The extension's active permissions. Note that the `origins` property will contain granted origins from those specified in the `permissions` and `optional_permissions` keys in the manifest and those associated with [Content Scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts).
 
 #### Returns
 
 - Promise&lt;[Permissions](#type-Permissions)&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### remove()
-
-Promise
 
 ```
 chrome.permissions.remove(
   permissions: Permissions,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Removes access to the specified permissions. If there are any problems removing the permissions, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/api/runtime/#property-lastError) will be set.
@@ -294,39 +235,21 @@ Removes access to the specified permissions. If there are any problems removing 
 - permissions
   
   [Permissions](#type-Permissions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (removed: boolean) => void
-  ```
-  
-  - removed
-    
-    boolean
-    
-    True if the permissions were removed.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeHostAccessRequest()
 
-Promise Chrome 133+ MV3+
+Chrome 133+ MV3+
 
 ```
 chrome.permissions.removeHostAccessRequest(
   request: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes a host access request, if existent.
@@ -352,31 +275,17 @@ Removes a host access request, if existent.
     number optional
     
     The id of the tab where host access request will be removed. This or `documentId` must be specified.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### request()
-
-Promise
 
 ```
 chrome.permissions.request(
   permissions: Permissions,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Requests access to the specified permissions, displaying a prompt to the user if necessary. These permissions must either be defined in the `optional_permissions` field of the manifest or be required permissions that were withheld by the user. Paths on origin patterns will be ignored. You can request subsets of optional origin permissions; for example, if you specify `*://*\/*` in the `optional_permissions` section of the manifest, you can request `http://example.com/`. If there are any problems requesting the permissions, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/api/runtime/#property-lastError) will be set.
@@ -386,29 +295,12 @@ Requests access to the specified permissions, displaying a prompt to the user if
 - permissions
   
   [Permissions](#type-Permissions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (granted: boolean) => void
-  ```
-  
-  - granted
-    
-    boolean
-    
-    True if the user granted the specified permissions.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

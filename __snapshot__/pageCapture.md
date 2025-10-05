@@ -29,13 +29,10 @@ You must declare the "pageCapture" permission in the [extension manifest](/docs/
 
 ### saveAsMHTML()
 
-Promise
-
 ```
 chrome.pageCapture.saveAsMHTML(
   details: object,
-  callback?: function,
-)
+): Promise<Blob | undefined>
 ```
 
 Saves the content of the tab with given id as MHTML.
@@ -51,26 +48,9 @@ Saves the content of the tab with given id as MHTML.
     number
     
     The id of the tab to save as MHTML.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (mhtmlData?: Blob) => void
-  ```
-  
-  - mhtmlData
-    
-    Blob optional
-    
-    The MHTML data as a Blob.
 
 #### Returns
 
 - Promise&lt;Blob | undefined&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

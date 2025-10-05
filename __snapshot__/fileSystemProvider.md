@@ -982,13 +982,10 @@ Error codes used by providing extensions in response to requests as well as in c
 
 ### get()
 
-Promise
-
 ```
 chrome.fileSystemProvider.get(
   fileSystemId: string,
-  callback?: function,
-)
+): Promise<FileSystemInfo>
 ```
 
 Returns information about a file system with the passed `fileSystemId`.
@@ -998,73 +995,33 @@ Returns information about a file system with the passed `fileSystemId`.
 - fileSystemId
   
   string
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (fileSystem: FileSystemInfo) => void
-  ```
-  
-  - fileSystem
-    
-    [FileSystemInfo](#type-FileSystemInfo)
 
 #### Returns
 
 - Promise&lt;[FileSystemInfo](#type-FileSystemInfo)&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
 
-Promise
-
 ```
-chrome.fileSystemProvider.getAll(
-  callback?: function,
-)
+chrome.fileSystemProvider.getAll(): Promise<FileSystemInfo[]>
 ```
 
 Returns all file systems mounted by the extension.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (fileSystems: FileSystemInfo[]) => void
-  ```
-  
-  - fileSystems
-    
-    [FileSystemInfo](#type-FileSystemInfo)\[]
 
 #### Returns
 
 - Promise&lt;[FileSystemInfo](#type-FileSystemInfo)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### mount()
-
-Promise
 
 ```
 chrome.fileSystemProvider.mount(
   options: MountOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Mounts a file system with the given `fileSystemId` and `displayName`. `displayName` will be shown in the left panel of the Files app. `displayName` can contain any characters including '/', but cannot be an empty string. `displayName` must be descriptive but doesn't have to be unique. The `fileSystemId` must not be an empty string.
@@ -1078,33 +1035,21 @@ In case of an error, [`runtime.lastError`](https://developer.chrome.com/docs/ext
 - options
   
   [MountOptions](#type-MountOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### notify()
 
-Promise Chrome 45+
+Chrome 45+
 
 ```
 chrome.fileSystemProvider.notify(
   options: NotifyOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Notifies about changes in the watched directory at `observedPath` in `recursive` mode. If the file system is mounted with `supportsNotifyTag`, then `tag` must be provided, and all changes since the last notification always reported, even if the system was shutdown. The last tag can be obtained with [`getAll`](#method-getAll).
@@ -1124,33 +1069,19 @@ In case of an error, [`runtime.lastError`](https://developer.chrome.com/docs/ext
 - options
   
   [NotifyOptions](#type-NotifyOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### unmount()
-
-Promise
 
 ```
 chrome.fileSystemProvider.unmount(
   options: UnmountOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Unmounts a file system with the given `fileSystemId`. It must be called after [`onUnmountRequested`](#event-onUnmountRequested) is invoked. Also, the providing extension can decide to perform unmounting if not requested (eg. in case of lost connection, or a file error).
@@ -1162,23 +1093,12 @@ In case of an error, [`runtime.lastError`](https://developer.chrome.com/docs/ext
 - options
   
   [UnmountOptions](#type-UnmountOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

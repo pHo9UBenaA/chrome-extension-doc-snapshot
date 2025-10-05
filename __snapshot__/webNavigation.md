@@ -129,13 +129,10 @@ Cause of the navigation. The same transition types as defined in the history API
 
 ### getAllFrames()
 
-Promise
-
 ```
 chrome.webNavigation.getAllFrames(
   details: object,
-  callback?: function,
-)
+): Promise<object[] | undefined>
 ```
 
 Retrieves information about all frames of a given tab.
@@ -153,93 +150,19 @@ Retrieves information about all frames of a given tab.
     number
     
     The ID of the tab.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details?: object[]) => void
-  ```
-  
-  - details
-    
-    object\[] optional
-    
-    A list of frames in the given tab, null if the specified tab ID is invalid.
-    
-    - documentId
-      
-      string
-      
-      Chrome 106+
-      
-      A UUID of the document loaded.
-    - documentLifecycle
-      
-      [DocumentLifecycle](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-DocumentLifecycle)
-      
-      Chrome 106+
-      
-      The lifecycle the document is in.
-    - errorOccurred
-      
-      boolean
-      
-      True if the last navigation in this frame was interrupted by an error, i.e. the onErrorOccurred event fired.
-    - frameId
-      
-      number
-      
-      The ID of the frame. 0 indicates that this is the main frame; a positive value indicates the ID of a subframe.
-    - frameType
-      
-      [FrameType](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-FrameType)
-      
-      Chrome 106+
-      
-      The type of frame the navigation occurred in.
-    - parentDocumentId
-      
-      string optional
-      
-      Chrome 106+
-      
-      A UUID of the parent document owning this frame. This is not set if there is no parent.
-    - parentFrameId
-      
-      number
-      
-      The ID of the parent frame, or `-1` if this is the main frame.
-    - processId
-      
-      number
-      
-      The ID of the process that runs the renderer for this frame.
-    - url
-      
-      string
-      
-      The URL currently associated with this frame.
 
 #### Returns
 
 - Promise&lt;object\[] | undefined&gt;
   
   Chrome 93+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getFrame()
-
-Promise
 
 ```
 chrome.webNavigation.getFrame(
   details: object,
-  callback?: function,
-)
+): Promise<object | undefined>
 ```
 
 Retrieves information about the given frame. A frame refers to an &lt;iframe&gt; or a &lt;frame&gt; of a web page and is identified by a tab ID and a frame ID.
@@ -278,73 +201,12 @@ Retrieves information about the given frame. A frame refers to an &lt;iframe&gt;
     number optional
     
     The ID of the tab in which the frame is.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details?: object) => void
-  ```
-  
-  - details
-    
-    object optional
-    
-    Information about the requested frame, null if the specified frame ID and/or tab ID are invalid.
-    
-    - documentId
-      
-      string
-      
-      Chrome 106+
-      
-      A UUID of the document loaded.
-    - documentLifecycle
-      
-      [DocumentLifecycle](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-DocumentLifecycle)
-      
-      Chrome 106+
-      
-      The lifecycle the document is in.
-    - errorOccurred
-      
-      boolean
-      
-      True if the last navigation in this frame was interrupted by an error, i.e. the onErrorOccurred event fired.
-    - frameType
-      
-      [FrameType](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-FrameType)
-      
-      Chrome 106+
-      
-      The type of frame the navigation occurred in.
-    - parentDocumentId
-      
-      string optional
-      
-      Chrome 106+
-      
-      A UUID of the parent document owning this frame. This is not set if there is no parent.
-    - parentFrameId
-      
-      number
-      
-      The ID of the parent frame, or `-1` if this is the main frame.
-    - url
-      
-      string
-      
-      The URL currently associated with this frame, if the frame identified by the frameId existed at one point in the given tab. The fact that an URL is associated with a given frameId does not imply that the corresponding frame still exists.
 
 #### Returns
 
 - Promise&lt;object | undefined&gt;
   
   Chrome 93+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

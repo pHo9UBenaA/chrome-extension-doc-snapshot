@@ -168,13 +168,10 @@ An object encapsulating one visit to a URL.
 
 ### addUrl()
 
-Promise
-
 ```
 chrome.history.addUrl(
   details: UrlDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Adds a URL to the history at the current time with a [transition type](https://developer.chrome.com/docs/extensions/reference/history/#transition_types) of "link".
@@ -184,65 +181,33 @@ Adds a URL to the history at the current time with a [transition type](https://d
 - details
   
   [UrlDetails](#type-UrlDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### deleteAll()
 
-Promise
-
 ```
-chrome.history.deleteAll(
-  callback?: function,
-)
+chrome.history.deleteAll(): Promise<void>
 ```
 
 Deletes all items from the history.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### deleteRange()
-
-Promise
 
 ```
 chrome.history.deleteRange(
   range: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes all items within the specified date range from the history. Pages will not be removed from the history unless all visits fall within the range.
@@ -263,33 +228,19 @@ Removes all items within the specified date range from the history. Pages will n
     number
     
     Items added to history after this date, represented in milliseconds since the epoch.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### deleteUrl()
-
-Promise
 
 ```
 chrome.history.deleteUrl(
   details: UrlDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes all occurrences of the given URL from the history.
@@ -299,33 +250,19 @@ Removes all occurrences of the given URL from the history.
 - details
   
   [UrlDetails](#type-UrlDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getVisits()
-
-Promise
 
 ```
 chrome.history.getVisits(
   details: UrlDetails,
-  callback?: function,
-)
+): Promise<VisitItem[]>
 ```
 
 Retrieves information about visits to a URL.
@@ -335,37 +272,19 @@ Retrieves information about visits to a URL.
 - details
   
   [UrlDetails](#type-UrlDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (results: VisitItem[]) => void
-  ```
-  
-  - results
-    
-    [VisitItem](#type-VisitItem)\[]
 
 #### Returns
 
 - Promise&lt;[VisitItem](#type-VisitItem)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### search()
-
-Promise
 
 ```
 chrome.history.search(
   query: object,
-  callback?: function,
-)
+): Promise<HistoryItem[]>
 ```
 
 Searches the history for the last visit time of each page matching the query.
@@ -396,27 +315,12 @@ Searches the history for the last visit time of each page matching the query.
     string
     
     A free-text query to the history service. Leave this empty to retrieve all pages.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (results: HistoryItem[]) => void
-  ```
-  
-  - results
-    
-    [HistoryItem](#type-HistoryItem)\[]
 
 #### Returns
 
 - Promise&lt;[HistoryItem](#type-HistoryItem)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

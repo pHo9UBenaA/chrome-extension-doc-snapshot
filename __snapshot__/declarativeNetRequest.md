@@ -1451,49 +1451,28 @@ Ruleset ID for the session-scoped rules added by the extension.
 
 ### getAvailableStaticRuleCount()
 
-Promise Chrome 89+
+Chrome 89+
 
 ```
-chrome.declarativeNetRequest.getAvailableStaticRuleCount(
-  callback?: function,
-)
+chrome.declarativeNetRequest.getAvailableStaticRuleCount(): Promise<number>
 ```
 
 Returns the number of static rules an extension can enable before the [global static rule limit](https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/#global-static-rule-limit) is reached.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (count: number) => void
-  ```
-  
-  - count
-    
-    number
 
 #### Returns
 
 - Promise&lt;number&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getDisabledRuleIds()
 
-Promise Chrome 111+
+Chrome 111+
 
 ```
 chrome.declarativeNetRequest.getDisabledRuleIds(
   options: GetDisabledRuleIdsOptions,
-  callback?: function,
-)
+): Promise<number[]>
 ```
 
 Returns the list of static rules in the given [`Ruleset`](#type-Ruleset) that are currently disabled.
@@ -1505,35 +1484,17 @@ Returns the list of static rules in the given [`Ruleset`](#type-Ruleset) that ar
   [GetDisabledRuleIdsOptions](#type-GetDisabledRuleIdsOptions)
   
   Specifies the ruleset to query.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (disabledRuleIds: number[]) => void
-  ```
-  
-  - disabledRuleIds
-    
-    number\[]
 
 #### Returns
 
 - Promise&lt;number\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getDynamicRules()
-
-Promise
 
 ```
 chrome.declarativeNetRequest.getDynamicRules(
   filter?: GetRulesFilter,
-  callback?: function,
-)
+): Promise<Rule[]>
 ```
 
 Returns the current set of dynamic rules for the extension. Callers can optionally filter the list of fetched rules by specifying a `filter`.
@@ -1547,73 +1508,33 @@ Returns the current set of dynamic rules for the extension. Callers can optional
   Chrome 111+
   
   An object to filter the list of fetched rules.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (rules: Rule[]) => void
-  ```
-  
-  - rules
-    
-    [Rule](#type-Rule)\[]
 
 #### Returns
 
 - Promise&lt;[Rule](#type-Rule)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getEnabledRulesets()
 
-Promise
-
 ```
-chrome.declarativeNetRequest.getEnabledRulesets(
-  callback?: function,
-)
+chrome.declarativeNetRequest.getEnabledRulesets(): Promise<string[]>
 ```
 
 Returns the ids for the current set of enabled static rulesets.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (rulesetIds: string[]) => void
-  ```
-  
-  - rulesetIds
-    
-    string\[]
 
 #### Returns
 
 - Promise&lt;string\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getMatchedRules()
-
-Promise
 
 ```
 chrome.declarativeNetRequest.getMatchedRules(
   filter?: MatchedRulesFilter,
-  callback?: function,
-)
+): Promise<RulesMatchedDetails>
 ```
 
 Returns all rules matched for the extension. Callers can optionally filter the list of matched rules by specifying a `filter`. This method is only available to extensions with the `"declarativeNetRequestFeedback"` permission or having the `"activeTab"` permission granted for the `tabId` specified in `filter`. Note: Rules not associated with an active document that were matched more than five minutes ago will not be returned.
@@ -1625,37 +1546,21 @@ Returns all rules matched for the extension. Callers can optionally filter the l
   [MatchedRulesFilter](#type-MatchedRulesFilter) optional
   
   An object to filter the list of matched rules.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: RulesMatchedDetails) => void
-  ```
-  
-  - details
-    
-    [RulesMatchedDetails](#type-RulesMatchedDetails)
 
 #### Returns
 
 - Promise&lt;[RulesMatchedDetails](#type-RulesMatchedDetails)&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getSessionRules()
 
-Promise Chrome 90+
+Chrome 90+
 
 ```
 chrome.declarativeNetRequest.getSessionRules(
   filter?: GetRulesFilter,
-  callback?: function,
-)
+): Promise<Rule[]>
 ```
 
 Returns the current set of session scoped rules for the extension. Callers can optionally filter the list of fetched rules by specifying a `filter`.
@@ -1669,37 +1574,21 @@ Returns the current set of session scoped rules for the extension. Callers can o
   Chrome 111+
   
   An object to filter the list of fetched rules.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (rules: Rule[]) => void
-  ```
-  
-  - rules
-    
-    [Rule](#type-Rule)\[]
 
 #### Returns
 
 - Promise&lt;[Rule](#type-Rule)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### isRegexSupported()
 
-Promise Chrome 87+
+Chrome 87+
 
 ```
 chrome.declarativeNetRequest.isRegexSupported(
   regexOptions: RegexOptions,
-  callback?: function,
-)
+): Promise<IsRegexSupportedResult>
 ```
 
 Checks if the given regular expression will be supported as a `regexFilter` rule condition.
@@ -1711,37 +1600,21 @@ Checks if the given regular expression will be supported as a `regexFilter` rule
   [RegexOptions](#type-RegexOptions)
   
   The regular expression to check.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: IsRegexSupportedResult) => void
-  ```
-  
-  - result
-    
-    [IsRegexSupportedResult](#type-IsRegexSupportedResult)
 
 #### Returns
 
 - Promise&lt;[IsRegexSupportedResult](#type-IsRegexSupportedResult)&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setExtensionActionOptions()
 
-Promise Chrome 88+
+Chrome 88+
 
 ```
 chrome.declarativeNetRequest.setExtensionActionOptions(
   options: ExtensionActionOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Configures if the action count for tabs should be displayed as the extension action's badge text and provides a way for that action count to be incremented.
@@ -1751,35 +1624,21 @@ Configures if the action count for tabs should be displayed as the extension act
 - options
   
   [ExtensionActionOptions](#type-ExtensionActionOptions)
-- callback
-  
-  function optional
-  
-  Chrome 89+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### testMatchOutcome()
 
-Promise Chrome 103+
+Chrome 103+
 
 ```
 chrome.declarativeNetRequest.testMatchOutcome(
   request: TestMatchRequestDetails,
-  callback?: function,
-)
+): Promise<TestMatchOutcomeResult>
 ```
 
 Checks if any of the extension's declarativeNetRequest rules would match a hypothetical request. Note: Only available for unpacked extensions as this is only intended to be used during extension development.
@@ -1789,35 +1648,17 @@ Checks if any of the extension's declarativeNetRequest rules would match a hypot
 - request
   
   [TestMatchRequestDetails](#type-TestMatchRequestDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: TestMatchOutcomeResult) => void
-  ```
-  
-  - result
-    
-    [TestMatchOutcomeResult](#type-TestMatchOutcomeResult)
 
 #### Returns
 
 - Promise&lt;[TestMatchOutcomeResult](#type-TestMatchOutcomeResult)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateDynamicRules()
-
-Promise
 
 ```
 chrome.declarativeNetRequest.updateDynamicRules(
   options: UpdateRuleOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Modifies the current set of dynamic rules for the extension. The rules with IDs listed in `options.removeRuleIds` are first removed, and then the rules given in `options.addRules` are added. Notes:
@@ -1834,33 +1675,19 @@ Modifies the current set of dynamic rules for the extension. The rules with IDs 
   [UpdateRuleOptions](#type-UpdateRuleOptions)
   
   Chrome 87+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateEnabledRulesets()
-
-Promise
 
 ```
 chrome.declarativeNetRequest.updateEnabledRulesets(
   options: UpdateRulesetOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates the set of enabled static rulesets for the extension. The rulesets with IDs listed in `options.disableRulesetIds` are first removed, and then the rulesets listed in `options.enableRulesetIds` are added. Note that the set of enabled static rulesets is persisted across sessions but not across extension updates, i.e. the `rule_resources` manifest key will determine the set of enabled static rulesets on each extension update.
@@ -1872,33 +1699,21 @@ Updates the set of enabled static rulesets for the extension. The rulesets with 
   [UpdateRulesetOptions](#type-UpdateRulesetOptions)
   
   Chrome 87+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateSessionRules()
 
-Promise Chrome 90+
+Chrome 90+
 
 ```
 chrome.declarativeNetRequest.updateSessionRules(
   options: UpdateRuleOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Modifies the current set of session scoped rules for the extension. The rules with IDs listed in `options.removeRuleIds` are first removed, and then the rules given in `options.addRules` are added. Notes:
@@ -1912,33 +1727,21 @@ Modifies the current set of session scoped rules for the extension. The rules wi
 - options
   
   [UpdateRuleOptions](#type-UpdateRuleOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateStaticRules()
 
-Promise Chrome 111+
+Chrome 111+
 
 ```
 chrome.declarativeNetRequest.updateStaticRules(
   options: UpdateStaticRulesOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Disables and enables individual static rules in a [`Ruleset`](#type-Ruleset). Changes to rules belonging to a disabled [`Ruleset`](#type-Ruleset) will take effect the next time that it becomes enabled.
@@ -1948,21 +1751,10 @@ Disables and enables individual static rules in a [`Ruleset`](#type-Ruleset). Ch
 - options
   
   [UpdateStaticRulesOptions](#type-UpdateStaticRulesOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

@@ -228,6 +228,23 @@ For more Side Panel API extensions demos, explore any of the following extension
 
 ## Types
 
+### CloseOptions
+
+Pending
+
+#### Properties
+
+- tabId
+  
+  number optional
+  
+  The tab in which to close the side panel. If a tab-specific side panel is open in the specified tab, it will be closed for that tab. At least one of this or `windowId` must be provided.
+- windowId
+  
+  number optional
+  
+  The window in which to close the side panel. If a global side panel is open in the specified window, it will be closed for all tabs in that window where no tab-specific panel is active. At least one of this or `tabId` must be provided.
+
 ### GetPanelOptions
 
 #### Properties
@@ -265,6 +282,60 @@ Chrome 116+
   
   Whether clicking the extension's icon will toggle showing the extension's entry in the side panel. Defaults to false.
 
+### PanelClosedInfo
+
+Pending
+
+#### Properties
+
+- path
+  
+  string
+  
+  The path of the local resource within the extension package whose content is displayed in the panel.
+- tabId
+  
+  number optional
+  
+  The optional ID of the tab where the side panel was closed. This is provided only when the panel is tab-specific.
+- windowId
+  
+  number
+  
+  The ID of the window where the side panel was closed. This is available for both global and tab-specific panels.
+
+### PanelLayout
+
+Chrome 140+
+
+#### Properties
+
+- side
+  
+  [Side](#type-Side)
+
+### PanelOpenedInfo
+
+Pending
+
+#### Properties
+
+- path
+  
+  string
+  
+  The path of the local resource within the extension package whose content is displayed in the panel.
+- tabId
+  
+  number optional
+  
+  The optional ID of the tab where the side panel is opened. This is provided only when the panel is tab-specific.
+- windowId
+  
+  number
+  
+  The ID of the window where the side panel is opened. This is available for both global and tab-specific panels.
+
 ### PanelOptions
 
 #### Properties
@@ -285,6 +356,18 @@ Chrome 116+
   
   If specified, the side panel options will only apply to the tab with this id. If omitted, these options set the default behavior (used for any tab that doesn't have specific settings). Note: if the same path is set for this tabId and the default tabId, then the panel for this tabId will be a different instance than the panel for the default tabId.
 
+### Side
+
+Chrome 140+
+
+Defines the possible alignment for the side panel in the browser UI.
+
+#### Enum
+
+"left"
+
+"right"
+
 ### SidePanel
 
 #### Properties
@@ -297,15 +380,26 @@ Chrome 116+
 
 ## Methods
 
-### getOptions()
+### getLayout()
 
-Promise
+Chrome 140+
+
+```
+chrome.sidePanel.getLayout(): Promise<PanelLayout>
+```
+
+Returns the side panel's current layout.
+
+#### Returns
+
+- Promise&lt;[PanelLayout](#type-PanelLayout)&gt;
+
+### getOptions()
 
 ```
 chrome.sidePanel.getOptions(
   options: GetPanelOptions,
-  callback?: function,
-)
+): Promise<PanelOptions>
 ```
 
 Returns the active panel configuration.
@@ -317,69 +411,31 @@ Returns the active panel configuration.
   [GetPanelOptions](#type-GetPanelOptions)
   
   Specifies the context to return the configuration for.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (options: PanelOptions) => void
-  ```
-  
-  - options
-    
-    [PanelOptions](#type-PanelOptions)
 
 #### Returns
 
 - Promise&lt;[PanelOptions](#type-PanelOptions)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPanelBehavior()
 
-Promise
-
 ```
-chrome.sidePanel.getPanelBehavior(
-  callback?: function,
-)
+chrome.sidePanel.getPanelBehavior(): Promise<PanelBehavior>
 ```
 
 Returns the extension's current side panel behavior.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (behavior: PanelBehavior) => void
-  ```
-  
-  - behavior
-    
-    [PanelBehavior](#type-PanelBehavior)
-
 #### Returns
 
 - Promise&lt;[PanelBehavior](#type-PanelBehavior)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### open()
 
-Promise Chrome 116+
+Chrome 116+
 
 ```
 chrome.sidePanel.open(
   options: OpenOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Opens the side panel for the extension. This may only be called in response to a user action.
@@ -391,31 +447,17 @@ Opens the side panel for the extension. This may only be called in response to a
   [OpenOptions](#type-OpenOptions)
   
   Specifies the context in which to open the side panel.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setOptions()
-
-Promise
 
 ```
 chrome.sidePanel.setOptions(
   options: PanelOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Configures the side panel.
@@ -427,31 +469,17 @@ Configures the side panel.
   [PanelOptions](#type-PanelOptions)
   
   The configuration options to apply to the panel.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setPanelBehavior()
-
-Promise
 
 ```
 chrome.sidePanel.setPanelBehavior(
   behavior: PanelBehavior,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Configures the extension's side panel behavior. This is an upsert operation.
@@ -463,18 +491,37 @@ Configures the extension's side panel behavior. This is an upsert operation.
   [PanelBehavior](#type-PanelBehavior)
   
   The new behavior to be set.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
+
+## Events
+
+### onOpened
+
+Pending
+
+```
+chrome.sidePanel.onOpened.addListener(
+  callback: function,
+)
+```
+
+Fired when the extension's side panel is opened.
+
+#### Parameters
+
+- callback
   
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
+  function
+  
+  The `callback` parameter looks like:
+  
+  ```
+  (info: PanelOpenedInfo) => void
+  ```
+  
+  - info
+    
+    [PanelOpenedInfo](#type-PanelOpenedInfo)

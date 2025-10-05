@@ -206,13 +206,10 @@ The windowId value that represents the absence of a Chrome browser window.
 
 ### create()
 
-Promise
-
 ```
 chrome.windows.create(
   createData?: object,
-  callback?: function,
-)
+): Promise<Window | undefined>
 ```
 
 Creates (opens) a new browser window with any optional sizing, position, or default URL provided.
@@ -282,40 +279,20 @@ Creates (opens) a new browser window with any optional sizing, position, or defa
     number optional
     
     The width in pixels of the new window, including the frame. If not specified, defaults to a natural width.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window?: Window) => void
-  ```
-  
-  - window
-    
-    [Window](#type-Window) optional
-    
-    Contains details about the created window.
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### get()
-
-Promise
 
 ```
 chrome.windows.get(
   windowId: number,
   queryOptions?: QueryOptions,
-  callback?: function,
-)
+): Promise<Window>
 ```
 
 Gets details about a window.
@@ -330,37 +307,19 @@ Gets details about a window.
   [QueryOptions](#type-QueryOptions) optional
   
   Chrome 88+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window: Window) => void
-  ```
-  
-  - window
-    
-    [Window](#type-Window)
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
-
-Promise
 
 ```
 chrome.windows.getAll(
   queryOptions?: QueryOptions,
-  callback?: function,
-)
+): Promise<Window[]>
 ```
 
 Gets all windows.
@@ -372,37 +331,19 @@ Gets all windows.
   [QueryOptions](#type-QueryOptions) optional
   
   Chrome 88+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (windows: Window[]) => void
-  ```
-  
-  - windows
-    
-    [Window](#type-Window)\[]
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getCurrent()
-
-Promise
 
 ```
 chrome.windows.getCurrent(
   queryOptions?: QueryOptions,
-  callback?: function,
-)
+): Promise<Window>
 ```
 
 Gets the [current window](https://developer.chrome.com/docs/extensions/reference/windows/#current-window).
@@ -414,37 +355,19 @@ Gets the [current window](https://developer.chrome.com/docs/extensions/reference
   [QueryOptions](#type-QueryOptions) optional
   
   Chrome 88+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window: Window) => void
-  ```
-  
-  - window
-    
-    [Window](#type-Window)
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getLastFocused()
-
-Promise
 
 ```
 chrome.windows.getLastFocused(
   queryOptions?: QueryOptions,
-  callback?: function,
-)
+): Promise<Window>
 ```
 
 Gets the window that was most recently focused — typically the window 'on top'.
@@ -456,37 +379,19 @@ Gets the window that was most recently focused — typically the window 'on top'
   [QueryOptions](#type-QueryOptions) optional
   
   Chrome 88+
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window: Window) => void
-  ```
-  
-  - window
-    
-    [Window](#type-Window)
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### remove()
-
-Promise
 
 ```
 chrome.windows.remove(
   windowId: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes (closes) a window and all the tabs inside it.
@@ -496,34 +401,20 @@ Removes (closes) a window and all the tabs inside it.
 - windowId
   
   number
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.windows.update(
   windowId: number,
   updateInfo: object,
-  callback?: function,
-)
+): Promise<Window>
 ```
 
 Updates the properties of a window. Specify only the properties that to be changed; unspecified properties are unchanged.
@@ -572,27 +463,12 @@ Updates the properties of a window. Specify only the properties that to be chang
     number optional
     
     The width to resize the window to in pixels. This value is ignored for panels.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window: Window) => void
-  ```
-  
-  - window
-    
-    [Window](#type-Window)
 
 #### Returns
 
 - Promise&lt;[Window](#type-Window)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

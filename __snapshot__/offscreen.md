@@ -201,43 +201,22 @@ Specifies that the offscreen document needs to use [navigator.geolocation](https
 
 ### closeDocument()
 
-Promise
-
 ```
-chrome.offscreen.closeDocument(
-  callback?: function,
-)
+chrome.offscreen.closeDocument(): Promise<void>
 ```
 
 Closes the currently-open offscreen document for the extension.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### createDocument()
-
-Promise
 
 ```
 chrome.offscreen.createDocument(
   parameters: CreateParameters,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Creates a new offscreen document for the extension.
@@ -249,18 +228,7 @@ Creates a new offscreen document for the extension.
   [CreateParameters](#type-CreateParameters)
   
   The parameters describing the offscreen document to create.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

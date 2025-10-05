@@ -201,13 +201,10 @@ For more Reading List API extensions demos, see the [Reading List API sample](ht
 
 ### addEntry()
 
-Promise
-
 ```
 chrome.readingList.addEntry(
   entry: AddEntryOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Adds an entry to the reading list if it does not exist.
@@ -219,31 +216,17 @@ Adds an entry to the reading list if it does not exist.
   [AddEntryOptions](#type-AddEntryOptions)
   
   The entry to add to the reading list.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### query()
-
-Promise
 
 ```
 chrome.readingList.query(
   info: QueryInfo,
-  callback?: function,
-)
+): Promise<ReadingListEntry[]>
 ```
 
 Retrieves all entries that match the `QueryInfo` properties. Properties that are not provided will not be matched.
@@ -255,35 +238,17 @@ Retrieves all entries that match the `QueryInfo` properties. Properties that are
   [QueryInfo](#type-QueryInfo)
   
   The properties to search for.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (entries: ReadingListEntry[]) => void
-  ```
-  
-  - entries
-    
-    [ReadingListEntry](#type-ReadingListEntry)\[]
 
 #### Returns
 
 - Promise&lt;[ReadingListEntry](#type-ReadingListEntry)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeEntry()
-
-Promise
 
 ```
 chrome.readingList.removeEntry(
   info: RemoveOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes an entry from the reading list if it exists.
@@ -295,31 +260,17 @@ Removes an entry from the reading list if it exists.
   [RemoveOptions](#type-RemoveOptions)
   
   The entry to remove from the reading list.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### updateEntry()
-
-Promise
 
 ```
 chrome.readingList.updateEntry(
   info: UpdateEntryOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates a reading list entry if it exists.
@@ -331,21 +282,10 @@ Updates a reading list entry if it exists.
   [UpdateEntryOptions](#type-UpdateEntryOptions)
   
   The entry to update.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

@@ -292,13 +292,10 @@ Chrome 130+
 
 ### disable()
 
-Promise
-
 ```
 chrome.action.disable(
   tabId?: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Disables the action for a tab.
@@ -310,31 +307,17 @@ Disables the action for a tab.
   number optional
   
   The ID of the tab for which you want to modify the action.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### enable()
-
-Promise
 
 ```
 chrome.action.enable(
   tabId?: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Enables the action for a tab. By default, actions are enabled.
@@ -346,31 +329,17 @@ Enables the action for a tab. By default, actions are enabled.
   number optional
   
   The ID of the tab for which you want to modify the action.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getBadgeBackgroundColor()
-
-Promise
 
 ```
 chrome.action.getBadgeBackgroundColor(
   details: TabDetails,
-  callback?: function,
-)
+): Promise<extensionTypes.ColorArray>
 ```
 
 Gets the background color of the action.
@@ -380,35 +349,17 @@ Gets the background color of the action.
 - details
   
   [TabDetails](#type-TabDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ColorArray) => void
-  ```
-  
-  - result
-    
-    [ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)
 
 #### Returns
 
-- Promise&lt;[browserAction.ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
+- Promise&lt;[extensionTypes.ColorArray](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-ColorArray)&gt;
 
 ### getBadgeText()
-
-Promise
 
 ```
 chrome.action.getBadgeText(
   details: TabDetails,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Gets the badge text of the action. If no tab is specified, the non-tab-specific badge text is returned. If [displayActionCountAsBadgeText](https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/#setExtensionActionOptions) is enabled, a placeholder text will be returned unless the [declarativeNetRequestFeedback](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions#declarativeNetRequestFeedback) permission is present or tab-specific badge text was provided.
@@ -418,35 +369,19 @@ Gets the badge text of the action. If no tab is specified, the non-tab-specific 
 - details
   
   [TabDetails](#type-TabDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: string) => void
-  ```
-  
-  - result
-    
-    string
 
 #### Returns
 
 - Promise&lt;string&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getBadgeTextColor()
 
-Promise Chrome 110+
+Chrome 110+
 
 ```
 chrome.action.getBadgeTextColor(
   details: TabDetails,
-  callback?: function,
-)
+): Promise<extensionTypes.ColorArray>
 ```
 
 Gets the text color of the action.
@@ -456,35 +391,17 @@ Gets the text color of the action.
 - details
   
   [TabDetails](#type-TabDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ColorArray) => void
-  ```
-  
-  - result
-    
-    [ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)
 
 #### Returns
 
-- Promise&lt;[browserAction.ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
+- Promise&lt;[extensionTypes.ColorArray](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-ColorArray)&gt;
 
 ### getPopup()
-
-Promise
 
 ```
 chrome.action.getPopup(
   details: TabDetails,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Gets the html document set as the popup for this action.
@@ -494,35 +411,17 @@ Gets the html document set as the popup for this action.
 - details
   
   [TabDetails](#type-TabDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: string) => void
-  ```
-  
-  - result
-    
-    string
 
 #### Returns
 
 - Promise&lt;string&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getTitle()
-
-Promise
 
 ```
 chrome.action.getTitle(
   details: TabDetails,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Gets the title of the action.
@@ -532,69 +431,33 @@ Gets the title of the action.
 - details
   
   [TabDetails](#type-TabDetails)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: string) => void
-  ```
-  
-  - result
-    
-    string
 
 #### Returns
 
 - Promise&lt;string&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getUserSettings()
 
-Promise Chrome 91+
+Chrome 91+
 
 ```
-chrome.action.getUserSettings(
-  callback?: function,
-)
+chrome.action.getUserSettings(): Promise<UserSettings>
 ```
 
 Returns the user-specified settings relating to an extension's action.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (userSettings: UserSettings) => void
-  ```
-  
-  - userSettings
-    
-    [UserSettings](#type-UserSettings)
-
 #### Returns
 
 - Promise&lt;[UserSettings](#type-UserSettings)&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### isEnabled()
 
-Promise Chrome 110+
+Chrome 110+
 
 ```
 chrome.action.isEnabled(
   tabId?: number,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Indicates whether the extension action is enabled for a tab (or globally if no `tabId` is provided). Actions enabled using only [`declarativeContent`](https://developer.chrome.com/docs/extensions/reference/declarativeContent/) always return false.
@@ -606,37 +469,19 @@ Indicates whether the extension action is enabled for a tab (or globally if no `
   number optional
   
   The ID of the tab for which you want check enabled status.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (isEnabled: boolean) => void
-  ```
-  
-  - isEnabled
-    
-    boolean
-    
-    True if the extension action is enabled.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### openPopup()
 
-Promise Chrome 127+
+Chrome 127+
 
 ```
 chrome.action.openPopup(
   options?: OpenPopupOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Opens the extension's popup. Between Chrome 118 and Chrome 126, this is only available to policy installed extensions.
@@ -648,31 +493,17 @@ Opens the extension's popup. Between Chrome 118 and Chrome 126, this is only ava
   [OpenPopupOptions](#type-OpenPopupOptions) optional
   
   Specifies options for opening the popup.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setBadgeBackgroundColor()
-
-Promise
 
 ```
 chrome.action.setBadgeBackgroundColor(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the background color for the badge.
@@ -685,7 +516,7 @@ Sets the background color for the badge.
   
   - color
     
-    string | [ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)
+    string | [ColorArray](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-ColorArray)
     
     An array of four integers in the range \[0,255] that make up the RGBA color of the badge. For example, opaque red is `[255, 0, 0, 255]`. Can also be a string with a CSS value, with opaque red being `#FF0000` or `#F00`.
   - tabId
@@ -693,31 +524,17 @@ Sets the background color for the badge.
     number optional
     
     Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setBadgeText()
-
-Promise
 
 ```
 chrome.action.setBadgeText(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the badge text for the action. The badge is displayed on top of the icon.
@@ -738,31 +555,19 @@ Sets the badge text for the action. The badge is displayed on top of the icon.
     string optional
     
     Any number of characters can be passed, but only about four can fit in the space. If an empty string (`''`) is passed, the badge text is cleared. If `tabId` is specified and `text` is null, the text for the specified tab is cleared and defaults to the global badge text.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setBadgeTextColor()
 
-Promise Chrome 110+
+Chrome 110+
 
 ```
 chrome.action.setBadgeTextColor(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the text color for the badge.
@@ -775,7 +580,7 @@ Sets the text color for the badge.
   
   - color
     
-    string | [ColorArray](https://developer.chrome.com/docs/extensions/reference/browserAction/#type-ColorArray)
+    string | [ColorArray](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-ColorArray)
     
     An array of four integers in the range \[0,255] that make up the RGBA color of the badge. For example, opaque red is `[255, 0, 0, 255]`. Can also be a string with a CSS value, with opaque red being `#FF0000` or `#F00`. Not setting this value will cause a color to be automatically chosen that will contrast with the badge's background color so the text will be visible. Colors with alpha values equivalent to 0 will not be set and will return an error.
   - tabId
@@ -783,31 +588,17 @@ Sets the text color for the badge.
     number optional
     
     Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setIcon()
-
-Promise
 
 ```
 chrome.action.setIcon(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the icon for the action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the **path** or the **imageData** property must be specified.
@@ -833,33 +624,19 @@ Sets the icon for the action. The icon can be specified either as the path to an
     number optional
     
     Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setPopup()
-
-Promise
 
 ```
 chrome.action.setPopup(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the HTML document to be opened as a popup when the user clicks on the action's icon.
@@ -880,31 +657,17 @@ Sets the HTML document to be opened as a popup when the user clicks on the actio
     number optional
     
     Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setTitle()
-
-Promise
 
 ```
 chrome.action.setTitle(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the title of the action. This shows up in the tooltip.
@@ -925,21 +688,10 @@ Sets the title of the action. This shows up in the tooltip.
     string
     
     The string the action should display when moused over.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

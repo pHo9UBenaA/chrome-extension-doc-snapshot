@@ -138,13 +138,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 ### clear()
 
-Promise
-
 ```
 chrome.alarms.clear(
   name?: string,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Clears the alarm with the given name.
@@ -156,74 +153,34 @@ Clears the alarm with the given name.
   string optional
   
   The name of the alarm to clear. Defaults to the empty string.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (wasCleared: boolean) => void
-  ```
-  
-  - wasCleared
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### clearAll()
 
-Promise
-
 ```
-chrome.alarms.clearAll(
-  callback?: function,
-)
+chrome.alarms.clearAll(): Promise<boolean>
 ```
 
 Clears all alarms.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (wasCleared: boolean) => void
-  ```
-  
-  - wasCleared
-    
-    boolean
-
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### create()
-
-Promise
 
 ```
 chrome.alarms.create(
   name?: string,
   alarmInfo: AlarmCreateInfo,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Creates an alarm. Near the time(s) specified by `alarmInfo`, the `onAlarm` event is fired. If there is another alarm with the same name (or no name if none is specified), it will be cancelled and replaced by this alarm.
@@ -244,35 +201,19 @@ To help you debug your app or extension, when you've loaded it unpacked, there's
   [AlarmCreateInfo](#type-AlarmCreateInfo)
   
   Describes when the alarm should fire. The initial time must be specified by either `when` or `delayInMinutes` (but not both). If `periodInMinutes` is set, the alarm will repeat every `periodInMinutes` minutes after the initial event. If neither `when` or `delayInMinutes` is set for a repeating alarm, `periodInMinutes` is used as the default for `delayInMinutes`.
-- callback
-  
-  function optional
-  
-  Chrome 111+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 111+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### get()
-
-Promise
 
 ```
 chrome.alarms.get(
   name?: string,
-  callback?: function,
-)
+): Promise<Alarm | undefined>
 ```
 
 Retrieves details about the specified alarm.
@@ -284,63 +225,26 @@ Retrieves details about the specified alarm.
   string optional
   
   The name of the alarm to get. Defaults to the empty string.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (alarm?: Alarm) => void
-  ```
-  
-  - alarm
-    
-    [Alarm](#type-Alarm) optional
 
 #### Returns
 
 - Promise&lt;[Alarm](#type-Alarm) | undefined&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAll()
 
-Promise
-
 ```
-chrome.alarms.getAll(
-  callback?: function,
-)
+chrome.alarms.getAll(): Promise<Alarm[]>
 ```
 
 Gets an array of all the alarms.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (alarms: Alarm[]) => void
-  ```
-  
-  - alarms
-    
-    [Alarm](#type-Alarm)\[]
 
 #### Returns
 
 - Promise&lt;[Alarm](#type-Alarm)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

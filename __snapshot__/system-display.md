@@ -499,7 +499,7 @@ Chrome 57+
 ```
 chrome.system.display.clearTouchCalibration(
   id: string,
-)
+): void
 ```
 
 Resets the touch calibration for the display and brings it back to its default state by clearing any touch calibration data associated with the display.
@@ -520,7 +520,7 @@ Chrome 57+
 chrome.system.display.completeCustomTouchCalibration(
   pairs: TouchCalibrationPairQuad,
   bounds: Bounds,
-)
+): void
 ```
 
 Sets the touch calibration pairs for a display. These `pairs` would be used to calibrate the touch screen for display with `id` called in startCustomTouchCalibration(). Always call `startCustomTouchCalibration` before calling this method. If another touch calibration is already in progress this will throw an error.
@@ -545,7 +545,7 @@ Chrome 46+
 ```
 chrome.system.display.enableUnifiedDesktop(
   enabled: boolean,
-)
+): void
 ```
 
 Enables/disables the unified desktop feature. If enabled while mirroring is active, the desktop mode will not change until mirroring is turned off. Otherwise, the desktop mode will switch to unified immediately. NOTE: This is only available to ChromeOS Kiosk apps and Web UI.
@@ -560,49 +560,26 @@ Enables/disables the unified desktop feature. If enabled while mirroring is acti
 
 ### getDisplayLayout()
 
-Promise Chrome 53+
+Chrome 53+
 
 ```
-chrome.system.display.getDisplayLayout(
-  callback?: function,
-)
+chrome.system.display.getDisplayLayout(): Promise<DisplayLayout[]>
 ```
 
 Requests the layout info for all displays. NOTE: This is only available to ChromeOS Kiosk apps and Web UI.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (layouts: DisplayLayout[]) => void
-  ```
-  
-  - layouts
-    
-    [DisplayLayout](#type-DisplayLayout)\[]
 
 #### Returns
 
 - Promise&lt;[DisplayLayout](#type-DisplayLayout)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getInfo()
-
-Promise
 
 ```
 chrome.system.display.getInfo(
   flags?: GetInfoFlags,
-  callback?: function,
-)
+): Promise<DisplayUnitInfo[]>
 ```
 
 Requests the information for all attached display devices.
@@ -616,27 +593,12 @@ Requests the information for all attached display devices.
   Chrome 59+
   
   Options affecting how the information is returned.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (displayInfo: DisplayUnitInfo[]) => void
-  ```
-  
-  - displayInfo
-    
-    [DisplayUnitInfo](#type-DisplayUnitInfo)\[]
 
 #### Returns
 
 - Promise&lt;[DisplayUnitInfo](#type-DisplayUnitInfo)\[]&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### overscanCalibrationAdjust()
 
@@ -646,7 +608,7 @@ Chrome 53+
 chrome.system.display.overscanCalibrationAdjust(
   id: string,
   delta: Insets,
-)
+): void
 ```
 
 Adjusts the current overscan insets for a display. Typically this should either move the display along an axis (e.g. left+right have the same value) or scale it along an axis (e.g. top+bottom have opposite values). Each Adjust call is cumulative with previous calls since Start.
@@ -671,7 +633,7 @@ Chrome 53+
 ```
 chrome.system.display.overscanCalibrationComplete(
   id: string,
-)
+): void
 ```
 
 Complete overscan adjustments for a display by saving the current values and hiding the overlay.
@@ -691,7 +653,7 @@ Chrome 53+
 ```
 chrome.system.display.overscanCalibrationReset(
   id: string,
-)
+): void
 ```
 
 Resets the overscan insets for a display to the last saved value (i.e before Start was called).
@@ -711,7 +673,7 @@ Chrome 53+
 ```
 chrome.system.display.overscanCalibrationStart(
   id: string,
-)
+): void
 ```
 
 Starts overscan calibration for a display. This will show an overlay on the screen indicating the current overscan insets. If overscan calibration for display `id` is in progress this will reset calibration.
@@ -726,13 +688,12 @@ Starts overscan calibration for a display. This will show an overlay on the scre
 
 ### setDisplayLayout()
 
-Promise Chrome 53+
+Chrome 53+
 
 ```
 chrome.system.display.setDisplayLayout(
   layouts: DisplayLayout[],
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Set the layout for all displays. Any display not included will use the default layout. If a layout would overlap or be otherwise invalid it will be adjusted to a valid layout. After layout is resolved, an onDisplayChanged event will be triggered. NOTE: This is only available to ChromeOS Kiosk apps and Web UI.
@@ -744,34 +705,20 @@ Set the layout for all displays. Any display not included will use the default l
   [DisplayLayout](#type-DisplayLayout)\[]
   
   The layout information, required for all displays except the primary display.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setDisplayProperties()
-
-Promise
 
 ```
 chrome.system.display.setDisplayProperties(
   id: string,
   info: DisplayProperties,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates the properties for the display specified by `id`, according to the information provided in `info`. On failure, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/api/runtime/#property-lastError) will be set. NOTE: This is only available to ChromeOS Kiosk apps and Web UI.
@@ -788,33 +735,21 @@ Updates the properties for the display specified by `id`, according to the infor
   [DisplayProperties](#type-DisplayProperties)
   
   The information about display properties that should be changed. A property will be changed only if a new value for it is specified in `info`.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setMirrorMode()
 
-Promise Chrome 65+
+Chrome 65+
 
 ```
 chrome.system.display.setMirrorMode(
   info: MirrorModeInfo,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the display mode to the specified mirror mode. Each call resets the state from previous calls. Calling setDisplayProperties() will fail for the mirroring destination displays. NOTE: This is only available to ChromeOS Kiosk apps and Web UI.
@@ -826,33 +761,21 @@ Sets the display mode to the specified mirror mode. Each call resets the state f
   [MirrorModeInfo](#type-MirrorModeInfo)
   
   The information of the mirror mode that should be applied to the display mode.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### showNativeTouchCalibration()
 
-Promise Chrome 57+
+Chrome 57+
 
 ```
 chrome.system.display.showNativeTouchCalibration(
   id: string,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Displays the native touch calibration UX for the display with `id` as display id. This will show an overlay on the screen with required instructions on how to proceed. The callback will be invoked in case of successful calibration only. If the calibration fails, this will throw an error.
@@ -864,27 +787,12 @@ Displays the native touch calibration UX for the display with `id` as display id
   string
   
   The display's unique identifier.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (success: boolean) => void
-  ```
-  
-  - success
-    
-    boolean
 
 #### Returns
 
 - Promise&lt;boolean&gt;
   
   Chrome 91+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### startCustomTouchCalibration()
 
@@ -893,7 +801,7 @@ Chrome 57+
 ```
 chrome.system.display.startCustomTouchCalibration(
   id: string,
-)
+): void
 ```
 
 Starts custom touch calibration for a display. This should be called when using a custom UX for collecting calibration data. If another touch calibration is already in progress this will throw an error.

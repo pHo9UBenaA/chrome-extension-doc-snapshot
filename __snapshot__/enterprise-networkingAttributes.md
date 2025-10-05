@@ -42,36 +42,14 @@ Chrome 85+ ChromeOS only [Requires policy](https://support.google.com/chrome/a/a
 
 ### getNetworkDetails()
 
-Promise
-
 ```
-chrome.enterprise.networkingAttributes.getNetworkDetails(
-  callback?: function,
-)
+chrome.enterprise.networkingAttributes.getNetworkDetails(): Promise<NetworkDetails>
 ```
 
 Retrieves the network details of the device's default network. If the user is not affiliated or the device is not connected to a network, [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/api/runtime/#property-lastError) will be set with a failure reason.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (networkAddresses: NetworkDetails) => void
-  ```
-  
-  - networkAddresses
-    
-    [NetworkDetails](#type-NetworkDetails)
 
 #### Returns
 
 - Promise&lt;[NetworkDetails](#type-NetworkDetails)&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

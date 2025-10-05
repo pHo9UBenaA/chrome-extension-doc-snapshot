@@ -214,14 +214,11 @@ Target type.
 
 ### attach()
 
-Promise
-
 ```
 chrome.debugger.attach(
   target: Debuggee,
   requiredVersion: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Attaches debugger to the given target.
@@ -238,33 +235,19 @@ Attaches debugger to the given target.
   string
   
   Required debugging protocol version ("0.1"). One can only attach to the debuggee with matching major version and greater or equal minor version. List of the protocol versions can be obtained [here](https://developer.chrome.com/devtools/docs/debugger-protocol).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### detach()
-
-Promise
 
 ```
 chrome.debugger.detach(
   target: Debuggee,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Detaches debugger from the given target.
@@ -276,73 +259,35 @@ Detaches debugger from the given target.
   [Debuggee](#type-Debuggee)
   
   Debugging target from which you want to detach.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getTargets()
 
-Promise
-
 ```
-chrome.debugger.getTargets(
-  callback?: function,
-)
+chrome.debugger.getTargets(): Promise<TargetInfo[]>
 ```
 
 Returns the list of available debug targets.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: TargetInfo[]) => void
-  ```
-  
-  - result
-    
-    [TargetInfo](#type-TargetInfo)\[]
-    
-    Array of TargetInfo objects corresponding to the available debug targets.
 
 #### Returns
 
 - Promise&lt;[TargetInfo](#type-TargetInfo)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### sendCommand()
-
-Promise
 
 ```
 chrome.debugger.sendCommand(
   target: DebuggerSession,
   method: string,
   commandParams?: object,
-  callback?: function,
-)
+): Promise<object | undefined>
 ```
 
 Sends given command to the debugging target.
@@ -364,29 +309,12 @@ Sends given command to the debugging target.
   object optional
   
   JSON object with request parameters. This object must conform to the remote debugging params scheme for given method.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result?: object) => void
-  ```
-  
-  - result
-    
-    object optional
-    
-    JSON object with the response. Structure of the response varies depending on the method name and is defined by the 'returns' attribute of the command description in the remote debugging protocol.
 
 #### Returns
 
 - Promise&lt;object | undefined&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

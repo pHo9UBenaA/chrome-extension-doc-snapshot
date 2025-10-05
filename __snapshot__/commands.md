@@ -291,39 +291,17 @@ function checkCommandShortcuts() {
 
 ### getAll()
 
-Promise
-
 ```
-chrome.commands.getAll(
-  callback?: function,
-)
+chrome.commands.getAll(): Promise<Command[]>
 ```
 
 Returns all the registered extension commands for this extension and their shortcut (if active). Before Chrome 110, this command did not return `_execute_action`.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (commands: Command[]) => void
-  ```
-  
-  - commands
-    
-    [Command](#type-Command)\[]
 
 #### Returns
 
 - Promise&lt;[Command](#type-Command)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

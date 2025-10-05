@@ -242,9 +242,9 @@ object
   
   [types.ChromeSetting](https://developer.chrome.com/docs/extensions/reference/types/#type-ChromeSetting)&lt;boolean&gt;
   
-  If disabled, Chrome blocks third-party sites from setting cookies. The value of this preference is of type boolean, and the default value is `true`.
+  If disabled, Chrome blocks third-party sites from setting cookies. The value of this preference is of type boolean, and the default value is `true`. Extensions may not enable this API in Incognito mode, where third-party cookies are blocked and can only be allowed at the site level. If you try setting this API to true in Incognito, it will throw an error.
   
-  \*\*Note:\*\*Individual sites may still be able to access third-party cookies when this API returns `false`, if they have a valid [exemption](https://developers.google.com/privacy-sandbox/cookies/temporary-exceptions/preserving-critical-user-experiences) or they use the [Storage Access API](https://developers.google.com/privacy-sandbox/cookies/storage-access-api) instead.
+  Note: Individual sites may still be able to access third-party cookies when this API returns `false`, if they have a valid [exemption](https://developers.google.com/privacy-sandbox/cookies/temporary-exceptions/preserving-critical-user-experiences) or they use the [Storage Access API](https://developers.google.com/privacy-sandbox/cookies/storage-access-api) instead.
 - topicsEnabled
   
   [types.ChromeSetting](https://developer.chrome.com/docs/extensions/reference/types/#type-ChromeSetting)&lt;boolean&gt;

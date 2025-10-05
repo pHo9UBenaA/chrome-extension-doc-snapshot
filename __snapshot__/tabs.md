@@ -502,14 +502,11 @@ An index that represents the absence of a tab index in a tab\_strip.
 
 ### captureVisibleTab()
 
-Promise
-
 ```
 chrome.tabs.captureVisibleTab(
   windowId?: number,
   options?: ImageDetails,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Captures the visible area of the currently active tab in the specified window. In order to call this method, the extension must have either the [&lt;all\_urls&gt;](https://developer.chrome.com/extensions/develop/concepts/declare-permissions) permission or the [activeTab](https://developer.chrome.com/docs/extensions/develop/concepts/activeTab) permission. In addition to sites that extensions can normally access, this method allows extensions to capture sensitive sites that are otherwise restricted, including chrome:-scheme pages, other extensions' pages, and data: URLs. These sensitive sites can only be captured with the activeTab permission. File URLs may be captured only if the extension has been granted file access.
@@ -524,29 +521,12 @@ Captures the visible area of the currently active tab in the specified window. I
 - options
   
   [ImageDetails](https://developer.chrome.com/docs/extensions/reference/extensionTypes/#type-ImageDetails) optional
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (dataUrl: string) => void
-  ```
-  
-  - dataUrl
-    
-    string
-    
-    A data URL that encodes an image of the visible area of the captured tab. May be assigned to the 'src' property of an HTML `img` element for display.
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### connect()
 
@@ -554,7 +534,7 @@ Captures the visible area of the currently active tab in the specified window. I
 chrome.tabs.connect(
   tabId: number,
   connectInfo?: object,
-)
+): runtime.Port
 ```
 
 Connects to the content script(s) in the specified tab. The [`runtime.onConnect`](https://developer.chrome.com/docs/extensions/reference/runtime/#event-onConnect) event is fired in each content script running in the specified tab for the current extension. For more details, see [Content Script Messaging](https://developer.chrome.com/docs/extensions/messaging).
@@ -594,13 +574,10 @@ Connects to the content script(s) in the specified tab. The [`runtime.onConnect`
 
 ### create()
 
-Promise
-
 ```
 chrome.tabs.create(
   createProperties: object,
-  callback?: function,
-)
+): Promise<Tab>
 ```
 
 Creates a new tab.
@@ -650,39 +627,19 @@ Creates a new tab.
     number optional
     
     The window in which to create the new tab. Defaults to the [current window](https://developer.chrome.com/docs/extensions/reference/windows/#current-window).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab)
-    
-    The created tab.
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### detectLanguage()
-
-Promise
 
 ```
 chrome.tabs.detectLanguage(
   tabId?: number,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Detects the primary language of the content in a tab.
@@ -694,39 +651,21 @@ Detects the primary language of the content in a tab.
   number optional
   
   Defaults to the active tab of the [current window](https://developer.chrome.com/docs/extensions/reference/windows/#current-window).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (language: string) => void
-  ```
-  
-  - language
-    
-    string
-    
-    An ISO language code such as `en` or `fr`. For a complete list of languages supported by this method, see [kLanguageInfoTable](https://src.chromium.org/viewvc/chrome/trunk/src/third_party/cld/languages/internal/languages.cc). The second to fourth columns are checked and the first non-NULL value is returned, except for Simplified Chinese for which `zh-CN` is returned. For an unknown/undefined language, `und` is returned.
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### discard()
 
-Promise Chrome 54+
+Chrome 54+
 
 ```
 chrome.tabs.discard(
   tabId?: number,
-  callback?: function,
-)
+): Promise<Tab | undefined>
 ```
 
 Discards a tab from memory. Discarded tabs are still visible on the tab strip and are reloaded when activated.
@@ -738,39 +677,19 @@ Discards a tab from memory. Discarded tabs are still visible on the tab strip an
   number optional
   
   The ID of the tab to be discarded. If specified, the tab is discarded unless it is active or already discarded. If omitted, the browser discards the least important tab. This can fail if no discardable tabs exist.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab?: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab) optional
-    
-    The discarded tab, if it was successfully discarded; undefined otherwise.
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### duplicate()
-
-Promise
 
 ```
 chrome.tabs.duplicate(
   tabId: number,
-  callback?: function,
-)
+): Promise<Tab | undefined>
 ```
 
 Duplicates a tab.
@@ -782,39 +701,19 @@ Duplicates a tab.
   number
   
   The ID of the tab to duplicate.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab?: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab) optional
-    
-    Details about the duplicated tab. The `url`, `pendingUrl`, `title` and `favIconUrl` properties are only included on the [`tabs.Tab`](#type-Tab) object if the extension has the `"tabs"` permission or has host permissions for the page.
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### get()
-
-Promise
 
 ```
 chrome.tabs.get(
   tabId: number,
-  callback?: function,
-)
+): Promise<Tab>
 ```
 
 Retrieves details about the specified tab.
@@ -824,73 +723,33 @@ Retrieves details about the specified tab.
 - tabId
   
   number
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab)
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getCurrent()
 
-Promise
-
 ```
-chrome.tabs.getCurrent(
-  callback?: function,
-)
+chrome.tabs.getCurrent(): Promise<Tab | undefined>
 ```
 
 Gets the tab that this script call is being made from. Returns `undefined` if called from a non-tab context (for example, a background page or popup view).
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab?: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab) optional
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getZoom()
-
-Promise
 
 ```
 chrome.tabs.getZoom(
   tabId?: number,
-  callback?: function,
-)
+): Promise<number>
 ```
 
 Gets the current zoom factor of a specified tab.
@@ -902,39 +761,19 @@ Gets the current zoom factor of a specified tab.
   number optional
   
   The ID of the tab to get the current zoom factor from; defaults to the active tab of the current window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (zoomFactor: number) => void
-  ```
-  
-  - zoomFactor
-    
-    number
-    
-    The tab's current zoom factor.
 
 #### Returns
 
 - Promise&lt;number&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getZoomSettings()
-
-Promise
 
 ```
 chrome.tabs.getZoomSettings(
   tabId?: number,
-  callback?: function,
-)
+): Promise<ZoomSettings>
 ```
 
 Gets the current zoom settings of a specified tab.
@@ -946,39 +785,21 @@ Gets the current zoom settings of a specified tab.
   number optional
   
   The ID of the tab to get the current zoom settings from; defaults to the active tab of the current window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (zoomSettings: ZoomSettings) => void
-  ```
-  
-  - zoomSettings
-    
-    [ZoomSettings](#type-ZoomSettings)
-    
-    The tab's current zoom settings.
 
 #### Returns
 
 - Promise&lt;[ZoomSettings](#type-ZoomSettings)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### goBack()
 
-Promise Chrome 72+
+Chrome 72+
 
 ```
 chrome.tabs.goBack(
   tabId?: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Go back to the previous page, if one is available.
@@ -990,33 +811,21 @@ Go back to the previous page, if one is available.
   number optional
   
   The ID of the tab to navigate back; defaults to the selected tab of the current window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### goForward()
 
-Promise Chrome 72+
+Chrome 72+
 
 ```
 chrome.tabs.goForward(
   tabId?: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Go foward to the next page, if one is available.
@@ -1028,33 +837,21 @@ Go foward to the next page, if one is available.
   number optional
   
   The ID of the tab to navigate forward; defaults to the selected tab of the current window.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### group()
 
-Promise Chrome 88+
+Chrome 88+
 
 ```
 chrome.tabs.group(
   options: object,
-  callback?: function,
-)
+): Promise<number>
 ```
 
 Adds one or more tabs to a specified group, or if no group is specified, adds the given tabs to a newly created group.
@@ -1086,37 +883,17 @@ Adds one or more tabs to a specified group, or if no group is specified, adds th
     number | \[number, ...number\[]]
     
     The tab ID or list of tab IDs to add to the specified group.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (groupId: number) => void
-  ```
-  
-  - groupId
-    
-    number
-    
-    The ID of the group that the tabs were added to.
 
 #### Returns
 
 - Promise&lt;number&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### highlight()
-
-Promise
 
 ```
 chrome.tabs.highlight(
   highlightInfo: object,
-  callback?: function,
-)
+): Promise<windows.Window>
 ```
 
 Highlights the given tabs and focuses on the first of group. Will appear to do nothing if the specified tab is currently active.
@@ -1137,40 +914,20 @@ Highlights the given tabs and focuses on the first of group. Will appear to do n
     number optional
     
     The window that contains the tabs.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (window: Window) => void
-  ```
-  
-  - window
-    
-    [Window](https://developer.chrome.com/docs/extensions/reference/windows/#type-Window)
-    
-    Contains details about the window whose tabs were highlighted.
 
 #### Returns
 
 - Promise&lt;[windows.Window](https://developer.chrome.com/docs/extensions/reference/windows/#type-Window)&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### move()
-
-Promise
 
 ```
 chrome.tabs.move(
   tabIds: number | number[],
   moveProperties: object,
-  callback?: function,
-)
+): Promise<Tab | Tab[]>
 ```
 
 Moves one or more tabs to a new position within its window, or to a new window. Note that tabs can only be moved to and from normal (window.type === "normal") windows.
@@ -1196,39 +953,19 @@ Moves one or more tabs to a new position within its window, or to a new window. 
     number optional
     
     Defaults to the window the tab is currently in.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tabs: Tab | Tab[]) => void
-  ```
-  
-  - tabs
-    
-    [Tab](#type-Tab) | [Tab](#type-Tab)\[]
-    
-    Details about the moved tabs.
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab) | [Tab](#type-Tab)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### query()
-
-Promise
 
 ```
 chrome.tabs.query(
   queryInfo: object,
-  callback?: function,
-)
+): Promise<Tab[]>
 ```
 
 Gets all tabs that have the specified properties, or all tabs if no properties are specified.
@@ -1311,6 +1048,13 @@ Gets all tabs that have the specified properties, or all tabs if no properties a
     boolean optional
     
     Whether the tabs are pinned.
+  - splitViewId
+    
+    number optional
+    
+    Chrome 140+
+    
+    The ID of the Split View that the tabs are in, or `tabs.SPLIT_VIEW_ID_NONE` for tabs that aren't in a Split View.
   - status
     
     [TabStatus](#type-TabStatus) optional
@@ -1336,38 +1080,20 @@ Gets all tabs that have the specified properties, or all tabs if no properties a
     [WindowType](#type-WindowType) optional
     
     The type of window the tabs are in.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: Tab[]) => void
-  ```
-  
-  - result
-    
-    [Tab](#type-Tab)\[]
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab)\[]&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### reload()
-
-Promise
 
 ```
 chrome.tabs.reload(
   tabId?: number,
   reloadProperties?: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Reload a tab.
@@ -1388,33 +1114,19 @@ Reload a tab.
     boolean optional
     
     Whether to bypass local caching. Defaults to `false`.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### remove()
-
-Promise
 
 ```
 chrome.tabs.remove(
   tabIds: number | number[],
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Closes one or more tabs.
@@ -1426,35 +1138,21 @@ Closes one or more tabs.
   number | number\[]
   
   The tab ID or list of tab IDs to close.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### sendMessage()
-
-Promise
 
 ```
 chrome.tabs.sendMessage(
   tabId: number,
   message: any,
   options?: object,
-  callback?: function,
-)
+): Promise<any>
 ```
 
 Sends a single message to the content script(s) in the specified tab, with an optional callback to run when a response is sent back. The [`runtime.onMessage`](https://developer.chrome.com/docs/extensions/reference/runtime/#event-onMessage) event is fired in each content script running in the specified tab for the current extension.
@@ -1485,42 +1183,20 @@ Sends a single message to the content script(s) in the specified tab, with an op
     number optional
     
     Send a message to a specific [frame](https://developer.chrome.com/docs/extensions/reference/webNavigation/#frame_ids) identified by `frameId` instead of all frames in the tab.
-- callback
-  
-  function optional
-  
-  Chrome 99+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: any) => void
-  ```
-  
-  - response
-    
-    any
-    
-    The JSON response object sent by the handler of the message. If an error occurs while connecting to the specified tab, the callback is called with no arguments and [`runtime.lastError`](https://developer.chrome.com/docs/extensions/reference/runtime/#property-lastError) is set to the error message.
 
 #### Returns
 
 - Promise&lt;any&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setZoom()
-
-Promise
 
 ```
 chrome.tabs.setZoom(
   tabId?: number,
   zoomFactor: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Zooms a specified tab.
@@ -1537,34 +1213,20 @@ Zooms a specified tab.
   number
   
   The new zoom factor. A value of `0` sets the tab to its current default zoom factor. Values greater than `0` specify a (possibly non-default) zoom factor for the tab.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setZoomSettings()
-
-Promise
 
 ```
 chrome.tabs.setZoomSettings(
   tabId?: number,
   zoomSettings: ZoomSettings,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the zoom settings for a specified tab, which define how zoom changes are handled. These settings are reset to defaults upon navigating the tab.
@@ -1581,33 +1243,21 @@ Sets the zoom settings for a specified tab, which define how zoom changes are ha
   [ZoomSettings](#type-ZoomSettings)
   
   Defines how zoom changes are handled and at what scope.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### ungroup()
 
-Promise Chrome 88+
+Chrome 88+
 
 ```
 chrome.tabs.ungroup(
   tabIds: number | [number, ...number[]],
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes one or more tabs from their respective groups. If any groups become empty, they are deleted.
@@ -1619,32 +1269,18 @@ Removes one or more tabs from their respective groups. If any groups become empt
   number | \[number, ...number\[]]
   
   The tab ID or list of tab IDs to remove from their respective groups.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.tabs.update(
   tabId?: number,
   updateProperties: object,
-  callback?: function,
-)
+): Promise<Tab | undefined>
 ```
 
 Modifies the properties of a tab. Properties that are not specified in `updateProperties` are not modified.
@@ -1708,29 +1344,12 @@ Modifies the properties of a tab. Properties that are not specified in `updatePr
     string optional
     
     A URL to navigate the tab to. JavaScript URLs are not supported; use [`scripting.executeScript`](https://developer.chrome.com/docs/extensions/reference/scripting/#method-executeScript) instead.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tab?: Tab) => void
-  ```
-  
-  - tab
-    
-    [Tab](#type-Tab) optional
-    
-    Details about the updated tab. The `url`, `pendingUrl`, `title` and `favIconUrl` properties are only included on the [`tabs.Tab`](#type-Tab) object if the extension has the `"tabs"` permission or has host permissions for the page.
 
 #### Returns
 
 - Promise&lt;[Tab](#type-Tab) | undefined&gt;
   
   Chrome 88+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 
@@ -2095,6 +1714,13 @@ Fired when a tab is updated.
       boolean optional
       
       The tab's new pinned state.
+    - splitViewId
+      
+      number optional
+      
+      Chrome 140+
+      
+      The tab's new Split View.
     - status
       
       [TabStatus](#type-TabStatus) optional

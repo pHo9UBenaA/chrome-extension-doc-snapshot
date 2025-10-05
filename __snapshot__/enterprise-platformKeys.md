@@ -179,13 +179,12 @@ Whether to use the Enterprise User Key or the Enterprise Machine Key.
 
 ### challengeKey()
 
-Promise Chrome 110+
+Chrome 110+
 
 ```
 chrome.enterprise.platformKeys.challengeKey(
   options: ChallengeKeyOptions,
-  callback?: function,
-)
+): Promise<ArrayBuffer>
 ```
 
 Similar to `challengeMachineKey` and `challengeUserKey`, but allows specifying the algorithm of a registered key. Challenges a hardware-backed Enterprise Machine Key and emits the response as part of a remote attestation protocol. Only useful on ChromeOS and in conjunction with the Verified Access Web API which both issues challenges and verifies responses.
@@ -201,40 +200,22 @@ This function is highly restricted and will fail if the current device is not ma
   [ChallengeKeyOptions](#type-ChallengeKeyOptions)
   
   Object containing the fields defined in [`ChallengeKeyOptions`](#type-ChallengeKeyOptions).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: ArrayBuffer) => void
-  ```
-  
-  - response
-    
-    ArrayBuffer
-    
-    The challenge response.
 
 #### Returns
 
 - Promise&lt;ArrayBuffer&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### challengeMachineKey()
 
-Promise Chrome 50+ Deprecated since Chrome 110
+Chrome 50+ Deprecated since Chrome 110
 
 ```
 chrome.enterprise.platformKeys.challengeMachineKey(
   challenge: ArrayBuffer,
   registerKey?: boolean,
-  callback?: function,
-)
+): Promise<ArrayBuffer>
 ```
 
 Use [`challengeKey`](#method-challengeKey) instead.
@@ -255,40 +236,22 @@ Challenges a hardware-backed Enterprise Machine Key and emits the response as pa
   Chrome 59+
   
   If set, the current Enterprise Machine Key is registered with the `"system"` token and relinquishes the Enterprise Machine Key role. The key can then be associated with a certificate and used like any other signing key. This key is 2048-bit RSA. Subsequent calls to this function will then generate a new Enterprise Machine Key.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: ArrayBuffer) => void
-  ```
-  
-  - response
-    
-    ArrayBuffer
-    
-    The challenge response.
 
 #### Returns
 
 - Promise&lt;ArrayBuffer&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### challengeUserKey()
 
-Promise Chrome 50+ Deprecated since Chrome 110
+Chrome 50+ Deprecated since Chrome 110
 
 ```
 chrome.enterprise.platformKeys.challengeUserKey(
   challenge: ArrayBuffer,
   registerKey: boolean,
-  callback?: function,
-)
+): Promise<ArrayBuffer>
 ```
 
 Use [`challengeKey`](#method-challengeKey) instead.
@@ -307,39 +270,19 @@ Challenges a hardware-backed Enterprise User Key and emits the response as part 
   boolean
   
   If set, the current Enterprise User Key is registered with the `"user"` token and relinquishes the Enterprise User Key role. The key can then be associated with a certificate and used like any other signing key. This key is 2048-bit RSA. Subsequent calls to this function will then generate a new Enterprise User Key.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: ArrayBuffer) => void
-  ```
-  
-  - response
-    
-    ArrayBuffer
-    
-    The challenge response.
 
 #### Returns
 
 - Promise&lt;ArrayBuffer&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getCertificates()
-
-Promise
 
 ```
 chrome.enterprise.platformKeys.getCertificates(
   tokenId: string,
-  callback?: function,
-)
+): Promise<ArrayBuffer[]>
 ```
 
 Returns the list of all client certificates available from the given token. Can be used to check for the existence and expiration of client certificates that are usable for a certain authentication.
@@ -351,78 +294,34 @@ Returns the list of all client certificates available from the given token. Can 
   string
   
   The id of a Token returned by `getTokens`.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (certificates: ArrayBuffer[]) => void
-  ```
-  
-  - certificates
-    
-    ArrayBuffer\[]
-    
-    The list of certificates, each in DER encoding of a X.509 certificate.
 
 #### Returns
 
 - Promise&lt;ArrayBuffer\[]&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getTokens()
 
-Promise
-
 ```
-chrome.enterprise.platformKeys.getTokens(
-  callback?: function,
-)
+chrome.enterprise.platformKeys.getTokens(): Promise<Token[]>
 ```
 
 Returns the available Tokens. In a regular user's session the list will always contain the user's token with `id` `"user"`. If a system-wide TPM token is available, the returned list will also contain the system-wide token with `id` `"system"`. The system-wide token will be the same for all sessions on this device (device in the sense of e.g. a Chromebook).
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (tokens: Token[]) => void
-  ```
-  
-  - tokens
-    
-    [Token](#type-Token)\[]
-    
-    The list of available tokens.
 
 #### Returns
 
 - Promise&lt;[Token](#type-Token)\[]&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### importCertificate()
-
-Promise
 
 ```
 chrome.enterprise.platformKeys.importCertificate(
   tokenId: string,
   certificate: ArrayBuffer,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Imports `certificate` to the given token if the certified key is already stored in this token. After a successful certification request, this function should be used to store the obtained certificate and to make it available to the operating system and browser for authentication.
@@ -439,34 +338,20 @@ Imports `certificate` to the given token if the certified key is already stored 
   ArrayBuffer
   
   The DER encoding of a X.509 certificate.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeCertificate()
-
-Promise
 
 ```
 chrome.enterprise.platformKeys.removeCertificate(
   tokenId: string,
   certificate: ArrayBuffer,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes `certificate` from the given token if present. Should be used to remove obsolete certificates so that they are not considered during authentication and do not clutter the certificate choice. Should be used to free storage in the certificate store.
@@ -483,20 +368,9 @@ Removes `certificate` from the given token if present. Should be used to remove 
   ArrayBuffer
   
   The DER encoding of a X.509 certificate.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 131+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

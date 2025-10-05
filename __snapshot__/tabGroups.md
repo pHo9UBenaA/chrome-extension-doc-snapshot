@@ -57,6 +57,13 @@ The group's color.
   number
   
   The ID of the group. Group IDs are unique within a browser session.
+- shared
+  
+  boolean
+  
+  Chrome 137+
+  
+  Whether the group is shared.
 - title
   
   string optional
@@ -82,13 +89,10 @@ An ID that represents the absence of a group.
 
 ### get()
 
-Promise
-
 ```
 chrome.tabGroups.get(
   groupId: number,
-  callback?: function,
-)
+): Promise<TabGroup>
 ```
 
 Retrieves details about the specified group.
@@ -98,38 +102,20 @@ Retrieves details about the specified group.
 - groupId
   
   number
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (group: TabGroup) => void
-  ```
-  
-  - group
-    
-    [TabGroup](#type-TabGroup)
 
 #### Returns
 
 - Promise&lt;[TabGroup](#type-TabGroup)&gt;
   
   Chrome 90+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### move()
-
-Promise
 
 ```
 chrome.tabGroups.move(
   groupId: number,
   moveProperties: object,
-  callback?: function,
-)
+): Promise<TabGroup | undefined>
 ```
 
 Moves the group and all its tabs within its window, or to a new window.
@@ -155,39 +141,19 @@ Moves the group and all its tabs within its window, or to a new window.
     number optional
     
     The window to move the group to. Defaults to the window the group is currently in. Note that groups can only be moved to and from windows with [`windows.WindowType`](https://developer.chrome.com/docs/extensions/reference/windows/#type-WindowType) type `"normal"`.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (group?: TabGroup) => void
-  ```
-  
-  - group
-    
-    [TabGroup](#type-TabGroup) optional
-    
-    Details about the moved group.
 
 #### Returns
 
 - Promise&lt;[TabGroup](#type-TabGroup) | undefined&gt;
   
   Chrome 90+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### query()
-
-Promise
 
 ```
 chrome.tabGroups.query(
   queryInfo: object,
-  callback?: function,
-)
+): Promise<TabGroup[]>
 ```
 
 Gets all groups that have the specified properties, or all groups if no properties are specified.
@@ -208,6 +174,13 @@ Gets all groups that have the specified properties, or all groups if no properti
     [Color](#type-Color) optional
     
     The color of the groups.
+  - shared
+    
+    boolean optional
+    
+    Chrome 137+
+    
+    Whether the group is shared.
   - title
     
     string optional
@@ -218,38 +191,20 @@ Gets all groups that have the specified properties, or all groups if no properti
     number optional
     
     The ID of the parent window, or [`windows.WINDOW_ID_CURRENT`](https://developer.chrome.com/docs/extensions/reference/windows/#property-WINDOW_ID_CURRENT) for the [current window](https://developer.chrome.com/docs/extensions/reference/windows/#current-window).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: TabGroup[]) => void
-  ```
-  
-  - result
-    
-    [TabGroup](#type-TabGroup)\[]
 
 #### Returns
 
 - Promise&lt;[TabGroup](#type-TabGroup)\[]&gt;
   
   Chrome 90+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.tabGroups.update(
   groupId: number,
   updateProperties: object,
-  callback?: function,
-)
+): Promise<TabGroup | undefined>
 ```
 
 Modifies the properties of a group. Properties that are not specified in `updateProperties` are not modified.
@@ -280,29 +235,12 @@ Modifies the properties of a group. Properties that are not specified in `update
     string optional
     
     The title of the group.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (group?: TabGroup) => void
-  ```
-  
-  - group
-    
-    [TabGroup](#type-TabGroup) optional
-    
-    Details about the updated group.
 
 #### Returns
 
 - Promise&lt;[TabGroup](#type-TabGroup) | undefined&gt;
   
   Chrome 90+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

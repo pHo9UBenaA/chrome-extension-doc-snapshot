@@ -284,7 +284,7 @@ Chrome 132+
 ```
 chrome.ttsEngine.updateLanguage(
   status: LanguageStatus,
-)
+): void
 ```
 
 Called by an engine when a language install is attempted, and when a language is uninstalled. Also called in response to a status request from a client. When a voice is installed or uninstalled, the engine should also call ttsEngine.updateVoices to register the voice.
@@ -304,7 +304,7 @@ Chrome 66+
 ```
 chrome.ttsEngine.updateVoices(
   voices: TtsVoice[],
-)
+): void
 ```
 
 Called by an engine to update its list of voices. This list overrides any voices declared in this extension's manifest.

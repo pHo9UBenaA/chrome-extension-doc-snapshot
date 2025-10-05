@@ -52,75 +52,31 @@ Specifies that the device is in RMA mode, finalizing repairs.
 
 ### getProfileType()
 
-Promise
-
 ```
-chrome.loginState.getProfileType(
-  callback?: function,
-)
+chrome.loginState.getProfileType(): Promise<ProfileType>
 ```
 
 Gets the type of the profile the extension is in.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: ProfileType) => void
-  ```
-  
-  - result
-    
-    [ProfileType](#type-ProfileType)
 
 #### Returns
 
 - Promise&lt;[ProfileType](#type-ProfileType)&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getSessionState()
 
-Promise
-
 ```
-chrome.loginState.getSessionState(
-  callback?: function,
-)
+chrome.loginState.getSessionState(): Promise<SessionState>
 ```
 
 Gets the current session state.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: SessionState) => void
-  ```
-  
-  - result
-    
-    [SessionState](#type-SessionState)
 
 #### Returns
 
 - Promise&lt;[SessionState](#type-SessionState)&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

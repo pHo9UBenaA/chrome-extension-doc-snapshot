@@ -156,12 +156,10 @@ Chrome 84+
 
 ### clearAllCachedAuthTokens()
 
-Promise Chrome 87+
+Chrome 87+
 
 ```
-chrome.identity.clearAllCachedAuthTokens(
-  callback?: function,
-)
+chrome.identity.clearAllCachedAuthTokens(): Promise<void>
 ```
 
 Resets the state of the Identity API:
@@ -170,71 +168,34 @@ Resets the state of the Identity API:
 - Removes user's account preferences
 - De-authorizes the user from all auth flows
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 106+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAccounts()
 
-Promise Dev channel
+Dev channel
 
 ```
-chrome.identity.getAccounts(
-  callback?: function,
-)
+chrome.identity.getAccounts(): Promise<AccountInfo[]>
 ```
 
 Retrieves a list of AccountInfo objects describing the accounts present on the profile.
 
 `getAccounts` is only supported on dev channel.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (accounts: AccountInfo[]) => void
-  ```
-  
-  - accounts
-    
-    [AccountInfo](#type-AccountInfo)\[]
-
 #### Returns
 
 - Promise&lt;[AccountInfo](#type-AccountInfo)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getAuthToken()
-
-Promise
 
 ```
 chrome.identity.getAuthToken(
   details?: TokenDetails,
-  callback?: function,
-)
+): Promise<GetAuthTokenResult>
 ```
 
 Gets an OAuth2 access token using the client ID and scopes specified in the [`oauth2` section of manifest.json](https://developer.chrome.com/docs/apps/app_identity#update_manifest).
@@ -252,39 +213,19 @@ Note: When called with a callback, instead of returning an object this function 
   [TokenDetails](#type-TokenDetails) optional
   
   Token options.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: GetAuthTokenResult) => void
-  ```
-  
-  - result
-    
-    [GetAuthTokenResult](#type-GetAuthTokenResult)
-    
-    Chrome 105+
 
 #### Returns
 
 - Promise&lt;[GetAuthTokenResult](#type-GetAuthTokenResult)&gt;
   
   Chrome 105+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getProfileUserInfo()
-
-Promise
 
 ```
 chrome.identity.getProfileUserInfo(
   details?: ProfileDetails,
-  callback?: function,
-)
+): Promise<ProfileUserInfo>
 ```
 
 Retrieves email address and obfuscated gaia id of the user signed into a profile.
@@ -302,34 +243,19 @@ This API is different from identity.getAccounts in two ways. The information ret
   Chrome 84+
   
   Profile options.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (userInfo: ProfileUserInfo) => void
-  ```
-  
-  - userInfo
-    
-    [ProfileUserInfo](#type-ProfileUserInfo)
 
 #### Returns
 
 - Promise&lt;[ProfileUserInfo](#type-ProfileUserInfo)&gt;
   
   Chrome 106+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getRedirectURL()
 
 ```
 chrome.identity.getRedirectURL(
   path?: string,
-)
+): string
 ```
 
 Generates a redirect URL to be used in `launchWebAuthFlow`.
@@ -350,13 +276,10 @@ The generated URLs match the pattern `https://<app-id>.chromiumapp.org/*`.
 
 ### launchWebAuthFlow()
 
-Promise
-
 ```
 chrome.identity.launchWebAuthFlow(
   details: WebAuthFlowDetails,
-  callback?: function,
-)
+): Promise<string | undefined>
 ```
 
 Starts an auth flow at the specified URL.
@@ -372,37 +295,19 @@ For a good user experience it is important interactive auth flows are initiated 
   [WebAuthFlowDetails](#type-WebAuthFlowDetails)
   
   WebAuth flow options.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (responseUrl?: string) => void
-  ```
-  
-  - responseUrl
-    
-    string optional
 
 #### Returns
 
 - Promise&lt;string | undefined&gt;
   
   Chrome 106+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeCachedAuthToken()
-
-Promise
 
 ```
 chrome.identity.removeCachedAuthToken(
   details: InvalidTokenDetails,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Removes an OAuth2 access token from the Identity API's token cache.
@@ -416,23 +321,12 @@ If an access token is discovered to be invalid, it should be passed to removeCac
   [InvalidTokenDetails](#type-InvalidTokenDetails)
   
   Token information.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 106+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

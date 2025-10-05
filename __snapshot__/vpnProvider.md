@@ -139,13 +139,10 @@ Specifies that VPN connection has failed.
 
 ### createConfig()
 
-Promise
-
 ```
 chrome.vpnProvider.createConfig(
   name: string,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Creates a new VPN configuration that persists across multiple login sessions of the user.
@@ -157,39 +154,19 @@ Creates a new VPN configuration that persists across multiple login sessions of 
   string
   
   The name of the VPN configuration.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (id: string) => void
-  ```
-  
-  - id
-    
-    string
-    
-    A unique ID for the created configuration, or `undefined` on failure.
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### destroyConfig()
-
-Promise
 
 ```
 chrome.vpnProvider.destroyConfig(
   id: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Destroys a VPN configuration created by the extension.
@@ -201,33 +178,19 @@ Destroys a VPN configuration created by the extension.
   string
   
   ID of the VPN configuration to destroy.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### notifyConnectionStateChanged()
-
-Promise
 
 ```
 chrome.vpnProvider.notifyConnectionStateChanged(
   state: VpnConnectionState,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Notifies the VPN session state to the platform. This will succeed only when the VPN session is owned by the extension.
@@ -239,33 +202,19 @@ Notifies the VPN session state to the platform. This will succeed only when the 
   [VpnConnectionState](#type-VpnConnectionState)
   
   The VPN session state of the VPN client.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### sendPacket()
-
-Promise
 
 ```
 chrome.vpnProvider.sendPacket(
   data: ArrayBuffer,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sends an IP packet through the tunnel created for the VPN session. This will succeed only when the VPN session is owned by the extension.
@@ -277,33 +226,19 @@ Sends an IP packet through the tunnel created for the VPN session. This will suc
   ArrayBuffer
   
   The IP packet to be sent to the platform.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setParameters()
-
-Promise
 
 ```
 chrome.vpnProvider.setParameters(
   parameters: Parameters,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the parameters for the VPN session. This should be called immediately after `"connected"` is received from the platform. This will succeed only when the VPN session is owned by the extension.
@@ -315,23 +250,12 @@ Sets the parameters for the VPN session. This should be called immediately after
   [Parameters](#type-Parameters)
   
   The parameters for the VPN session.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

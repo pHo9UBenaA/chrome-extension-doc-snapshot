@@ -281,14 +281,11 @@ Options that determine exactly what data will be removed.
 
 ### remove()
 
-Promise
-
 ```
 chrome.browsingData.remove(
   options: RemovalOptions,
   dataToRemove: DataTypeSet,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears various types of browsing data stored in a user's profile.
@@ -303,33 +300,19 @@ Clears various types of browsing data stored in a user's profile.
   [DataTypeSet](#type-DataTypeSet)
   
   The set of data types to remove.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeAppcache()
-
-Promise
 
 ```
 chrome.browsingData.removeAppcache(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' appcache data.
@@ -339,33 +322,19 @@ Clears websites' appcache data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeCache()
-
-Promise
 
 ```
 chrome.browsingData.removeCache(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's cache.
@@ -375,33 +344,21 @@ Clears the browser's cache.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeCacheStorage()
 
-Promise Chrome 72+
+Chrome 72+
 
 ```
 chrome.browsingData.removeCacheStorage(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' cache storage data.
@@ -411,33 +368,19 @@ Clears websites' cache storage data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeCookies()
-
-Promise
 
 ```
 chrome.browsingData.removeCookies(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's cookies and server-bound certificates modified within a particular timeframe.
@@ -447,33 +390,19 @@ Clears the browser's cookies and server-bound certificates modified within a par
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeDownloads()
-
-Promise
 
 ```
 chrome.browsingData.removeDownloads(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's list of downloaded files (*not* the downloaded files themselves).
@@ -483,33 +412,19 @@ Clears the browser's list of downloaded files (*not* the downloaded files themse
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeFileSystems()
-
-Promise
 
 ```
 chrome.browsingData.removeFileSystems(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' file system data.
@@ -519,33 +434,19 @@ Clears websites' file system data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeFormData()
-
-Promise
 
 ```
 chrome.browsingData.removeFormData(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's stored form data (autofill).
@@ -555,33 +456,19 @@ Clears the browser's stored form data (autofill).
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeHistory()
-
-Promise
 
 ```
 chrome.browsingData.removeHistory(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's history.
@@ -591,33 +478,19 @@ Clears the browser's history.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeIndexedDB()
-
-Promise
 
 ```
 chrome.browsingData.removeIndexedDB(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' IndexedDB data.
@@ -627,33 +500,19 @@ Clears websites' IndexedDB data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeLocalStorage()
-
-Promise
 
 ```
 chrome.browsingData.removeLocalStorage(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' local storage data.
@@ -663,33 +522,19 @@ Clears websites' local storage data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removePasswords()
-
-Promise
 
 ```
 chrome.browsingData.removePasswords(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the browser's stored passwords.
@@ -699,33 +544,21 @@ Clears the browser's stored passwords.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removePluginData()
 
-Promise Deprecated since Chrome 88
+Deprecated since Chrome 88
 
 ```
 chrome.browsingData.removePluginData(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Support for Flash has been removed. This function has no effect.
@@ -737,33 +570,21 @@ Clears plugins' data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeServiceWorkers()
 
-Promise Chrome 72+
+Chrome 72+
 
 ```
 chrome.browsingData.removeServiceWorkers(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' service workers.
@@ -773,33 +594,19 @@ Clears websites' service workers.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### removeWebSQL()
-
-Promise
 
 ```
 chrome.browsingData.removeWebSQL(
   options: RemovalOptions,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears websites' WebSQL data.
@@ -809,70 +616,23 @@ Clears websites' WebSQL data.
 - options
   
   [RemovalOptions](#type-RemovalOptions)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### settings()
 
-Promise
-
 ```
-chrome.browsingData.settings(
-  callback?: function,
-)
+chrome.browsingData.settings(): Promise<object>
 ```
 
 Reports which types of data are currently selected in the 'Clear browsing data' settings UI. Note: some of the data types included in this API are not available in the settings UI, and some UI settings control more than one data type listed here.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: object) => void
-  ```
-  
-  - result
-    
-    object
-    
-    - dataRemovalPermitted
-      
-      [DataTypeSet](#type-DataTypeSet)
-      
-      All of the types will be present in the result, with values of `true` if they are permitted to be removed (e.g., by enterprise policy) and `false` if not.
-    - dataToRemove
-      
-      [DataTypeSet](#type-DataTypeSet)
-      
-      All of the types will be present in the result, with values of `true` if they are both selected to be removed and permitted to be removed, otherwise `false`.
-    - options
-      
-      [RemovalOptions](#type-RemovalOptions)
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

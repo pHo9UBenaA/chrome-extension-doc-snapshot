@@ -420,13 +420,10 @@ An ISO 15924 script code. The default, or global, script is represented by scrip
 
 ### clearDefaultFixedFontSize()
 
-Promise
-
 ```
 chrome.fontSettings.clearDefaultFixedFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the default fixed font size set by this extension, if any.
@@ -438,33 +435,19 @@ Clears the default fixed font size set by this extension, if any.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### clearDefaultFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.clearDefaultFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the default font size set by this extension, if any.
@@ -476,33 +459,19 @@ Clears the default font size set by this extension, if any.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### clearFont()
-
-Promise
 
 ```
 chrome.fontSettings.clearFont(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the font set by this extension, if any.
@@ -523,33 +492,19 @@ Clears the font set by this extension, if any.
     [ScriptCode](#type-ScriptCode) optional
     
     The script for which the font should be cleared. If omitted, the global script font setting is cleared.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### clearMinimumFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.clearMinimumFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Clears the minimum font size set by this extension, if any.
@@ -561,33 +516,19 @@ Clears the minimum font size set by this extension, if any.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getDefaultFixedFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.getDefaultFixedFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 Gets the default size for fixed width fonts.
@@ -599,48 +540,19 @@ Gets the default size for fixed width fonts.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: object) => void
-  ```
-  
-  - details
-    
-    object
-    
-    - levelOfControl
-      
-      [LevelOfControl](#type-LevelOfControl)
-      
-      The level of control this extension has over the setting.
-    - pixelSize
-      
-      number
-      
-      The font size in pixels.
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getDefaultFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.getDefaultFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 Gets the default font size.
@@ -652,48 +564,19 @@ Gets the default font size.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: object) => void
-  ```
-  
-  - details
-    
-    object
-    
-    - levelOfControl
-      
-      [LevelOfControl](#type-LevelOfControl)
-      
-      The level of control this extension has over the setting.
-    - pixelSize
-      
-      number
-      
-      The font size in pixels.
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getFont()
-
-Promise
 
 ```
 chrome.fontSettings.getFont(
   details: object,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 Gets the font for a given script and generic font family.
@@ -714,84 +597,33 @@ Gets the font for a given script and generic font family.
     [ScriptCode](#type-ScriptCode) optional
     
     The script for which the font should be retrieved. If omitted, the font setting for the global script (script code "Zyyy") is retrieved.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: object) => void
-  ```
-  
-  - details
-    
-    object
-    
-    - fontId
-      
-      string
-      
-      The font ID. Rather than the literal font ID preference value, this may be the ID of the font that the system resolves the preference value to. So, `fontId` can differ from the font passed to `setFont`, if, for example, the font is not available on the system. The empty string signifies fallback to the global script font setting.
-    - levelOfControl
-      
-      [LevelOfControl](#type-LevelOfControl)
-      
-      The level of control this extension has over the setting.
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getFontList()
 
-Promise
-
 ```
-chrome.fontSettings.getFontList(
-  callback?: function,
-)
+chrome.fontSettings.getFontList(): Promise<FontName[]>
 ```
 
 Gets a list of fonts on the system.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (results: FontName[]) => void
-  ```
-  
-  - results
-    
-    [FontName](#type-FontName)\[]
 
 #### Returns
 
 - Promise&lt;[FontName](#type-FontName)\[]&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getMinimumFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.getMinimumFontSize(
   details?: object,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 Gets the minimum font size.
@@ -803,48 +635,19 @@ Gets the minimum font size.
   object optional
   
   This parameter is currently unused.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (details: object) => void
-  ```
-  
-  - details
-    
-    object
-    
-    - levelOfControl
-      
-      [LevelOfControl](#type-LevelOfControl)
-      
-      The level of control this extension has over the setting.
-    - pixelSize
-      
-      number
-      
-      The font size in pixels.
 
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setDefaultFixedFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.setDefaultFixedFontSize(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the default size for fixed width fonts.
@@ -860,33 +663,19 @@ Sets the default size for fixed width fonts.
     number
     
     The font size in pixels.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setDefaultFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.setDefaultFontSize(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the default font size.
@@ -902,33 +691,19 @@ Sets the default font size.
     number
     
     The font size in pixels.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setFont()
-
-Promise
 
 ```
 chrome.fontSettings.setFont(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the font for a given script and generic font family.
@@ -954,33 +729,19 @@ Sets the font for a given script and generic font family.
     [ScriptCode](#type-ScriptCode) optional
     
     The script code which the font should be set. If omitted, the font setting for the global script (script code "Zyyy") is set.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setMinimumFontSize()
-
-Promise
 
 ```
 chrome.fontSettings.setMinimumFontSize(
   details: object,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the minimum font size.
@@ -996,23 +757,12 @@ Sets the minimum font size.
     number
     
     The font size in pixels.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 96+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

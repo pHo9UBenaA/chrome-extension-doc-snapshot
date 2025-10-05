@@ -125,11 +125,13 @@ The types of the browser processes.
 
 "plugin"
 
-"worker"
+"worker"  
+Obsolete, will never be returned.
 
 "nacl"
 
-"service\_worker"
+"service\_worker"  
+Obsolete, will never be returned.
 
 "utility"
 
@@ -156,13 +158,10 @@ The types of the browser processes.
 
 ### getProcessIdForTab()
 
-Promise
-
 ```
 chrome.processes.getProcessIdForTab(
   tabId: number,
-  callback?: function,
-)
+): Promise<number>
 ```
 
 Returns the ID of the renderer process for the specified tab.
@@ -174,38 +173,18 @@ Returns the ID of the renderer process for the specified tab.
   number
   
   The ID of the tab for which the renderer process ID is to be returned.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (processId: number) => void
-  ```
-  
-  - processId
-    
-    number
-    
-    Process ID of the tab's renderer process.
 
 #### Returns
 
 - Promise&lt;number&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getProcessInfo()
-
-Promise
 
 ```
 chrome.processes.getProcessInfo(
   processIds: number | number[],
   includeMemory: boolean,
-  callback?: function,
-)
+): Promise<object>
 ```
 
 Retrieves the process information for each process ID specified.
@@ -222,37 +201,17 @@ Retrieves the process information for each process ID specified.
   boolean
   
   True if detailed memory usage is required. Note, collecting memory usage information incurs extra CPU usage and should only be queried for when needed.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (processes: object) => void
-  ```
-  
-  - processes
-    
-    object
-    
-    A dictionary of [`Process`](#type-Process) objects for each requested process that is a live child process of the current browser process, indexed by process ID. Metrics requiring aggregation over time will not be populated in each Process object.
 
 #### Returns
 
 - Promise&lt;object&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### terminate()
-
-Promise
 
 ```
 chrome.processes.terminate(
   processId: number,
-  callback?: function,
-)
+): Promise<boolean>
 ```
 
 Terminates the specified renderer process. Equivalent to visiting about:crash, but without changing the tab's URL.
@@ -264,27 +223,10 @@ Terminates the specified renderer process. Equivalent to visiting about:crash, b
   number
   
   The ID of the process to be terminated.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (didTerminate: boolean) => void
-  ```
-  
-  - didTerminate
-    
-    boolean
-    
-    True if terminating the process was successful, and false otherwise.
 
 #### Returns
 
 - Promise&lt;boolean&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

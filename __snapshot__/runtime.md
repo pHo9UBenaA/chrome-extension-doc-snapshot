@@ -374,6 +374,9 @@ Specifies the processer architecture as mips.
 "mips64"  
 Specifies the processer architecture as mips64.
 
+"riscv64"  
+Specifies the processer architecture as riscv64.
+
 ### PlatformInfo
 
 An object containing information about the current platform.
@@ -387,7 +390,7 @@ An object containing information about the current platform.
   The machine's processor architecture.
 - nacl\_arch
   
-  [PlatformNaclArch](#type-PlatformNaclArch)
+  [PlatformNaclArch](#type-PlatformNaclArch) optional
   
   The native client architecture. This may be different from arch on some platforms.
 - os
@@ -444,9 +447,6 @@ Specifies the Linux operating system.
 
 "openbsd"  
 Specifies the OpenBSD operating system.
-
-"fuchsia"  
-Specifies the Fuchsia operating system.
 
 ### Port
 
@@ -599,7 +599,7 @@ object
 chrome.runtime.connect(
   extensionId?: string,
   connectInfo?: object,
-)
+): Port
 ```
 
 Attempts to connect listeners within an extension (such as the background page), or other extensions/apps. This is useful for content scripts connecting to their extension processes, inter-app/extension communication, and [web messaging](https://developer.chrome.com/docs/extensions/manifest/externally_connectable). Note that this does not connect to any listeners in a content script. Extensions may connect to content scripts embedded in tabs via [`tabs.connect`](https://developer.chrome.com/docs/extensions/reference/tabs/#method-connect).
@@ -637,7 +637,7 @@ Attempts to connect listeners within an extension (such as the background page),
 ```
 chrome.runtime.connectNative(
   application: string,
-)
+): Port
 ```
 
 Connects to a native application in the host machine. This method requires the `"nativeMessaging"` permission. See [Native Messaging](https://developer.chrome.com/extensions/develop/concepts/native-messaging) for more information.
@@ -658,53 +658,30 @@ Connects to a native application in the host machine. This method requires the `
 
 ### getBackgroundPage()
 
-Promise Foreground only Deprecated since Chrome 133
+Foreground only Deprecated since Chrome 133
 
 ```
-chrome.runtime.getBackgroundPage(
-  callback?: function,
-)
+chrome.runtime.getBackgroundPage(): Promise<Window | undefined>
 ```
 
 Background pages do not exist in MV3 extensions.
 
 Retrieves the JavaScript 'window' object for the background page running inside the current extension/app. If the background page is an event page, the system will ensure it is loaded before calling the callback. If there is no background page, an error is set.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (backgroundPage?: Window) => void
-  ```
-  
-  - backgroundPage
-    
-    Window optional
-    
-    The JavaScript 'window' object for the background page.
-
 #### Returns
 
 - Promise&lt;Window | undefined&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getContexts()
 
-Promise Chrome 116+ MV3+
+Chrome 116+ MV3+
 
 ```
 chrome.runtime.getContexts(
   filter: ContextFilter,
-  callback?: function,
-)
+): Promise<ExtensionContext[]>
 ```
 
 Fetches information about active contexts associated with this extension
@@ -716,32 +693,15 @@ Fetches information about active contexts associated with this extension
   [ContextFilter](#type-ContextFilter)
   
   A filter to find matching contexts. A context matches if it matches all specified fields in the filter. Any unspecified field in the filter matches all contexts.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (contexts: ExtensionContext[]) => void
-  ```
-  
-  - contexts
-    
-    [ExtensionContext](#type-ExtensionContext)\[]
-    
-    The matching contexts, if any.
 
 #### Returns
 
 - Promise&lt;[ExtensionContext](#type-ExtensionContext)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getManifest()
 
 ```
-chrome.runtime.getManifest()
+chrome.runtime.getManifest(): object
 ```
 
 Returns details about the app or extension from the manifest. The object returned is a serialization of the full [manifest file](https://developer.chrome.com/docs/extensions/reference/manifest).
@@ -754,82 +714,40 @@ Returns details about the app or extension from the manifest. The object returne
 
 ### getPackageDirectoryEntry()
 
-Promise Foreground only
+Foreground only
 
 ```
-chrome.runtime.getPackageDirectoryEntry(
-  callback?: function,
-)
+chrome.runtime.getPackageDirectoryEntry(): Promise<DirectoryEntry>
 ```
 
 Returns a DirectoryEntry for the package directory.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (directoryEntry: DirectoryEntry) => void
-  ```
-  
-  - directoryEntry
-    
-    DirectoryEntry
 
 #### Returns
 
 - Promise&lt;DirectoryEntry&gt;
   
   Chrome 122+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getPlatformInfo()
 
-Promise
-
 ```
-chrome.runtime.getPlatformInfo(
-  callback?: function,
-)
+chrome.runtime.getPlatformInfo(): Promise<PlatformInfo>
 ```
 
 Returns information about the current platform.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (platformInfo: PlatformInfo) => void
-  ```
-  
-  - platformInfo
-    
-    [PlatformInfo](#type-PlatformInfo)
 
 #### Returns
 
 - Promise&lt;[PlatformInfo](#type-PlatformInfo)&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getURL()
 
 ```
 chrome.runtime.getURL(
   path: string,
-)
+): string
 ```
 
 Converts a relative path within an app/extension install directory to a fully-qualified URL.
@@ -850,12 +768,8 @@ Converts a relative path within an app/extension install directory to a fully-qu
 
 ### openOptionsPage()
 
-Promise
-
 ```
-chrome.runtime.openOptionsPage(
-  callback?: function,
-)
+chrome.runtime.openOptionsPage(): Promise<void>
 ```
 
 Open your Extension's options page, if possible.
@@ -864,42 +778,24 @@ The precise behavior may depend on your manifest's [`options_ui`](https://develo
 
 If your Extension does not declare an options page, or Chrome failed to create one for some other reason, the callback will set [`lastError`](#property-lastError).
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
-
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### reload()
 
 ```
-chrome.runtime.reload()
+chrome.runtime.reload(): void
 ```
 
 Reloads the app or extension. This method is not supported in kiosk mode. For kiosk mode, use chrome.runtime.restart() method.
 
 ### requestUpdateCheck()
 
-Promise
-
 ```
-chrome.runtime.requestUpdateCheck(
-  callback?: function,
-)
+chrome.runtime.requestUpdateCheck(): Promise<object>
 ```
 
 Requests an immediate update check be done for this app/extension.
@@ -910,62 +806,28 @@ This method is only appropriate to call in very limited circumstances, such as i
 
 Note: When called with a callback, instead of returning an object this function will return the two properties as separate arguments passed to the callback.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: object) => void
-  ```
-  
-  - result
-    
-    object
-    
-    Chrome 109+
-    
-    RequestUpdateCheckResult object that holds the status of the update check and any details of the result if there is an update available
-    
-    - status
-      
-      [RequestUpdateCheckStatus](#type-RequestUpdateCheckStatus)
-      
-      Result of the update check.
-    - version
-      
-      string optional
-      
-      If an update is available, this contains the version of the available update.
-
 #### Returns
 
 - Promise&lt;object&gt;
   
   Chrome 109+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### restart()
 
 ```
-chrome.runtime.restart()
+chrome.runtime.restart(): void
 ```
 
 Restart the ChromeOS device when the app runs in kiosk mode. Otherwise, it's no-op.
 
 ### restartAfterDelay()
 
-Promise Chrome 53+
+Chrome 53+
 
 ```
 chrome.runtime.restartAfterDelay(
   seconds: number,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Restart the ChromeOS device when the app runs in kiosk mode after the given seconds. If called again before the time ends, the reboot will be delayed. If called with a value of -1, the reboot will be cancelled. It's a no-op in non-kiosk mode. It's only allowed to be called repeatedly by the first extension to invoke this API.
@@ -977,35 +839,21 @@ Restart the ChromeOS device when the app runs in kiosk mode after the given seco
   number
   
   Time to wait in seconds before rebooting the device, or -1 to cancel a scheduled reboot.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### sendMessage()
-
-Promise
 
 ```
 chrome.runtime.sendMessage(
   extensionId?: string,
   message: any,
   options?: object,
-  callback?: function,
-)
+): Promise<any>
 ```
 
 Sends a single message to event listeners within your extension or a different extension/app. Similar to [`runtime.connect`](#method-connect) but only sends a single message, with an optional response. If sending to your extension, the [`runtime.onMessage`](#event-onMessage) event will be fired in every frame of your extension (except for the sender's frame), or [`runtime.onMessageExternal`](#event-onMessageExternal), if a different extension. Note that extensions cannot send messages to content scripts using this method. To send messages to content scripts, use [`tabs.sendMessage`](https://developer.chrome.com/docs/extensions/reference/tabs/#method-sendMessage).
@@ -1031,42 +879,20 @@ Sends a single message to event listeners within your extension or a different e
     boolean optional
     
     Whether the TLS channel ID will be passed into onMessageExternal for processes that are listening for the connection event.
-- callback
-  
-  function optional
-  
-  Chrome 99+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: any) => void
-  ```
-  
-  - response
-    
-    any
-    
-    The JSON response object sent by the handler of the message. If an error occurs while connecting to the extension, the callback will be called with no arguments and [`runtime.lastError`](#property-lastError) will be set to the error message.
 
 #### Returns
 
 - Promise&lt;any&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### sendNativeMessage()
-
-Promise
 
 ```
 chrome.runtime.sendNativeMessage(
   application: string,
   message: object,
-  callback?: function,
-)
+): Promise<any>
 ```
 
 Send a single message to a native application. This method requires the `"nativeMessaging"` permission.
@@ -1083,41 +909,19 @@ Send a single message to a native application. This method requires the `"native
   object
   
   The message that will be passed to the native messaging host.
-- callback
-  
-  function optional
-  
-  Chrome 99+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (response: any) => void
-  ```
-  
-  - response
-    
-    any
-    
-    The response message sent by the native messaging host. If an error occurs while connecting to the native messaging host, the callback will be called with no arguments and [`runtime.lastError`](#property-lastError) will be set to the error message.
 
 #### Returns
 
 - Promise&lt;any&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### setUninstallURL()
-
-Promise
 
 ```
 chrome.runtime.setUninstallURL(
   url: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Sets the URL to be visited upon uninstallation. This may be used to clean up server-side data, do analytics, and implement surveys. Maximum 1023 characters.
@@ -1129,25 +933,12 @@ Sets the URL to be visited upon uninstallation. This may be used to clean up ser
   string
   
   URL to be opened after the extension is uninstalled. This URL must have an http: or https: scheme. Set an empty string to not open a new tab upon uninstallation.
-- callback
-  
-  function optional
-  
-  Chrome 45+
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 99+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

@@ -22,13 +22,10 @@ The maximum size (in bytes) of all key/value pairs in a message.
 
 ### register()
 
-Promise
-
 ```
 chrome.gcm.register(
   senderIds: string[],
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Registers the application with FCM. The registration ID will be returned by the `callback`. If `register` is called again with the same list of `senderIds`, the same registration ID will be returned.
@@ -40,39 +37,19 @@ Registers the application with FCM. The registration ID will be returned by the 
   string\[]
   
   A list of server IDs that are allowed to send messages to the application. It should contain at least one and no more than 100 sender IDs.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (registrationId: string) => void
-  ```
-  
-  - registrationId
-    
-    string
-    
-    A registration ID assigned to the application by the FCM.
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### send()
-
-Promise
 
 ```
 chrome.gcm.send(
   message: object,
-  callback?: function,
-)
+): Promise<string>
 ```
 
 Sends a message according to its contents.
@@ -105,61 +82,26 @@ Sends a message according to its contents.
     number optional
     
     Time-to-live of the message in seconds. If it is not possible to send the message within that time, an onSendError event will be raised. A time-to-live of 0 indicates that the message should be sent immediately or fail if it's not possible. The default value of time-to-live is 86,400 seconds (1 day) and the maximum value is 2,419,200 seconds (28 days).
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (messageId: string) => void
-  ```
-  
-  - messageId
-    
-    string
-    
-    The ID of the message that the callback was issued for.
 
 #### Returns
 
 - Promise&lt;string&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### unregister()
 
-Promise
-
 ```
-chrome.gcm.unregister(
-  callback?: function,
-)
+chrome.gcm.unregister(): Promise<void>
 ```
 
 Unregisters the application from FCM.
-
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
   
   Chrome 116+
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ## Events
 

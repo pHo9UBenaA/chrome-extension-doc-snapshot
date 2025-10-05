@@ -32,24 +32,63 @@ Chrome 120+ MV3+
 
 A user script is a snippet of code injected into a web page to modify its appearance or behavior. Unlike other extension features, such as [Content Scripts](/docs/extensions/develop/concepts/content-scripts) and the [`chrome.scripting` API](/docs/extensions/reference/api/scripting), the User Scripts API lets you run arbitrary code. This API is required for extensions that run scripts provided by the user that cannot be shipped as part of your extension package.
 
-### Developer mode for extension users
+### Enable usage of the userScripts API
 
-As an extension developer, you already have Developer mode enabled in your installation of Chrome. For user script extensions, your users will also need to enable developer mode. Here are instructions that you can copy and paste into your own documentation.
+After your extension receives the permission to use the userScripts API, users must enable a specific toggle to allow your extension to use the API. The specific toggle required, and the API's behavior when disabled, vary by Chrome version.
+
+Use the following check to determine which toggle the user needs to enable, for example, during new user onboarding:
+
+```
+let version = Number(navigator.userAgent.match(/(Chrome|Chromium)\/([0-9]+)/)?.[2]);
+if (version >= 138) {
+  // Allow User Scripts toggle will be used.
+} else {
+  // Developer mode toggle will be used.
+}
+```
+
+The following sections describe the different toggles and how to enable them.
+
+#### Chrome versions prior to 138 (Developer mode toggle)
+
+AAs an extension developer, you already have Developer mode enabled in your installation of Chrome. Your users must also enable Developer mode.
+
+You can copy and paste the following instructions into your extension's documentation for your users
 
 1. Go to the Extensions page by entering `chrome://extensions` in a new tab. (By design `chrome://` URLs are not linkable.)
 2. Enable Developer Mode by clicking the toggle switch next to **Developer mode**.
    
-   ![Extensions page](/static/docs/extensions/reference/api/userScripts/image/extensions-page-324e88e82e214.png)
+   ![The Chrome Extensions page with Developer mode toggle highlighted](/static/docs/extensions/reference/api/userScripts/image/extensions-page-324e88e82e214.png)
    
    Extensions page (chrome://extensions)
 
-You can determine if developer mode is enabled by checking whether `chrome.userScripts` throws an error. For example:
+**Note:** If Developer mode is not enabled, accessing `chrome.userScripts` shows an error. You can use this error to determine API availability, see [Check for API availability](#check-for-api-availability).
+
+#### Chrome versions 138 and newer (Allow User Scripts toggle)
+
+The **Allow User Scripts** toggle is on each extension's details page (for example, chrome://extensions/?id=YOUR\_EXTENSION\_ID).
+
+You can copy and paste the following instructions into your extension's documentation for your users:
+
+1. Go to the Extensions page by entering `chrome://extensions` in a new tab. (By design `chrome://` URLs are not linkable.)
+2. Click the "Details" button on the extension card to view detailed information about the extension.
+3. Click the toggle switch next to **Allow User Scripts**.
+
+![The Allow User Scripts toggle on the extension details page](/static/docs/extensions/reference/api/userScripts/image/allow-user-scripts-toggle.png)
+
+Allow User Scripts toggle (chrome://extensions/?id=abc...)
+
+**Note:** If the **Allow User Scripts** toggle is not enabled, `chrome.userScripts` is undefined. This undefined state (similar to how other APIs behave) only resets when an extension script context reloads. For example, if a user revokes access while your service worker is running, `chrome.userScripts` remains defined. However, in this scenario, attempting to call any of its methods throws an error.
+
+### Check for API availability
+
+We recommend the following check to determine if the userScripts API is enabled, as it works in all Chrome versions. This check attempts to call a `chrome.userScripts()` method that should always succeed when the API is available. If this call throws an error, the API is not available:
 
 ```
 function isUserScriptsAvailable() {
   try {
-    // Property access which throws if developer mode is not enabled.
-    chrome.userScripts;
+    // Method call which throws if API permission or toggle is not enabled.
+    chrome.userScripts.getScripts();
     return true;
   } catch {
     // Not available.
@@ -310,13 +349,10 @@ Chrome 135+
 
 ### configureWorld()
 
-Promise
-
 ```
 chrome.userScripts.configureWorld(
   properties: WorldProperties,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Configures the `` `USER_SCRIPT` `` execution environment.
@@ -328,31 +364,19 @@ Configures the `` `USER_SCRIPT` `` execution environment.
   [WorldProperties](#type-WorldProperties)
   
   Contains the user script world configuration.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### execute()
 
-Promise Chrome 135+
+Chrome 135+
 
 ```
 chrome.userScripts.execute(
   injection: UserScriptInjection,
-  callback?: function,
-)
+): Promise<InjectionResult[]>
 ```
 
 Injects a script into a target context. By default, the script will be run at `document_idle`, or immediately if the page has already loaded. If the `injectImmediately` property is set, the script will inject without waiting, even if the page has not finished loading. If the script evaluates to a promise, the browser will wait for the promise to settle and return the resulting value.
@@ -362,35 +386,17 @@ Injects a script into a target context. By default, the script will be run at `d
 - injection
   
   [UserScriptInjection](#type-UserScriptInjection)
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (result: InjectionResult[]) => void
-  ```
-  
-  - result
-    
-    [InjectionResult](#type-InjectionResult)\[]
 
 #### Returns
 
 - Promise&lt;[InjectionResult](#type-InjectionResult)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getScripts()
-
-Promise
 
 ```
 chrome.userScripts.getScripts(
   filter?: UserScriptFilter,
-  callback?: function,
-)
+): Promise<RegisteredUserScript[]>
 ```
 
 Returns all dynamically-registered user scripts for this extension.
@@ -402,69 +408,31 @@ Returns all dynamically-registered user scripts for this extension.
   [UserScriptFilter](#type-UserScriptFilter) optional
   
   If specified, this method returns only the user scripts that match it.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (scripts: RegisteredUserScript[]) => void
-  ```
-  
-  - scripts
-    
-    [RegisteredUserScript](#type-RegisteredUserScript)\[]
 
 #### Returns
 
 - Promise&lt;[RegisteredUserScript](#type-RegisteredUserScript)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### getWorldConfigurations()
 
-Promise Chrome 133+
+Chrome 133+
 
 ```
-chrome.userScripts.getWorldConfigurations(
-  callback?: function,
-)
+chrome.userScripts.getWorldConfigurations(): Promise<WorldProperties[]>
 ```
 
 Retrieves all registered world configurations.
 
-#### Parameters
-
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  (worlds: WorldProperties[]) => void
-  ```
-  
-  - worlds
-    
-    [WorldProperties](#type-WorldProperties)\[]
-
 #### Returns
 
 - Promise&lt;[WorldProperties](#type-WorldProperties)\[]&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### register()
-
-Promise
 
 ```
 chrome.userScripts.register(
   scripts: RegisteredUserScript[],
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Registers one or more user scripts for this extension.
@@ -476,31 +444,19 @@ Registers one or more user scripts for this extension.
   [RegisteredUserScript](#type-RegisteredUserScript)\[]
   
   Contains a list of user scripts to be registered.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### resetWorldConfiguration()
 
-Promise Chrome 133+
+Chrome 133+
 
 ```
 chrome.userScripts.resetWorldConfiguration(
   worldId?: string,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Resets the configuration for a user script world. Any scripts that inject into the world with the specified ID will use the default world configuration.
@@ -512,31 +468,17 @@ Resets the configuration for a user script world. Any scripts that inject into t
   string optional
   
   The ID of the user script world to reset. If omitted, resets the default world's configuration.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### unregister()
-
-Promise
 
 ```
 chrome.userScripts.unregister(
   filter?: UserScriptFilter,
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Unregisters all dynamically-registered user scripts for this extension.
@@ -548,31 +490,17 @@ Unregisters all dynamically-registered user scripts for this extension.
   [UserScriptFilter](#type-UserScriptFilter) optional
   
   If specified, this method unregisters only the user scripts that match it.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.
 
 ### update()
-
-Promise
 
 ```
 chrome.userScripts.update(
   scripts: RegisteredUserScript[],
-  callback?: function,
-)
+): Promise<void>
 ```
 
 Updates one or more user scripts for this extension.
@@ -584,18 +512,7 @@ Updates one or more user scripts for this extension.
   [RegisteredUserScript](#type-RegisteredUserScript)\[]
   
   Contains a list of user scripts to be updated. A property is only updated for the existing script if it is specified in this object. If there are errors during script parsing/file validation, or if the IDs specified do not correspond to a fully registered script, then no scripts are updated.
-- callback
-  
-  function optional
-  
-  The `callback` parameter looks like:
-  
-  ```
-  () => void
-  ```
 
 #### Returns
 
 - Promise&lt;void&gt;
-  
-  Promises are supported in Manifest V3 and later, but callbacks are provided for backward compatibility. You cannot use both on the same function call. The promise resolves with the same type that is passed to the callback.

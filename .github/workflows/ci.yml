@@ -36,9 +36,13 @@ jobs:
 
       - name: Install go-task
         run: go install github.com/go-task/task/v3/cmd/task@latest
+        env:
+          GOTOOLCHAIN: auto
 
       - name: Install govulncheck
         run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        env:
+          GOTOOLCHAIN: auto
 
       - name: Run fmt task
         run: diff -u <(echo -n) <(task fmt)
